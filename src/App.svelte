@@ -1,5 +1,6 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
+  import LunaAuth from '@/luna/auth/LunaAuth.svelte';
   import { OSDViewer, OSDPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
   import { parseW3C, StorageAdapter } from '@/w3c';
   import { Store } from '@/store';
@@ -54,3 +55,7 @@
   </WMTSTileSource>
 
 </OSDViewer>
+
+<LunaAuth
+  loginUrl="https://clone.davidrumsey.com/luna/servlet/login?origin=http://127.0.0.1:5173/public/auth_callback.html"
+  tokenUrl="https://clone.davidrumsey.com/luna/servlet/token?messageId=1" />
