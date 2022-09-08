@@ -70,6 +70,6 @@
   }
 
   .luna-auth-widget iframe {
-    
+    display: none;
   }
 </style>

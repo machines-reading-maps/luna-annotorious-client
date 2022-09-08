@@ -5,9 +5,10 @@
 
   import { Store } from '@/store';
   import { type Shape, ShapeType, simplify, type Rectangle, type Polygon } from '@/shapes';
-  import { redraw } from './redraw';
+  import { redraw, translateShape } from '.';
   
   export let viewer: any;
+  export let map = null;
 
   let currentHover: Shape | null;
 
@@ -19,11 +20,13 @@
     graphics.beginFill(0xff0000, 0.45);
 
     shapes.forEach(shape => {
-      if (shape.type === ShapeType.RECTANGLE) {
-        const { x, y, w, h } = (shape as Rectangle).geometry;
-        graphics.drawRect(x, y, w, h);
-      } else if (shape.type === ShapeType.POLYGON) {
-        const simplified = simplify(shape as Polygon);
+      const translated = translateShape(shape, map);
+
+      if (translated.type === ShapeType.RECTANGLE) {
+        const { x, y, w, h } = (translated as Rectangle).geometry;
+        graphics.drawRect(x, y, w, - h);
+      } else if (translated.type === ShapeType.POLYGON) {
+        const simplified = simplify(translated as Polygon);
         const flattend = simplified.geometry.points.reduce((flat, xy) => ([...flat, ...xy]), []);   
         graphics.drawPolygon(flattend);
       }
@@ -56,8 +59,9 @@
 
       moveHandler: evt => {
         const vpt = viewer.viewport.pointFromPixel(evt.position);
+        const [lon, lat] = map.viewportToLonLat([vpt.x, vpt.y]);
 
-        const hovered = Store.getAt(vpt.x, vpt.y);
+        const hovered = Store.getAt(lon, lat);
 
         if (hovered !== currentHover) {
           const { originalEvent } = evt;
@@ -81,7 +85,7 @@
       view: canvas
     });
 
-    viewer.addHandler('update-viewport', redraw(viewer, renderer, graphics));
+    viewer.addHandler('update-viewport', redraw(viewer, renderer, graphics, map));
 
     draw(Store.all());
   });

@@ -1,33 +1,37 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
-  import LunaAuth from '@/luna/auth/LunaAuth.svelte';
-  import { OSDViewer, OSDPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
-  import { parseW3C, StorageAdapter } from '@/w3c';
+  // import LunaAuth from '@/luna/auth/LunaAuth.svelte';
+  import { OSDViewer, OSDPixiAnnotationLayer }  from '@/openseadragon';
+  // import { parseW3C, StorageAdapter } from '@/w3c';
   import { Store } from '@/store';
+  import { parseAnnotations } from './iiifv2/parseAnnotations';
 
   let hovered: any;
 
   // OSD viewer config
   const config = {
+    tileSources: "https://www.davidrumsey.com/luna/servlet/iiif/RUMSEY~8~1~272964~90046789",
     gestureSettingsTouch: {
       pinchRotate: true
     }
   }
 
-  // WMTS tile URL
-  // const url = 'https://maps.georeferencer.com/georeferences/3d5c7e1c-1771-56bc-adf2-c7178a14b1ca/2020-09-16T21:50:03.264834Z/wmts?key=DfHCmpUePzYdkPYnbvIl&SERVICE=WMTS&REQUEST=GetCapabilities'
-  const url = 'https://geo.nls.uk/mapdata3/os/25_inch/edinburgh_west/wmts.xml';
-
   // Load data
-  fetch('/hgnswtqypvcrtl.json').then(res => res.json()).then(data => {
-    Store.set(parseW3C(data, true).parsed);
+  const annotationUrl = 'https://www.davidrumsey.com/luna/servlet/iiif/annotation/oa/search?uri=https%3A%2F%2Fwww.davidrumsey.com%2Fluna%2Fservlet%2Fiiif%2Fm%2FRUMSEY~8~1~272964~90046789%2Fcanvas%2Fc1&media=image&limit=10000&_=1654013978941';
+  
+  fetch(annotationUrl).then(res => res.json()).then(data => {
+    const { parsed } = parseAnnotations(data);
+    Store.set(parsed);
+
+    /*
 
     // Init the storage adapter
     StorageAdapter({
       store: Store
     });
+    */
   });
-
+  
   const onEnterShape = ({ detail }) => hovered = detail;
 
   const onLeaveShape = () => hovered = null;
@@ -35,27 +39,18 @@
 
 <OSDViewer class="viewer" config={config} let:viewer={viewer}>
 
-  <WMTSTileSource viewer={viewer} url={url} let:map={map}>
+  <OSDPixiAnnotationLayer 
+    viewer={viewer} 
+    on:enterShape={onEnterShape} 
+    on:leaveShape={onLeaveShape} />
 
-    <OSDPixiAnnotationLayer 
-      viewer={viewer} 
-      map={map} 
-      on:enterShape={onEnterShape} 
-      on:leaveShape={onLeaveShape} />
-
-    {#if hovered}
-      <LunaPopup 
-        viewer={viewer}
-        shape={hovered.shape}
-        offsetX={hovered.originalEvent.offsetX}
-        offsetY={hovered.originalEvent.offsetY} 
-        viewportPoint={hovered.viewportPoint} />
-    {/if}
-      
-  </WMTSTileSource>
+  {#if hovered}
+    <LunaPopup 
+      viewer={viewer}
+      shape={hovered.shape}
+      offsetX={hovered.originalEvent.offsetX}
+      offsetY={hovered.originalEvent.offsetY} 
+      viewportPoint={hovered.viewportPoint} />
+  {/if}
 
 </OSDViewer>
-
-<LunaAuth
-  loginUrl="https://clone.davidrumsey.com/luna/servlet/login?origin=http://127.0.0.1:5173/public/auth_callback.html"
-  tokenUrl="https://clone.davidrumsey.com/luna/servlet/token?messageId=1" />
