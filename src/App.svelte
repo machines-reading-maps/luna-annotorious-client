@@ -2,34 +2,37 @@
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   // import LunaAuth from '@/luna/auth/LunaAuth.svelte';
   import { OSDViewer, OSDPixiAnnotationLayer }  from '@/openseadragon';
-  // import { parseW3C, StorageAdapter } from '@/w3c';
+  import { StorageAdapter } from '@/w3c';
   import { Store } from '@/store';
   import { parseAnnotations } from './iiifv2/parseAnnotations';
 
   let hovered: any;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  const imageUrl = urlParams.get('img') || 
+    'https://www.davidrumsey.com/luna/servlet/iiif/RUMSEY~8~1~272964~90046789';
+  
+  const annotationUrl = urlParams.get('annotations') ||
+    'https://www.davidrumsey.com/luna/servlet/iiif/annotation/oa/search?uri=https%3A%2F%2Fwww.davidrumsey.com%2Fluna%2Fservlet%2Fiiif%2Fm%2FRUMSEY~8~1~272964~90046789%2Fcanvas%2Fc1&media=image&limit=10000&_=1654013978941';
+
   // OSD viewer config
   const config = {
-    tileSources: "https://www.davidrumsey.com/luna/servlet/iiif/RUMSEY~8~1~272964~90046789",
+    tileSources: imageUrl,
     gestureSettingsTouch: {
       pinchRotate: true
     }
   }
 
-  // Load data
-  const annotationUrl = 'https://www.davidrumsey.com/luna/servlet/iiif/annotation/oa/search?uri=https%3A%2F%2Fwww.davidrumsey.com%2Fluna%2Fservlet%2Fiiif%2Fm%2FRUMSEY~8~1~272964~90046789%2Fcanvas%2Fc1&media=image&limit=10000&_=1654013978941';
-  
+  // Load data  
   fetch(annotationUrl).then(res => res.json()).then(data => {
     const { parsed } = parseAnnotations(data);
     Store.set(parsed);
-
-    /*
 
     // Init the storage adapter
     StorageAdapter({
       store: Store
     });
-    */
   });
   
   const onEnterShape = ({ detail }) => hovered = detail;
