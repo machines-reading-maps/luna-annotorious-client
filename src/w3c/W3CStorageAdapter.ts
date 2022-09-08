@@ -1,13 +1,6 @@
 import { ShapeType, type Rectangle, type Shape } from '@/shapes';
-import type { Selector, WebAnnotation } from '.';
-
-// TODO make configurable
-const API_BASE = '/api';
-
-// TODO dummy for testing!
-fetch('/api/login').then(res => res.json()).then(data => {
-  // console.log('login reply:', data);
-});
+import type { Selector } from '.';
+import { API_BASE } from '@/Config';
 
 const toFragmentSelector = (rect: Rectangle): Selector => {
   const { x, y, w, h } = rect.geometry;
@@ -37,14 +30,12 @@ const toW3C = (shape: Shape, source: string): Object => ({
 
 const StorageAdapter = ({ store, source }) => {
 
+  // How to handle this? Load only my own corrections? Merge/replace with Luna annotations?
   fetch(`/api/annotation/search?source=${source}`).then(res => res.json()).then(data => {
     console.log('initial search', data);
   });
 
   store.observe(changes => {
-
-    // console.log('adapter. changes', changes);
-  
     // Currently, the UI will only make updates, anyway
     const { updated }  = changes;
 

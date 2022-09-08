@@ -16,6 +16,11 @@
   const annotationUrl = urlParams.get('annotations') ||
     'https://www.davidrumsey.com/luna/servlet/iiif/annotation/oa/search?uri=https%3A%2F%2Fwww.davidrumsey.com%2Fluna%2Fservlet%2Fiiif%2Fm%2FRUMSEY~8~1~272964~90046789%2Fcanvas%2Fc1&media=image&limit=10000&_=1654013978941';
 
+  // TODO dummy for testing - fetches the dev access token from the API dev hack...
+  fetch('/api/login').then(res => res.json()).then(data => {
+    // console.log('login reply:', data);
+  });
+
   // OSD viewer config
   const config = {
     tileSources: imageUrl,
