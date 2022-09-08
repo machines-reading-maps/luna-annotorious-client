@@ -18,6 +18,10 @@ export default defineConfig({
     open: '/public/index.html',
     proxy: {
       '/api': 'http://localhost'
+      // '/api': {
+      //   target: 'http://localhost:3000',
+      //   rewrite: (path) => path.replace(/^\/api/, '')
+      // }
     }
   },
   build: {
