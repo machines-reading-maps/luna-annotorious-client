@@ -15,7 +15,10 @@ export default defineConfig({
     splitVendorChunkPlugin()
   ],
   server: {
-    open: '/public/index.html'
+    open: '/public/index.html',
+    proxy: {
+      '/api': 'http://localhost'
+    }
   },
   build: {
     rollupOptions: {

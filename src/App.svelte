@@ -26,12 +26,15 @@
 
   // Load data  
   fetch(annotationUrl).then(res => res.json()).then(data => {
+    console.log('data', data);
+
     const { parsed } = parseAnnotations(data);
     Store.set(parsed);
 
     // Init the storage adapter
     StorageAdapter({
-      store: Store
+      store: Store,
+      source: imageUrl
     });
   });
   

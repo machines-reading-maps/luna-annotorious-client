@@ -8,15 +8,19 @@ export interface WebAnnotation {
 
 }
 
-interface AnnotationTarget {
+export interface AnnotationTarget {
+
+  source: string
 
   selector: Selector | Array<Selector>
 
 }
 
-interface Selector {
+export interface Selector {
 
   type: string
+
+  conformsTo: string
 
   value: string
 
