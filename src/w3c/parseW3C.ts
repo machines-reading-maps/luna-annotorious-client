@@ -26,7 +26,6 @@ export const parseW3C = (annotations: WebAnnotation[], invertY: boolean = false)
         geometry: parseMediaFragment(selector.value, invertY),
         state: {}  
       }
-
     } else if (selector.type === 'SvgSelector') {
       const parsed = parseSVG(selector.value);
       if (parsed) {

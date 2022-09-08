@@ -56,8 +56,9 @@
 
       moveHandler: evt => {
         const vpt = viewer.viewport.pointFromPixel(evt.position);
+        const img = viewer.viewport.viewportToImageCoordinates(vpt.x, vpt.y);
 
-        const hovered = Store.getAt(vpt.x, vpt.y);
+        const hovered = Store.getAt(img.x, img.y);
 
         if (hovered !== currentHover) {
           const { originalEvent } = evt;

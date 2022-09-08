@@ -3,7 +3,7 @@ import { type Shape, ShapeType } from '../shapes';
 import { parseMediaFragment } from '../w3c/selector/MediaFragment';
 
 const toW3CBody = (resource: IiifV2Resource) => ({
-  purpose: 'commenting',
+  purpose: 'transcribing',
   value: resource.chars
 })
 
@@ -18,7 +18,7 @@ export const parseAnnotations = (annotations: IiifV2Annotation[]): ({ parsed: Sh
       shape = {
         id: annotation['@id'],
         type: ShapeType.RECTANGLE,
-        data: { body: toW3CBody(resource) },
+        data: { body: [ toW3CBody(resource) ] },
         geometry: parseMediaFragment(on.selector.value),
         state: {}  
       }
