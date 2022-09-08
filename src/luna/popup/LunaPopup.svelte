@@ -11,6 +11,7 @@
 
   /** Props **/
   export let viewer: any;
+  export let user: any;
   export let shape: Shape;
   export let offsetX: number;
   export let offsetY: number;
@@ -45,7 +46,9 @@
     const updated = upsertFirst(shape, {
       type: 'TextualBody',
       purpose: 'transcribing',
-      value: evt.detail
+      value: evt.detail,
+      // created: "2020-05-18T09:39:47.582Z",
+      creator: user
     });
 
     Store.update(shape, updated);

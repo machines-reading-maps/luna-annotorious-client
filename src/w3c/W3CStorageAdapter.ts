@@ -30,12 +30,15 @@ const toW3C = (shape: Shape, source: string): Object => ({
 })
 
 const StorageAdapter = ({ store, source }) => {
-
   // How to handle this? Load only my own corrections? Merge/replace with Luna annotations?
-  fetch(`/api/annotation/search?source=${source}`).then(res => res.json()).then(data => {
-    console.log('initial search', data);
-    const { parsed } = parseW3C(data);
-    store.bulkUpsert(parsed);
+  fetch(`${API_BASE}/annotation/search?source=${source}`).then(res => res.json()).then(data => {
+    if (data.length > 0) {
+      console.log(`Got ${data.length} corrections`);
+      console.log(data);
+
+      const { parsed } = parseW3C(data);
+      store.bulkUpsert(parsed);
+    }
   }).then(() => {
     // Observe changes after the initial load
     store.observe(changes => {

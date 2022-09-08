@@ -24,7 +24,8 @@
 
     // Init the storage adapter
     StorageAdapter({
-      store: Store
+      store: Store,
+      source: null
     });
   });
 

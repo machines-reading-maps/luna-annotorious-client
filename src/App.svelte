@@ -1,12 +1,14 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
-  // import LunaAuth from '@/luna/auth/LunaAuth.svelte';
+  import DummyAuth from '@/luna/auth/DummyAuth.svelte';
   import { OSDViewer, OSDPixiAnnotationLayer }  from '@/openseadragon';
   import { StorageAdapter } from '@/w3c';
   import { Store } from '@/store';
   import { parseAnnotations } from './iiifv2/parseAnnotations';
 
   let hovered: any;
+
+  let user: { id: string, name: string };
 
   const urlParams = new URLSearchParams(window.location.search);
   
@@ -41,13 +43,19 @@
     });
   });
   
+  const onAuth = (evt: CustomEvent) => {
+    user = {
+      id: evt.detail.id,
+      name: evt.detail.fullname
+    };
+  }
+
   const onEnterShape = ({ detail }) => hovered = detail;
 
   const onLeaveShape = () => hovered = null;
 </script>
 
 <OSDViewer class="viewer" config={config} let:viewer={viewer}>
-
   <OSDPixiAnnotationLayer 
     viewer={viewer} 
     on:enterShape={onEnterShape} 
@@ -56,6 +64,7 @@
   {#if hovered}
     <LunaPopup 
       viewer={viewer}
+      user={user}
       shape={hovered.shape}
       offsetX={hovered.originalEvent.offsetX}
       offsetY={hovered.originalEvent.offsetY} 
@@ -63,3 +72,5 @@
   {/if}
 
 </OSDViewer>
+
+<DummyAuth on:authenticated={onAuth} />
