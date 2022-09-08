@@ -4,6 +4,11 @@ import type { Selector, WebAnnotation } from '.';
 // TODO make configurable
 const API_BASE = '/api';
 
+// TODO dummy for testing!
+fetch('/api/login').then(res => res.json()).then(data => {
+  console.log('login reply:', data);
+});
+
 const toFragmentSelector = (rect: Rectangle): Selector => {
   const { x, y, w, h } = rect.geometry;
 
