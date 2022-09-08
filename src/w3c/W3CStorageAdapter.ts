@@ -1,6 +1,7 @@
 import { ShapeType, type Rectangle, type Shape } from '@/shapes';
 import type { Selector } from '.';
 import { API_BASE } from '@/Config';
+import { parseW3C } from '.';
 
 const toFragmentSelector = (rect: Rectangle): Selector => {
   const { x, y, w, h } = rect.geometry;
@@ -33,27 +34,30 @@ const StorageAdapter = ({ store, source }) => {
   // How to handle this? Load only my own corrections? Merge/replace with Luna annotations?
   fetch(`/api/annotation/search?source=${source}`).then(res => res.json()).then(data => {
     console.log('initial search', data);
-  });
+    const { parsed } = parseW3C(data);
+    store.bulkUpsert(parsed);
+  }).then(() => {
+    // Observe changes after the initial load
+    store.observe(changes => {
+      // Currently, the UI will only make updates, anyway
+      const { updated }  = changes;
 
-  store.observe(changes => {
-    // Currently, the UI will only make updates, anyway
-    const { updated }  = changes;
+      updated.forEach(({ previous, updated } : { previous: Shape, updated: Shape}) => {
+        const w3c = toW3C(updated, source);
 
-    updated.forEach(({ previous, updated } : { previous: Shape, updated: Shape}) => {
-      const w3c = toW3C(updated, source);
-
-      fetch(`${API_BASE}/annotation`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(w3c)
-      }).then(res => res.json()).then(data => {
-        console.log('API reply:', data);
-      }).catch(error => {
-        // TODO raise event?
-        console.error('ERROR storing annotation', error);
+        fetch(`${API_BASE}/annotation`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(w3c)
+        }).then(res => res.json()).then(data => {
+          console.log('API reply:', data);
+        }).catch(error => {
+          // TODO raise event?
+          console.error('ERROR storing annotation', error);
+        });
       });
     });
   });

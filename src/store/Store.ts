@@ -69,8 +69,11 @@ const Store = () => {
     index.update(previousShape, shape);
   }
 
+  const bulkUpsert = (shapes: Shape[]) =>
+    index.bulkUpsert(shapes);
+
   return {
-    add, all, clear, get, getAt, observe, remove, set, update 
+    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, update 
   }
 
 }

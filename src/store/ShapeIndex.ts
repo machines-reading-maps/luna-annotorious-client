@@ -49,6 +49,14 @@ export default class ShapeIndex {
     }
   }
 
+  bulkUpsert = (shapes: Shape[]) => {
+    this.doc.transact(() => {
+      shapes.forEach(shape => {
+        this.map.set(shape.id, shape);
+      })
+    });
+  }
+
   remove = (shape: Shape | string) => {
     if (typeof shape === 'string')
       this.map.delete(shape);
