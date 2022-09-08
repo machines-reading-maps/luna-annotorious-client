@@ -6,7 +6,7 @@ const API_BASE = '/api';
 
 // TODO dummy for testing!
 fetch('/api/login').then(res => res.json()).then(data => {
-  console.log('login reply:', data);
+  // console.log('login reply:', data);
 });
 
 const toFragmentSelector = (rect: Rectangle): Selector => {
@@ -24,16 +24,22 @@ const toSvgSelector = (shape: Shape): Selector => {
   return null;
 }
 
-const toW3C = (shape: Shape, source: string): WebAnnotation => ({
+const toW3C = (shape: Shape, source: string): Object => ({
+  '@context': 'http://www.w3.org/ns/anno.jsonld',
+  type: 'Annotation',
   id: shape.id,
   body: shape.data?.body || [],
-  target: [{
+  target: {
     source,
     selector: shape.type === ShapeType.RECTANGLE ? toFragmentSelector(shape as Rectangle) : toSvgSelector(shape)
-  }]
+  }
 })
 
 const StorageAdapter = ({ store, source }) => {
+
+  fetch(`/api/annotation/search?source=${source}`).then(res => res.json()).then(data => {
+    console.log('initial search', data);
+  });
 
   store.observe(changes => {
 
