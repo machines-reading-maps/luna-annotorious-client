@@ -1,8 +1,7 @@
-import { ShapeType, boundsFromPoints } from '../../shapes';
+import { ShapeType, boundsFromPoints } from '@/shapes';
+import type { Shape, Polygon, Rectangle } from '@/shapes';
 
-import type { Shape, Polygon, Rectangle } from '../../shapes';
-
-const translatePolygon = (polygon: Polygon, map: any): Polygon => {
+const latLonPolygonToImageRegion = (polygon: Polygon, map: any): Polygon => {
   const points: Array<Array<number>> = polygon.geometry.points.map(map.lonLatToImageRegion);
 
   return {
@@ -14,7 +13,7 @@ const translatePolygon = (polygon: Polygon, map: any): Polygon => {
   }
 }
 
-const translateRectangle = (rectangle: Rectangle, map: any): Rectangle => {
+const latLonRectToImageRegion = (rectangle: Rectangle, map: any): Rectangle => {
   const {x, y, w, h} = rectangle.geometry;
 
   const [x0, y0] = map.lonLatToImageRegion([x, y]);
@@ -37,9 +36,9 @@ const translateRectangle = (rectangle: Rectangle, map: any): Rectangle => {
   }
 }
 
-export const translateShape = (shape: Shape, map: any): Shape => {
+export const latLonShapeToImageRegion = (shape: Shape, map: any): Shape => {
   if (shape.type === ShapeType.POLYGON)
-    return translatePolygon(shape as Polygon, map);
+    return latLonPolygonToImageRegion(shape as Polygon, map);
   else if (shape.type === ShapeType.RECTANGLE)
-    return translateRectangle(shape as Rectangle, map);
+    return latLonRectToImageRegion(shape as Rectangle, map);
 }

@@ -4,10 +4,12 @@
   import OpenSeadragon from 'openseadragon';
 
   import { Store } from '@/store';
-  import { type Shape, ShapeType, simplify, type Rectangle, type Polygon } from '@/shapes';
-  import { redraw } from './redraw';
+  import type { Shape } from '@/shapes';
   
   export let viewer: any;
+  export let draw: any;
+  export let toImageCoordinates;
+  export let getDelta: any;
 
   let currentHover: Shape | null;
 
@@ -15,22 +17,41 @@
 
   const dispatch = createEventDispatcher();
 
-  const draw = (shapes: Shape[]) => {
-    graphics.beginFill(0xff0000, 0.45);
+  const redraw = (renderer: PIXI.AbstractRenderer) => () => {
+    const viewportBounds = viewer.viewport.viewportToImageRectangle(viewer.viewport.getBounds(true));
 
-    shapes.forEach(shape => {
-      if (shape.type === ShapeType.RECTANGLE) {
-        const { x, y, w, h } = (shape as Rectangle).geometry;
-        graphics.drawRect(x, y, w, h);
-      } else if (shape.type === ShapeType.POLYGON) {
-        const simplified = simplify(shape as Polygon);
-        const flattend = simplified.geometry.points.reduce((flat, xy) => ([...flat, ...xy]), []);   
-        graphics.drawPolygon(flattend);
-      }
-    });
+    const containerWidth = viewer.viewport.getContainerSize().x;
+    const zoom = viewer.viewport.getZoom(true);
+    const scale = zoom * containerWidth / viewer.world.getContentFactor();
 
-    graphics.endFill();
-  }
+    const { dx, dy } = getDelta(viewportBounds, scale);
+
+    const rotation = Math.PI * viewer.viewport.getRotation() / 180;
+
+    let offsetX: number, offsetY: number;
+
+    if (rotation > 0 && rotation <= Math.PI / 2) {
+      offsetX = viewportBounds.height * scale;
+      offsetY = 0;
+    } else if (rotation > Math.PI / 2 && rotation <= Math.PI) {
+      offsetX = viewportBounds.width * scale;
+      offsetY = viewportBounds.height * scale;
+    } else if (rotation > Math.PI && rotation <= Math.PI * 1.5) {
+      offsetX = 0;
+      offsetY = viewportBounds.width * scale;
+    } else {
+      offsetX = 0;
+      offsetY = 0;
+    }
+
+    graphics.position.x = offsetX + dx * Math.cos(rotation) - dy * Math.sin(rotation);
+    graphics.position.y = offsetY + dx * Math.sin(rotation) + dy * Math.cos(rotation);
+
+    graphics.scale.set(scale, scale);
+    graphics.rotation = rotation;
+    
+    renderer.render(graphics);
+  };
 
   onMount(() => {
     const { offsetWidth, offsetHeight } = viewer.canvas;
@@ -56,7 +77,7 @@
 
       moveHandler: evt => {
         const vpt = viewer.viewport.pointFromPixel(evt.position);
-        const img = viewer.viewport.viewportToImageCoordinates(vpt.x, vpt.y);
+        const img = toImageCoordinates(vpt, viewer);
 
         const hovered = Store.getAt(img.x, img.y);
 
@@ -82,13 +103,13 @@
       view: canvas
     });
 
-    viewer.addHandler('update-viewport', redraw(viewer, renderer, graphics));
+    viewer.addHandler('update-viewport', redraw(renderer));
 
-    draw(Store.all());
+    draw(Store.all(), graphics);
   });
 
   Store.observe(changes => {
-    draw(changes.added);
+    draw(changes.added, graphics);
   });
 </script>
 
