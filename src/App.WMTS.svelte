@@ -2,8 +2,9 @@
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import LunaAuth from '@/luna/auth/LunaAuth.svelte';
   import { OSDViewer, WMTSPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
-  import { parseW3C, StorageAdapter } from '@/w3c';
-  import { Store } from '@/store';
+  import { parseW3C } from '@/formats/w3c';
+  import { Store } from '@/state';
+  import { LunaStorageAdapter } from '@/storage';
 
   let hovered: any;
 
@@ -23,7 +24,7 @@
     Store.set(parseW3C(data, true).parsed);
 
     // Init the storage adapter
-    StorageAdapter({
+    LunaStorageAdapter({
       store: Store,
       source: null
     });
@@ -53,6 +54,7 @@
       <LunaPopup 
         viewer={viewer}
         shape={hovered.shape}
+        user={{ id: 'dumy', name: 'dummy '}}
         offsetX={hovered.originalEvent.offsetX}
         offsetY={hovered.originalEvent.offsetY} 
         viewportPoint={hovered.viewportPoint} />

@@ -27,6 +27,4 @@ export interface Selector {
 }
 
 export * from './parseW3C';
-
-export { default as StorageAdapter } from './W3CStorageAdapter';
-
+export * from './W3CUtils';

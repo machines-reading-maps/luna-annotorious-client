@@ -1,10 +1,10 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import DummyAuth from '@/luna/auth/DummyAuth.svelte';
-  import { OSDViewer, OSDPixiAnnotationLayer }  from '@/openseadragon';
-  import { StorageAdapter } from '@/w3c';
-  import { Store } from '@/store';
-  import { parseAnnotations } from './iiifv2/parseAnnotations';
+  import { OSDViewer, OSDPixiImageAnnotationLayer }  from '@/openseadragon';
+  import { Store } from '@/state';
+  import { LunaStorageAdapter } from '@/storage';
+  import { parseAnnotations } from '@/formats/iiif2';
 
   let hovered: any;
 
@@ -37,7 +37,7 @@
     Store.set(parsed);
 
     // Init the storage adapter
-    StorageAdapter({
+    LunaStorageAdapter({
       store: Store,
       source: imageUrl
     });
@@ -56,7 +56,8 @@
 </script>
 
 <OSDViewer class="viewer" config={config} let:viewer={viewer}>
-  <OSDPixiAnnotationLayer 
+
+  <OSDPixiImageAnnotationLayer 
     viewer={viewer} 
     on:enterShape={onEnterShape} 
     on:leaveShape={onLeaveShape} />

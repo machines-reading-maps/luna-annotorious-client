@@ -1,6 +1,6 @@
 <script type="ts">
   import { onMount, createEventDispatcher } from 'svelte';
-  import { API_BASE } from '../../Config';
+  import { API_BASE } from '@/Config';
 
   const dispatch = createEventDispatcher();
 

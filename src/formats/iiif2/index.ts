@@ -35,3 +35,5 @@ export interface IiifV2Resource {
   chars?: string
 
 }
+
+export * from './parseAnnotations';

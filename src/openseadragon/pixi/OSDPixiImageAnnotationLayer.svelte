@@ -1,7 +1,7 @@
 <script lang="ts">
   import type * as PIXI from 'pixi.js';
-  import { ShapeType, simplify, type Polygon, type Rectangle, type Shape } from "@/shapes";
-  import BaseAnnotationLayer from "./BaseAnnotationLayer.svelte";
+  import { ShapeType, simplify, type Polygon, type Rectangle, type Shape } from '@/shapes';
+  import BaseAnnotationLayer from './OSDPixiBaseAnnotationLayer.svelte';
 
   export let viewer: any;
 

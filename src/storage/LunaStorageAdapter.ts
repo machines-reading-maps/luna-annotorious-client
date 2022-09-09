@@ -1,7 +1,6 @@
 import { ShapeType, type Rectangle, type Shape } from '@/shapes';
-import type { Selector } from '.';
+import { type Selector, parseW3C } from '@/formats/w3c';
 import { API_BASE } from '@/Config';
-import { parseW3C } from '.';
 
 const toFragmentSelector = (rect: Rectangle): Selector => {
   const { x, y, w, h } = rect.geometry;
@@ -29,7 +28,7 @@ const toW3C = (shape: Shape, source: string): Object => ({
   }
 })
 
-const StorageAdapter = ({ store, source }) => {
+const LunaStorageAdapter = ({ store, source }) => {
   // How to handle this? Load only my own corrections? Merge/replace with Luna annotations?
   fetch(`${API_BASE}/annotation/search?source=${source}`).then(res => res.json()).then(data => {
     if (data.length > 0) {
@@ -67,4 +66,4 @@ const StorageAdapter = ({ store, source }) => {
 
 }
 
-export default StorageAdapter;
+export default LunaStorageAdapter;

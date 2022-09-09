@@ -1,4 +1,4 @@
-import type { Bounds } from '../../shapes';
+import type { Bounds } from '@/shapes';
 
 export interface MediaFragment {
 

@@ -3,8 +3,8 @@
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
 
-  import { upsertFirst } from '@/w3c/W3CUtils';
-  import { Store } from '@/store';
+  import { upsertFirst } from '@/formats/w3c';
+  import { Store } from '@/state';
   import type { Shape } from '@/shapes';
   import HUD from './HUD.svelte';
   import Transcription from './Transcription.svelte';

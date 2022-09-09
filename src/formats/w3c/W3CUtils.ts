@@ -1,4 +1,4 @@
-import type { Shape } from '../shapes';
+import type { Shape } from '@/shapes';
 
 interface AnnotationBody {
 

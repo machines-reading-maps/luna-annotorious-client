@@ -1,10 +1,9 @@
 import { nanoid  } from 'nanoid';
 
+import { type Shape, ShapeType } from '@/shapes';
 import { parseMediaFragment } from './selector/MediaFragment';
 import { parseSVG } from './selector/SVG';
-
 import type { WebAnnotation } from '.';
-import { type Shape, ShapeType } from '../shapes';
 
 export const parseW3C = (annotations: WebAnnotation[], invertY: boolean = false): ({ parsed: Shape[], failed: WebAnnotation[] }) =>
   annotations.reduce((result, annotation) => {

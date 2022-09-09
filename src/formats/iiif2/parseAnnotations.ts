@@ -1,6 +1,6 @@
 import type { IiifV2Annotation, IiifV2Resource } from '.';
-import { type Shape, ShapeType } from '../shapes';
-import { parseMediaFragment } from '../w3c/selector/MediaFragment';
+import { type Shape, ShapeType } from '@/shapes';
+import { parseMediaFragment } from '@/formats/w3c/selector/MediaFragment';
 
 const toW3CBody = (resource: IiifV2Resource) => ({
   purpose: 'transcribing',
