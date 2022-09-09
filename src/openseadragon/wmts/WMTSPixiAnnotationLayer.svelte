@@ -27,8 +27,10 @@
     graphics.endFill();
   }
 
-  const toImageCoordinates = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) =>
-    map.viewportToLonLat([vpt.x, vpt.y]);
+  const toImageCoordinates = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) => {
+    const [x, y] = map.viewportToLonLat([vpt.x, vpt.y]);
+    return { x, y };
+  }
 
   const getDelta = (viewportBounds: OpenSeadragon.Rect, scale: number) => ({
     dx: - (viewportBounds.x - map.imageRegion.x) * scale,

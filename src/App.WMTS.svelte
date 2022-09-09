@@ -1,10 +1,8 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
-  import LunaAuth from '@/luna/auth/LunaAuth.svelte';
   import { OSDViewer, WMTSPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
   import { parseW3C } from '@/formats/w3c';
   import { Store } from '@/state';
-  import { LunaStorageAdapter } from '@/storage';
 
   let hovered: any;
 
@@ -22,22 +20,11 @@
   // Load data
   fetch('/hgnswtqypvcrtl.json').then(res => res.json()).then(data => {
     Store.set(parseW3C(data, true).parsed);
-
-    // Init the storage adapter
-    LunaStorageAdapter({
-      store: Store,
-      source: null
-    });
   });
 
   const onEnterShape = ({ detail }) => hovered = detail;
 
   const onLeaveShape = () => hovered = null;
-
-  var clientAppHostUrl = 'https://anno1.davidrumsey.com/anno';
-  var lunaUrl = 'https://clone.davidrumsey.com/luna/servlet';
-  const loginUrl = lunaUrl + "/login?origin="+clientAppHostUrl+"/callback.htm";
-  const getTokenUrl = lunaUrl + "/token?messageId=1&origin="+clientAppHostUrl+"/token_test.html";
 </script>
 
 <OSDViewer class="viewer" config={config} let:viewer={viewer}>
@@ -63,7 +50,3 @@
   </WMTSTileSource>
 
 </OSDViewer>
-
-<LunaAuth
-  loginUrl="https://clone.davidrumsey.com/luna/servlet/login?origin=http://127.0.0.1:5173/public/auth_callback.html"
-  tokenUrl="https://clone.davidrumsey.com/luna/servlet/token?messageId=1&origin=https://127.0.0.1:5173" />
