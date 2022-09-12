@@ -1,31 +1,57 @@
 <script type="ts">
-  import { onMount } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
+  import { API_BASE } from '@/Config';
 
   export let loginUrl: string;
   export let tokenUrl: string;
+
+  const dispatch = createEventDispatcher();
   
   // Login state
-  let state = 'CHECKING';
+  let state = 'QUERY_TOKEN_SERVICE';
+  let user = null;
 
   // Auth iframe reference
   let iframe: HTMLIFrameElement;
 
   onMount(() => {
-    const onFetchToken = () => {
-      console.log('fetch token');
-
+    const afterIFrameOpened = () => {
       if (iframe.contentDocument) {
-        state = 'LOGGED_IN';
+        // iframe loaded content - now wait if we receive a token message
+        state = 'WAITING_FOR_TOKEN';
       } else { 
+        // iframe content was blocked - we're definitely logged out
         state = 'LOGGED_OUT';
       }
     }
 
-    iframe.addEventListener('load', onFetchToken);
-    iframe.addEventListener('error', onFetchToken);
+    iframe.addEventListener('load', afterIFrameOpened);
+    iframe.addEventListener('error', afterIFrameOpened);
 
     const onMessage = (evt: MessageEvent) => {
-      console.log('message event:', evt);
+      try {
+        const { accessToken } = JSON.parse(evt.data);
+
+        // 'Log in' on the server with the token. The server will verify the 
+        // token, set an HttpOnly cookie (not accessible to JS), and respond
+        // with user details. If the token is not valid, the server will respond
+        // with HTTP 401 Unauthorized instead.
+        fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ accessToken })
+        }).then(res => res.json()).then(data => {
+          user = data.user;
+          state = 'LOGGED_IN';
+
+          dispatch('authenticated', user);
+        });
+      } catch (error) {
+        console.error('Failed to retrieve token', evt);
+      }
     };
 
     window.addEventListener('message', onMessage);
@@ -36,15 +62,23 @@
   const doLogin = () => {
     const popup = window.open(loginUrl, "_blank", "height=377,width=606");
 
+    /*
     const interval = setInterval(() => {
       console.log(popup.document.domain);
     }, 500);
+    */
+  }
+
+  const doLogout = () => {
+    fetch(`${API_BASE}/logout`).then(res => res.json()).then(data => {
+      console.log('Logged out');
+    });
   }
 </script>
 
 <div class="luna-auth-widget">
-  {#if state === 'CHECKING'}
-    Checking...
+  {#if state === 'QUERY_TOKEN_SERVICE' || state === 'WAITING_FOR_TOKEN'}
+    {state}
     <iframe 
       bind:this={iframe}
       title="iiif-auth-iframe"
@@ -52,10 +86,8 @@
   {:else if state === 'LOGGED_OUT'}
     Not logged in <button on:click={doLogin}>Login</button>
   {:else if state === 'LOGGED_IN'}
-    Logged in!
+    Logged in as: {user} <button on:click={doLogout}>Logout</button>
   {/if}
-
-
 </div>
 
 <style>
