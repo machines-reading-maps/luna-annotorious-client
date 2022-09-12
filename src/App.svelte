@@ -9,6 +9,8 @@
 
   let hovered: any;
 
+  let loaded: boolean;
+
   let user: { id: string };
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -28,22 +30,29 @@
   }
 
   // Load data  
-  fetch(annotationUrl).then(res => res.json()).then(data => {
+  const fLoad = fetch(annotationUrl).then(res => res.json()).then(data => {
     console.log('Loading annotations from Luna');
     const { parsed } = parseAnnotations(data);
     Store.set(parsed);
-  });
+  }).then(() => loaded = true);
   
   const onAuth = (evt: CustomEvent) => {
-    console.log('Authorization successful - fetching personal corrections');
-    
-    user = { id: evt.detail };
+    const initStorageAdapter = () => {
+      console.log('Authorization successful - fetching personal corrections');
+      
+      user = { id: evt.detail };
 
-    // Init the storage adapter
-    LunaStorageAdapter({
-      store: Store,
-      source: imageUrl
-    });
+      // Init the storage adapter
+      LunaStorageAdapter({
+        store: Store,
+        source: imageUrl
+      });
+    }
+
+    if (loaded)
+      initStorageAdapter();
+    else
+      fLoad.then(() => initStorageAdapter());
   }
 
   const onEnterShape = ({ detail }) => hovered = detail;
@@ -73,4 +82,4 @@
 <LunaAuth 
   loginUrl={LUNA_LOGIN_URL}
   tokenUrl={LUNA_TOKEN_URL}
-  on:authenticated={onAuth} />
+  on:authenticated={onAuth} />sd

@@ -68,12 +68,6 @@
     }, 500);
     */
   }
-
-  const doLogout = () => {
-    fetch(`${API_BASE}/logout`).then(res => res.json()).then(data => {
-      console.log('Logged out');
-    });
-  }
 </script>
 
 <div class="luna-auth-widget">
@@ -86,7 +80,7 @@
   {:else if state === 'LOGGED_OUT'}
     Not logged in <button on:click={doLogin}>Login</button>
   {:else if state === 'LOGGED_IN'}
-    Logged in as: {user} <button on:click={doLogout}>Logout</button>
+    Logged in as: {user}
   {/if}
 </div>
 
