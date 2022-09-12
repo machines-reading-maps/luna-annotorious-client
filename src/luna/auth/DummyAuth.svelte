@@ -20,7 +20,6 @@
           });
       }).catch(error => {
         console.log('Something went wrong during login');
-
         state = 'LOGGED_OUT';
       });
   });

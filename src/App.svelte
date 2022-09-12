@@ -5,7 +5,7 @@
   import { Store } from '@/state';
   import { LunaStorageAdapter } from '@/storage';
   import { parseAnnotations } from '@/formats/iiif2';
-  import { LUNA_LOGIN_URL, LUNA_TOKEN_URL } from '@/Config';
+  import { LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/Config';
 
   let hovered: any;
 
@@ -79,7 +79,8 @@
 
 </OSDViewer>
 
-<LunaAuth 
-  loginUrl={LUNA_LOGIN_URL}
+<LunaAuth
   tokenUrl={LUNA_TOKEN_URL}
+  loginUrl={LUNA_LOGIN_URL}
+  logoutUrl={LUNA_LOGOUT_URL}
   on:authenticated={onAuth} />sd

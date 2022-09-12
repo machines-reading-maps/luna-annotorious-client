@@ -2,8 +2,9 @@
   import { onMount, createEventDispatcher } from 'svelte';
   import { API_BASE } from '@/Config';
 
-  export let loginUrl: string;
   export let tokenUrl: string;
+  export let loginUrl: string;
+  export let logoutUrl: string;
 
   const dispatch = createEventDispatcher();
   
@@ -60,6 +61,7 @@
   });
 
   const doLogin = () => {
+
     const popup = window.open(loginUrl, "_blank", "height=377,width=606");
 
     /*
@@ -78,9 +80,9 @@
       title="iiif-auth-iframe"
       src={tokenUrl} />
   {:else if state === 'LOGGED_OUT'}
-    Not logged in <button on:click={doLogin}>Login</button>
+    Not logged in <a href={loginUrl}>Login</a>
   {:else if state === 'LOGGED_IN'}
-    Logged in as: {user}
+    Logged in as: {user} <a href={logoutUrl}>Logout</a>
   {/if}
 </div>
 
