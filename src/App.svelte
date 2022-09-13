@@ -93,4 +93,4 @@
   tokenUrl={LUNA_TOKEN_URL}
   loginUrl={LUNA_LOGIN_URL}
   logoutUrl={LUNA_LOGOUT_URL}
-  on:authenticated={onAuth} />sd
+  on:authenticated={onAuth} />
