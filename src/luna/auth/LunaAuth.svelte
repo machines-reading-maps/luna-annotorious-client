@@ -45,10 +45,14 @@
           },
           body: JSON.stringify({ accessToken })
         }).then(res => res.json()).then(data => {
-          user = data.user;
-          state = 'LOGGED_IN';
+          if (data.user) {
+            user = data.user;
+            state = 'LOGGED_IN';
 
-          dispatch('authenticated', user);
+            dispatch('authenticated', user);
+          } else {
+            dispatch('failed', data);
+          }
         });
       } catch (error) {
         console.error('Failed to retrieve token', evt);
@@ -60,16 +64,8 @@
     return () => window.removeEventListener('message', onMessage);
   });
 
-  const doLogin = () => {
-
-    const popup = window.open(loginUrl, "_blank", "height=377,width=606");
-
-    /*
-    const interval = setInterval(() => {
-      console.log(popup.document.domain);
-    }, 500);
-    */
-  }
+  const doLogin = () =>
+    window.open(loginUrl, "_blank", "height=377,width=606");
 </script>
 
 <div class="luna-auth-widget">
