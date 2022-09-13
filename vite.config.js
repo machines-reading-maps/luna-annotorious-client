@@ -26,6 +26,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      input: './public/index.html',
       output: {
         manualChunks: {
           vendor: ['openseadragon', 'pixi.js']
