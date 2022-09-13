@@ -1,17 +1,20 @@
 <script type="ts">
+  import { onMount } from 'svelte';
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import LunaAuth from '@/luna/auth/LunaAuth.svelte';
   import { OSDViewer, OSDPixiImageAnnotationLayer }  from '@/openseadragon';
   import { Store } from '@/state';
   import { LunaStorageAdapter } from '@/storage';
   import { parseAnnotations } from '@/formats/iiif2';
-  import { LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/Config';
+  import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/Config';
 
   let hovered: any;
 
   let loaded: boolean;
 
   let user: { id: string };
+
+  let serverTimeDifference = 0;
 
   const urlParams = new URLSearchParams(window.location.search);
   
@@ -58,6 +61,12 @@
   const onEnterShape = ({ detail }) => hovered = detail;
 
   const onLeaveShape = () => hovered = null;
+
+  onMount(() => {
+    // Clock sync
+    fetch(`${API_BASE}/time`).then(res => res.json()).then(({ timestamp }) =>
+      serverTimeDifference = timestamp - Date.now());
+  });
 </script>
 
 <OSDViewer class="viewer" config={config} let:viewer={viewer}>
@@ -71,6 +80,7 @@
     <LunaPopup 
       viewer={viewer}
       user={user}
+      serverTimeDifference={serverTimeDifference}
       shape={hovered.shape}
       offsetX={hovered.originalEvent.offsetX}
       offsetY={hovered.originalEvent.offsetY} 

@@ -12,6 +12,7 @@
   /** Props **/
   export let viewer: any;
   export let user: any;
+  export let serverTimeDifference: number = 0; 
   export let shape: Shape;
   export let offsetX: number;
   export let offsetY: number;
@@ -20,6 +21,9 @@
   /** State **/
   let isHUDOpen = false;
   let isTranscriptionEditable = false;
+
+  const currentTimeAdjusted = () =>
+    new Date(Date.now() + serverTimeDifference);
 
   /** Derived **/
   $: transcription = shape.data.body.find(body => body.purpose === 'transcribing')?.value;
@@ -47,8 +51,8 @@
       type: 'TextualBody',
       purpose: 'transcribing',
       value: evt.detail,
-      // created: "2020-05-18T09:39:47.582Z",
-      creator: user
+      creator: user,
+      created: currentTimeAdjusted()
     });
 
     Store.update(shape, updated);
