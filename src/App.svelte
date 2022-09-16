@@ -17,12 +17,17 @@
   let serverTimeDifference = 0;
 
   const urlParams = new URLSearchParams(window.location.search);
+
+  const imageId = urlParams.get('img')  || 'RUMSEY~8~1~272964~90046789';
+
+  const manifestUrl = 
+    `https://www.davidrumsey.com/luna/servlet/iiif/m/${imageId}/manifest`;
   
-  const imageUrl = urlParams.get('img') || 
-    'https://www.davidrumsey.com/luna/servlet/iiif/RUMSEY~8~1~272964~90046789';
+  const imageUrl =
+    `https://www.davidrumsey.com/luna/servlet/iiif/${imageId}/info.json`;
   
-  const annotationUrl = urlParams.get('annotations') ||
-    'https://www.davidrumsey.com/luna/servlet/iiif/annotation/oa/search?uri=https%3A%2F%2Fwww.davidrumsey.com%2Fluna%2Fservlet%2Fiiif%2Fm%2FRUMSEY~8~1~272964~90046789%2Fcanvas%2Fc1&media=image&limit=10000&_=1654013978941';
+  const annotationUrl = 
+    `https://www.davidrumsey.com/luna/servlet/iiif/m/${imageId}/list/luna`;
 
   // OSD viewer config
   const config = {
@@ -32,10 +37,14 @@
     }
   }
 
+  // Load manifest for metadata
+  fetch(manifestUrl).then(res => res.json()).then(metadata =>
+    document.title = `${metadata.label} - David Rumsey Historical Map Collection | Annotation`); 
+
   // Load data  
   const fLoad = fetch(annotationUrl).then(res => res.json()).then(data => {
     console.log('Loading annotations from Luna');
-    const { parsed } = parseAnnotations(data);
+    const { parsed } = parseAnnotations(data.resources);
     Store.set(parsed);
   }).then(() => loaded = true);
   
