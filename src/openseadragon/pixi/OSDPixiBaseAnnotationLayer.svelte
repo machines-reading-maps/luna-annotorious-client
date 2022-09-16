@@ -121,7 +121,6 @@
   });
 
   afterUpdate(() => {
-    console.log(selected);
     if (selected) {
       const g = graphicsIndex[selected.id];
       g.destroy();

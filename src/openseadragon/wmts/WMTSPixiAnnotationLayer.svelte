@@ -1,30 +1,37 @@
 <script lang="ts">
-  import type * as PIXI from 'pixi.js';
+  import * as PIXI from 'pixi.js';
 
   import { ShapeType, simplify, type Polygon, type Rectangle, type Shape } from '@/shapes';
   import BaseAnnotationLayer from '@/openseadragon/pixi/OSDPixiBaseAnnotationLayer.svelte';
   import { latLonShapeToImageRegion } from './transform';
 
   export let viewer: any;
+  export let selected: Shape;
   export let map: any;
 
-  const draw = (shapes: Shape[], graphics: PIXI.Graphics) => {
-    graphics.beginFill(0xff0000, 0.45);
+  const draw = (shape: Shape) => {
+    const translated = latLonShapeToImageRegion(shape, map);
 
-    shapes.forEach(shape => {
-      const translated = latLonShapeToImageRegion(shape, map);
+    if (translated.type === ShapeType.RECTANGLE) {
+      const { x, y, w, h } = (translated as Rectangle).geometry;
+      
+      const rect = new PIXI.Graphics();
+      rect.beginFill(0xff0000, 0.45);
+      rect.drawRect(x, y, w, - h);
+      rect.endFill();
 
-      if (translated.type === ShapeType.RECTANGLE) {
-        const { x, y, w, h } = (translated as Rectangle).geometry;
-        graphics.drawRect(x, y, w, - h);
-      } else if (translated.type === ShapeType.POLYGON) {
-        const simplified = simplify(translated as Polygon);
-        const flattend = simplified.geometry.points.reduce((flat, xy) => ([...flat, ...xy]), []);   
-        graphics.drawPolygon(flattend);
-      }
-    });
+      return rect;
+    } else if (translated.type === ShapeType.POLYGON) {
+      const simplified = simplify(translated as Polygon);
+      const flattend = simplified.geometry.points.reduce((flat, xy) => ([...flat, ...xy]), []);  
+      
+      const poly = new PIXI.Graphics();
+      poly.beginFill(0xff0000, 0.45);
+      poly.drawPolygon(flattend);
+      poly.endFill();
 
-    graphics.endFill();
+      return poly;
+    }
   }
 
   const toImageCoordinates = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) => {
@@ -40,6 +47,7 @@
 
 <BaseAnnotationLayer
   viewer={viewer}
+  selected={selected}
   draw={draw}
   toImageCoordinates={toImageCoordinates}
   getDelta={getDelta} 
