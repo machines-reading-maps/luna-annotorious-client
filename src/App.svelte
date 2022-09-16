@@ -2,13 +2,15 @@
   import { onMount } from 'svelte';
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import LunaAuth from '@/luna/auth/LunaAuth.svelte';
-  import { OSDViewer, OSDPixiImageAnnotationLayer }  from '@/openseadragon';
+  import { OSDViewer, OSDPixiImageAnnotationLayer , OSDSVGDrawingLayer}  from '@/openseadragon';
   import { Store } from '@/state';
   import { LunaStorageAdapter } from '@/storage';
   import { parseAnnotations } from '@/formats/iiif2';
   import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/Config';
 
   let hovered: any;
+
+  let selected: any;
 
   let loaded: boolean;
 
@@ -81,9 +83,13 @@
 <OSDViewer class="viewer" config={config} let:viewer={viewer}>
 
   <OSDPixiImageAnnotationLayer 
-    viewer={viewer} 
+    viewer={viewer}
     on:enterShape={onEnterShape} 
     on:leaveShape={onLeaveShape} />
+
+  <OSDSVGDrawingLayer 
+    viewer={viewer}
+    selected={selected} />
 
   {#if hovered}
     <LunaPopup 
@@ -93,7 +99,8 @@
       shape={hovered.shape}
       offsetX={hovered.originalEvent.offsetX}
       offsetY={hovered.originalEvent.offsetY} 
-      viewportPoint={hovered.viewportPoint} />
+      viewportPoint={hovered.viewportPoint} 
+      on:editShape={evt => selected = evt.detail}/>
   {/if}
 
 </OSDViewer>

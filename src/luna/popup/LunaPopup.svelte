@@ -1,5 +1,5 @@
 <script type="ts">
-  import { onMount } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
 
@@ -21,6 +21,8 @@
   /** State **/
   let isHUDOpen = false;
   let isTranscriptionEditable = false;
+
+  const dispatch = createEventDispatcher();
 
   const currentTimeAdjusted = () =>
     new Date(Date.now() + serverTimeDifference);
@@ -82,7 +84,9 @@
   </div>
 
   {#if isHUDOpen}
-    <HUD on:fixTranscription={() => isTranscriptionEditable = true} />
+    <HUD 
+      on:fixTranscription={() => isTranscriptionEditable = true} 
+      on:editShape={() => dispatch('editShape', shape)} />
   {/if}
 
   <div class="mousetrap" />

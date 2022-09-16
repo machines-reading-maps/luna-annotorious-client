@@ -12,7 +12,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const anim = (from: number, to: number, angle: number, spring: Function, conf: object) => (node: Element, config: object) => {
+  const anim = (from: number, to: number, angle: number, spring: Function, conf: object) => (node: Element) => {
     const { duration, tickToValue } = spring(from, to, conf);
 
     return {
