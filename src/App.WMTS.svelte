@@ -1,10 +1,12 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
-  import { OSDViewer, WMTSPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
+  import { OSDViewer, OSDSVGDrawingLayer, WMTSPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
   import { parseW3C } from '@/formats/w3c';
   import { Store } from '@/state';
 
   let hovered: any;
+
+  let selected: any;
 
   // OSD viewer config
   const config = {
@@ -33,9 +35,14 @@
 
     <WMTSPixiAnnotationLayer 
       viewer={viewer} 
+      selected={selected}
       map={map} 
       on:enterShape={onEnterShape} 
       on:leaveShape={onLeaveShape} />
+
+    <OSDSVGDrawingLayer 
+      viewer={viewer}
+      selected={selected} />
 
     {#if hovered}
       <LunaPopup 
@@ -44,7 +51,8 @@
         user={{ id: 'dumy', name: 'dummy '}}
         offsetX={hovered.originalEvent.offsetX}
         offsetY={hovered.originalEvent.offsetY} 
-        viewportPoint={hovered.viewportPoint} />
+        viewportPoint={hovered.viewportPoint} 
+        on:editShape={evt => selected = evt.detail} />
     {/if}
       
   </WMTSTileSource>
