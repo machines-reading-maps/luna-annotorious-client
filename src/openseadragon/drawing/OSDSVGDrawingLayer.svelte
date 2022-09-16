@@ -1,5 +1,6 @@
 <script type="ts">
   import { onMount } from 'svelte';
+
   import type { Shape } from "@/shapes";
   import OSDSVGOverlay from "./OSDSVGOverlay.svelte.svelte";
 
@@ -12,11 +13,12 @@
     overlay = new OSDSVGOverlay({
       target: viewer.element.querySelector('.openseadragon-canvas'),
       props: {
+        viewer,
         selected
       }
     });
   });
 
-  $: overlay && overlay.$set({  selected });
+  $: overlay && overlay.$set({ viewer, selected });
 </script>
 
