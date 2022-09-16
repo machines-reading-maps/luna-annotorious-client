@@ -135,20 +135,23 @@
   Store.observe(changes => changes.added.forEach(drawShape));
 
   afterUpdate(() => {
-    if (selected) {
-      // Restore removed objects
-      removedObjects.forEach(drawShape);
+    // Restore removed objects
+    removedObjects.forEach(drawShape);
 
-      // Remove selected
+    if (selected) {
+      // Remove selected from Pixi layer
       const g = renderedObjects[selected.id];
       g.destroy();
-
       delete renderedObjects[selected.id];
 
+      // Keep record of removed object
       removedObjects = [ selected ];
-
-      refresh();
+    } else {
+      // Set removed to empty
+      removedObjects = [];
     }
+
+    refresh();
   });
 </script>
 
