@@ -1,42 +1,54 @@
 <script lang="ts">
   import { onMount, afterUpdate, createEventDispatcher } from 'svelte';
-  import * as PIXI from 'pixi.js';
   import OpenSeadragon from 'openseadragon';
-
+  import * as PIXI from 'pixi.js';
   import { Store } from '@/state';
   import type { Shape } from '@/shapes';
-  
-  export let viewer: any;
-  export let selected: Shape;
-
-  export let draw: any;
-  export let toImageCoordinates;
-  export let getDelta: any;
-
-  let currentHover: Shape | null;
-
-  const graphicsIndex = {}; // Graphics object by shape ID
-
-  let renderer; 
-
-  const graphics = new PIXI.Graphics();
 
   const dispatch = createEventDispatcher();
 
-  const drawAll = (shapes: Shape[]) => shapes.forEach(shape => {
-    const g = draw(shape);
-    graphics.addChild(g);
-    graphicsIndex[shape.id] = g;
-  });
+  // OpenSeadragon viewer
+  export let viewer: any;
 
-  const redraw = (renderer: PIXI.AbstractRenderer) => () => {
+  // Current selection
+  export let selected: Shape;
+  
+  // AnnotationLayer config
+  export let config: {
+    drawShape:Function,
+    viewportToLayerPoint: Function,
+    viewportToLayerDelta: Function
+  };
+
+  // Pixi stage
+  const graphics = new PIXI.Graphics();
+
+  // Pixi renderer - initialized on mount
+  let renderer: PIXI.AbstractRenderer; 
+
+  // Lookup table: rendered graphics objects by shape ID
+  let renderedObjects = {}; 
+
+  // Objects currently removed due to selection
+  let removedObjects = [];
+
+  // Current mouse hover state
+  let currentHover: Shape | null;
+
+  const drawShape = (shape: Shape) => {
+    const g = config.drawShape(shape);
+    graphics.addChild(g);
+    renderedObjects[shape.id] = g;
+  }
+
+  const refresh = () => {
     const viewportBounds = viewer.viewport.viewportToImageRectangle(viewer.viewport.getBounds(true));
 
     const containerWidth = viewer.viewport.getContainerSize().x;
     const zoom = viewer.viewport.getZoom(true);
     const scale = zoom * containerWidth / viewer.world.getContentFactor();
 
-    const { dx, dy } = getDelta(viewportBounds, scale);
+    const { dx, dy } = config.viewportToLayerDelta(viewportBounds, scale);
 
     const rotation = Math.PI * viewer.viewport.getRotation() / 180;
 
@@ -89,7 +101,7 @@
 
       moveHandler: evt => {
         const vpt = viewer.viewport.pointFromPixel(evt.position);
-        const img = toImageCoordinates(vpt, viewer);
+        const img = config.viewportToLayerPoint(vpt, viewer);
 
         const hovered = Store.getAt(img.x, img.y);
 
@@ -115,21 +127,28 @@
       view: canvas
     });
 
-    viewer.addHandler('update-viewport', redraw(renderer));
+    viewer.addHandler('update-viewport', refresh);
 
-    drawAll(Store.all());
+    Store.all().forEach(drawShape);
   });
+
+  Store.observe(changes => changes.added.forEach(drawShape));
 
   afterUpdate(() => {
     if (selected) {
-      const g = graphicsIndex[selected.id];
-      g.destroy();
-      redraw(renderer)();
-    }
-  });
+      // Restore removed objects
+      removedObjects.forEach(drawShape);
 
-  Store.observe(changes => {
-    drawAll(changes.added);
+      // Remove selected
+      const g = renderedObjects[selected.id];
+      g.destroy();
+
+      delete renderedObjects[selected.id];
+
+      removedObjects = [ selected ];
+
+      refresh();
+    }
   });
 </script>
 

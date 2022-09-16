@@ -6,7 +6,7 @@
   export let viewer: any;
   export let selected: Shape;
 
-  const draw = (shape: Shape) => {
+  const drawShape = (shape: Shape) => {
     if (shape.type === ShapeType.RECTANGLE) {
       const { x, y, w, h } = (shape as Rectangle).geometry;
 
@@ -29,10 +29,10 @@
     }
   }
 
-  const toImageCoordinates = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) =>
+  const viewportToLayerPoint = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) =>
     viewer.viewport.viewportToImageCoordinates(vpt.x, vpt.y);
 
-  const getDelta = (viewportBounds: OpenSeadragon.Rect, scale: number) => ({
+  const viewportToLayerDelta = (viewportBounds: OpenSeadragon.Rect, scale: number) => ({
     dx: - viewportBounds.x * scale,
     dy: - viewportBounds.y * scale
   });
@@ -41,8 +41,10 @@
 <BaseAnnotationLayer
   viewer={viewer}
   selected={selected}
-  draw={draw}
-  toImageCoordinates={toImageCoordinates}
-  getDelta={getDelta} 
+  config={{
+    drawShape, 
+    viewportToLayerPoint,
+    viewportToLayerDelta
+  }}
   on:enterShape
   on:leaveShape />

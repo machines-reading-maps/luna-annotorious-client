@@ -9,7 +9,7 @@
   export let selected: Shape;
   export let map: any;
 
-  const draw = (shape: Shape) => {
+  const drawShape = (shape: Shape) => {
     const translated = latLonShapeToImageRegion(shape, map);
 
     if (translated.type === ShapeType.RECTANGLE) {
@@ -34,12 +34,12 @@
     }
   }
 
-  const toImageCoordinates = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) => {
+  const viewportToLayerPoint = (vpt: OpenSeadragon.Point, viewer: OpenSeadragon.Viewer) => {
     const [x, y] = map.viewportToLonLat([vpt.x, vpt.y]);
     return { x, y };
   }
 
-  const getDelta = (viewportBounds: OpenSeadragon.Rect, scale: number) => ({
+  const viewportToLayerDelta = (viewportBounds: OpenSeadragon.Rect, scale: number) => ({
     dx: - (viewportBounds.x - map.imageRegion.x) * scale,
     dy: - (viewportBounds.y - map.imageRegion.y) * scale
   });
@@ -48,8 +48,10 @@
 <BaseAnnotationLayer
   viewer={viewer}
   selected={selected}
-  draw={draw}
-  toImageCoordinates={toImageCoordinates}
-  getDelta={getDelta} 
+  config={{
+    drawShape, 
+    viewportToLayerPoint,
+    viewportToLayerDelta
+  }}
   on:enterShape
   on:leaveShape />
