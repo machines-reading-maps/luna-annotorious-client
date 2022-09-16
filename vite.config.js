@@ -15,7 +15,7 @@ export default defineConfig({
     splitVendorChunkPlugin()
   ],
   server: {
-    open: '/public/index.html',
+    open: '/',
     proxy: {
       '/api': 'http://localhost'
       // '/api': {
@@ -26,7 +26,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      input: './public/index.html',
+      input: 'index.html',
       output: {
         manualChunks: {
           vendor: ['openseadragon', 'pixi.js']
