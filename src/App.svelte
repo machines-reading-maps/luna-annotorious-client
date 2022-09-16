@@ -84,6 +84,7 @@
 
   <OSDPixiImageAnnotationLayer 
     viewer={viewer}
+    selected={selected}
     on:enterShape={onEnterShape} 
     on:leaveShape={onLeaveShape} />
 

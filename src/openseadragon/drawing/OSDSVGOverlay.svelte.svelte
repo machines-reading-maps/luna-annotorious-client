@@ -48,4 +48,11 @@
     height: 100%;
     outline: none;
   }
+
+  rect {
+    stroke-width: 2px;
+    stroke: #ff0000;
+    fill: transparent;
+    vector-effect: non-scaling-stroke;
+  }
 </style>

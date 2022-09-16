@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount, afterUpdate, createEventDispatcher } from 'svelte';
   import * as PIXI from 'pixi.js';
   import OpenSeadragon from 'openseadragon';
 
@@ -7,15 +7,27 @@
   import type { Shape } from '@/shapes';
   
   export let viewer: any;
+  export let selected: Shape;
+
   export let draw: any;
   export let toImageCoordinates;
   export let getDelta: any;
 
   let currentHover: Shape | null;
 
+  const graphicsIndex = {}; // Graphics object by shape ID
+
+  let renderer; 
+
   const graphics = new PIXI.Graphics();
 
   const dispatch = createEventDispatcher();
+
+  const drawAll = (shapes: Shape[]) => shapes.forEach(shape => {
+    const g = draw(shape);
+    graphics.addChild(g);
+    graphicsIndex[shape.id] = g;
+  });
 
   const redraw = (renderer: PIXI.AbstractRenderer) => () => {
     const viewportBounds = viewer.viewport.viewportToImageRectangle(viewer.viewport.getBounds(true));
@@ -96,7 +108,7 @@
       }
     });
 
-    const renderer = PIXI.autoDetectRenderer({ 
+    renderer = PIXI.autoDetectRenderer({ 
       width: offsetWidth, 
       height: offsetHeight,
       backgroundAlpha: 0,
@@ -105,11 +117,20 @@
 
     viewer.addHandler('update-viewport', redraw(renderer));
 
-    draw(Store.all(), graphics);
+    drawAll(Store.all());
+  });
+
+  afterUpdate(() => {
+    console.log(selected);
+    if (selected) {
+      const g = graphicsIndex[selected.id];
+      g.destroy();
+      redraw(renderer)();
+    }
   });
 
   Store.observe(changes => {
-    draw(changes.added, graphics);
+    drawAll(changes.added);
   });
 </script>
 
