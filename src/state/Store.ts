@@ -1,4 +1,4 @@
-import type { Shape } from '@/shapes';
+import type { Shape, Geometry } from '@/shapes';
 import ShapeIndex from './ShapeIndex';
 import SpatialTree from './SpatialTree';
 import type ChangeEvent from './ChangeEvent';
@@ -69,11 +69,17 @@ const Store = () => {
     index.update(previousShape, shape);
   }
 
+  const updateGeometry = <T extends Geometry>(shape: Shape | string, geometry: T) => { 
+    const previousShape = typeof shape === 'string' ? index.get(shape): shape;
+    const updatedShape = { ...previousShape, geometry };
+    index.update(previousShape, updatedShape);
+  }
+
   const bulkUpsert = (shapes: Shape[]) =>
     index.bulkUpsert(shapes);
 
   return {
-    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, update 
+    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, update, updateGeometry
   }
 
 }

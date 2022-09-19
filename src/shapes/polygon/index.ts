@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import s from 'simplify-js';
 
-import { ShapeType } from '../Shape';
+import { type Geometry, ShapeType } from '../Shape';
 import { registerShapeUtil } from '../ShapeUtils';
 
 import type { Bounds } from '../Bounds';
@@ -10,13 +10,15 @@ import type { ShapeUtil } from '../ShapeUtils';
 
 export interface Polygon extends Shape {
 
-  geometry: {
+  geometry: PolygonGeometry
 
-    points: Array<Array<number>>
+}
 
-    bounds: Bounds
+export interface PolygonGeometry extends Geometry {
 
-  }
+  points: Array<Array<number>>
+
+  bounds: Bounds
 
 }
 

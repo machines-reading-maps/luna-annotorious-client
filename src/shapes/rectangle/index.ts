@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import { ShapeType } from '../Shape';
+import { type Geometry, ShapeType } from '../Shape';
 import { registerShapeUtil } from '../ShapeUtils';
 
 import type { Bounds } from '../Bounds';
@@ -9,19 +9,21 @@ import type { ShapeUtil } from '../ShapeUtils';
 
 export interface Rectangle extends Shape {
 
-  geometry: {
+  geometry: RectangleGeometry
 
-    x: number
+}
 
-    y: number
+export interface RectangleGeometry extends Geometry {
 
-    w: number
+  x: number
 
-    h: number,
+  y: number
 
-    bounds: Bounds
+  w: number
 
-  }
+  h: number,
+
+  bounds: Bounds
 
 }
 

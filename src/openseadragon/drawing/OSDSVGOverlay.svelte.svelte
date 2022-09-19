@@ -1,6 +1,7 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import OpenSeadragon from 'openseadragon';
+  import EditableRect from '@/tools/rectangle/EditableRect.svelte';
 
   export let viewer: any;
   export let selected: any;
@@ -23,6 +24,15 @@
     transform = `translate(${p.x}, ${p.y}) scale(${scaleX}, ${scaleY}) rotate(${rotation})`;
   }
 
+  const screenToImage = (x: number, y: number) =>
+    viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(x, y));
+
+  const onGrab = () =>
+    viewer.setMouseNavEnabled(false);
+
+  const onRelease = () =>
+    viewer.setMouseNavEnabled(true);
+
   onMount(() =>
     viewer.addHandler('update-viewport', updateTransform(viewer)));
 </script>
@@ -30,11 +40,11 @@
 <svg class="a9s-gl-drawing-pane">
   <g transform={transform}>
     {#if selected}
-      <rect 
-        x={selected.geometry.x}
-        y={selected.geometry.y}
-        width={selected.geometry.w}
-        height={selected.geometry.h} />
+      <EditableRect
+        shape={selected} 
+        screenToImage={screenToImage} 
+        on:grab={onGrab} 
+        on:release={onRelease} />
     {/if}
   </g>
 </svg>
@@ -47,12 +57,5 @@
     width: 100%;
     height: 100%;
     outline: none;
-  }
-
-  rect {
-    stroke-width: 2px;
-    stroke: #ff0000;
-    fill: transparent;
-    vector-effect: non-scaling-stroke;
   }
 </style>

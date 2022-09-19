@@ -92,7 +92,7 @@
     viewer={viewer}
     selected={selected} />
 
-  {#if hovered}
+  {#if hovered && !selected}
     <LunaPopup 
       viewer={viewer}
       user={user}

@@ -12,24 +12,28 @@ export interface Shape {
 
   id: string
 
-  type: ShapeType,
+  type: ShapeType
 
   data?: any
 
-  geometry: {
-    
-    bounds: Bounds
+  geometry: Geometry
 
-  }
+  state: ShapeState
 
-  state: {
+}
 
-    isHovered?: boolean,
+export interface Geometry {
 
-    isSelected?: boolean,
-  
-    props?: Object
-      
-  }
+  bounds: Bounds
+
+}
+
+export interface ShapeState {
+
+  isHovered?: boolean,
+
+  isSelected?: boolean,
+
+  props?: Object
 
 }
