@@ -1,7 +1,7 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import OpenSeadragon from 'openseadragon';
-  import { Selection } from '@/state';
+  import { Store, Selection } from '@/state';
   import EditableRect from '@/tools/rectangle/EditableRect.svelte';
   import { ShapeType, type Shape, type Rectangle} from '@/shapes';
 
@@ -36,13 +36,20 @@
   const onRelease = () =>
     viewer.setMouseNavEnabled(true);
 
+  const onComplete = (shape: Shape) =>
+    Store.update(shape.id, {
+      ...shape,
+      state: {
+        ...shape.state,
+        isSelected: false
+      }
+    });
+
   onMount(() =>
     viewer.addHandler('update-viewport', updateTransform(viewer)));
   
   // Making TypeScript happy
   const rectangle = (shape: Shape) => shape as Rectangle;
-
-  $: console.log('asdfasfasd', $Selection);
 </script>
 
 <svg class="a9s-gl-drawing-pane">
@@ -53,7 +60,9 @@
           shape={rectangle(selected)} 
           screenToImage={screenToImage} 
           on:grab={onGrab} 
-          on:release={onRelease} />
+          on:release={onRelease} 
+          on:save={({ detail }) => onComplete(detail)} 
+          on:cancel={({ detail }) => onComplete(detail)} />
       {/if}
     {/each}
   </g>

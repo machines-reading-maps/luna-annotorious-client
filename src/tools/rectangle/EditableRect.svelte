@@ -1,5 +1,5 @@
 <script type="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import { Store } from '@/state';
   import type { Rectangle } from '@/shapes';
   import { Handle} from '../HandleType';
@@ -47,6 +47,19 @@
 
     dispatch('release');
   }
+
+  onMount(() => {
+    const onKeyDown = (evt: KeyboardEvent) => {
+      if (evt.code === 'Enter')
+        dispatch('save', shape)
+      else if (evt.code === 'Escape')
+        dispatch('cancel', initialShape);
+    };
+    
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
 </script>
 
 <g 
