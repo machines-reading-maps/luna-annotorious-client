@@ -25,8 +25,10 @@
     transform = `translate(${p.x}, ${p.y}) scale(${scaleX}, ${scaleY}) rotate(${rotation})`;
   }
 
-  const screenToImage = (x: number, y: number) =>
-    viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(x, y));
+  const screenToImage = (px: number, py: number) => {
+    const { x, y } = viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(px, py));
+    return [x, y];
+  }
 
   const onGrab = () =>
     viewer.setMouseNavEnabled(false);

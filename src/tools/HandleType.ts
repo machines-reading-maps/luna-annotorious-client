@@ -1,4 +1,7 @@
-export enum BoundsEdge {
+export enum Handle {
+ 
+  SHAPE = 'SHAPE',
+
   
   TOP = 'TOP',
   
@@ -6,12 +9,9 @@ export enum BoundsEdge {
   
   BOTTOM = 'BOTTOM',
   
-  LEFT = 'LEFT'
+  LEFT = 'LEFT',
 
-}
-
-export enum BoundsCorner {
-
+  
   TOP_LEFT = 'TOP_LEFT',
   
   TOP_RIGHT = 'TOP_RIGHT',

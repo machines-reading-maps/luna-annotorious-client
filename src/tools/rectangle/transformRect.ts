@@ -1,47 +1,54 @@
 import type { Rectangle } from '@/shapes';
-import { BoundsCorner, BoundsEdge } from '../ShapeTransform';
+import { Handle } from '../HandleType';
 
 export const resize = (
   rect: Rectangle, 
-  handle: BoundsEdge | BoundsCorner,
-  pointer: number[]
+  handle: Handle,
+  delta: number[]
 ): Rectangle => {
   const initialBounds = rect.geometry.bounds; 
 
   let [x0, y0] = [initialBounds.minX, initialBounds.minY];
   let [x1, y1] = [initialBounds.maxX, initialBounds.maxY];
 
-  const [ px, py ] = pointer;
+  const [ dx, dy ] = delta;
 
-  switch (handle) {
-    case BoundsEdge.TOP:
-    case BoundsCorner.TOP_LEFT:
-    case BoundsCorner.TOP_RIGHT: {
-      y0 = py;
-      break;
+  if (handle === Handle.SHAPE) {
+    x0 += dx;
+    x1 += dx;
+    y0 += dy;
+    y1 += dy;
+  } else {
+    switch (handle) {
+      case Handle.TOP:
+      case Handle.TOP_LEFT:
+      case Handle.TOP_RIGHT: {
+        y0 += dy;
+        break;
+      }
+
+      case Handle.BOTTOM:
+      case Handle.BOTTOM_LEFT:
+      case Handle.BOTTOM_RIGHT: {
+        y1 += dy;
+        break;
+      }
     }
 
-    case BoundsEdge.BOTTOM:
-    case BoundsCorner.BOTTOM_LEFT:
-    case BoundsCorner.BOTTOM_RIGHT: {
-      y1 = py;
-      break;
-    }
-  }
+    switch (handle) {
+      case Handle.LEFT:
+      case Handle.TOP_LEFT:
+      case Handle.BOTTOM_LEFT: {
+        x0 += dx;
+        break
+      }
 
-  switch (handle) {
-    case BoundsEdge.LEFT:
-    case BoundsCorner.TOP_LEFT:
-    case BoundsCorner.BOTTOM_LEFT: {
-      x0 = px;
-      break
-    }
-
-    case BoundsEdge.RIGHT:
-    case BoundsCorner.TOP_RIGHT:
-    case BoundsCorner.BOTTOM_RIGHT: {
-      x1 = px;
-      break
+      case Handle.RIGHT:
+      case Handle.TOP_RIGHT:
+      case Handle.BOTTOM_RIGHT: {
+        x1 += dx;
+        break
+      }
     }
   }
 
