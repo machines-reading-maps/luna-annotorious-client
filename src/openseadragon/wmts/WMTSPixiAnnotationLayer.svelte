@@ -6,7 +6,6 @@
   import { latLonShapeToImageRegion } from './transform';
 
   export let viewer: any;
-  export let selected: Shape;
   export let map: any;
 
   const drawShape = (shape: Shape) => {
@@ -47,7 +46,6 @@
 
 <BaseAnnotationLayer
   viewer={viewer}
-  selected={selected}
   config={{
     drawShape, 
     viewportToLayerPoint,

@@ -13,6 +13,29 @@ const latLonPolygonToImageRegion = (polygon: Polygon, map: any): Polygon => {
   }
 }
 
+export const imageRegionRectToLanLot = (rectangle: Rectangle, map: any): Rectangle => {
+  const {x, y, w, h} = rectangle.geometry;
+
+  const [x0, y0] = map.imageRegionToLonLat([ x, y ]);
+  const [x1, y1] = map.imageRegionToLonLat([x + w, y + h]);
+
+  return {
+    ...rectangle,
+    geometry: {
+      x: x0,
+      y: y1,
+      w: x1 - x0,
+      h: y1 - y0,
+      bounds: {
+        minX: x0,
+        minY: y0,
+        maxX: x1,
+        maxY: y1
+      }
+    }
+  }
+}
+
 const latLonRectToImageRegion = (rectangle: Rectangle, map: any): Rectangle => {
   const {x, y, w, h} = rectangle.geometry;
 

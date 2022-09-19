@@ -1,8 +1,8 @@
 <script type="ts">
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
-  import { OSDViewer, OSDSVGDrawingLayer, WMTSPixiAnnotationLayer, WMTSTileSource }  from '@/openseadragon';
+  import { OSDViewer, WMTSPixiAnnotationLayer, WMTSTileSource, WMTSSVGDrawingLayer }  from '@/openseadragon';
   import { parseW3C } from '@/formats/w3c';
-  import { Store } from '@/state';
+  import { Store, Selection } from '@/state';
 
   let hovered: any;
 
@@ -35,16 +35,15 @@
 
     <WMTSPixiAnnotationLayer 
       viewer={viewer} 
-      selected={selected}
       map={map} 
       on:enterShape={onEnterShape} 
       on:leaveShape={onLeaveShape} />
 
-    <OSDSVGDrawingLayer 
+    <WMTSSVGDrawingLayer
       viewer={viewer}
-      selected={selected} />
+      map={map} />
 
-    {#if hovered}
+    {#if hovered && $Selection.length === 0}
       <LunaPopup 
         viewer={viewer}
         shape={hovered.shape}

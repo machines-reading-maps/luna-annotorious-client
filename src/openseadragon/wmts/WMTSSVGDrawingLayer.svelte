@@ -1,17 +1,19 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import type OpenSeadragon from 'openseadragon';
-  import OSDSVGOverlay from './OSDSVGOverlay.svelte';
+  import WMTSSVGDrawingOverlay from './WMTSSVGOverlay.svelte';
 
   export let viewer: OpenSeadragon.Viewer;
+  export let map: any;
 
-  let overlay: OSDSVGOverlay;
+  let overlay: WMTSSVGDrawingOverlay;
 
   onMount(() => {
-    overlay = new OSDSVGOverlay({
+    overlay = new WMTSSVGDrawingOverlay({
       target: viewer.element.querySelector('.openseadragon-canvas'),
       props: {
-        viewer
+        viewer,
+        map
       }
     });
   });
