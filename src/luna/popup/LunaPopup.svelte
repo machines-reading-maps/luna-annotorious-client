@@ -1,10 +1,10 @@
 <script type="ts">
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount } from 'svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
 
   import { upsertFirst } from '@/formats/w3c';
-  import { Store } from '@/state';
+  import { Store, Selection } from '@/state';
   import type { Shape } from '@/shapes';
   import HUD from './HUD.svelte';
   import Transcription from './Transcription.svelte';
@@ -22,10 +22,29 @@
   let isHUDOpen = false;
   let isTranscriptionEditable = false;
 
-  const dispatch = createEventDispatcher();
-
   const currentTimeAdjusted = () =>
     new Date(Date.now() + serverTimeDifference);
+
+  const onEditShape = () => {
+    // Deselect
+    $Selection.forEach(shape => {
+      Store.update(shape, {
+        ...shape,
+        state: {
+          ...shape.state,
+          isSelected: false
+        }
+      });
+    });
+
+    Store.update(shape, {
+      ...shape,
+      state: {
+        ...shape.state,
+        isSelected: true
+      }
+    });
+  }
 
   /** Derived **/
   $: transcription = shape.data.body.find(body => body.purpose === 'transcribing')?.value;
@@ -86,7 +105,7 @@
   {#if isHUDOpen}
     <HUD 
       on:fixTranscription={() => isTranscriptionEditable = true} 
-      on:editShape={() => dispatch('editShape', shape)} />
+      on:editShape={onEditShape} />
   {/if}
 
   <div class="mousetrap" />

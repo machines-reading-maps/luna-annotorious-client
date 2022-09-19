@@ -1,24 +1,21 @@
 <script type="ts">
   import { onMount } from 'svelte';
+  import type OpenSeadragon from 'openseadragon';
+  import OSDSVGOverlay from './OSDSVGOverlay.svelte.svelte';
 
-  import type { Shape } from "@/shapes";
-  import OSDSVGOverlay from "./OSDSVGOverlay.svelte.svelte";
+  export let viewer: OpenSeadragon.Viewer;
 
-  export let viewer: any;
-  export let selected: Shape;
-
-  let overlay: any;
+  let overlay: OSDSVGOverlay;
 
   onMount(() => {
     overlay = new OSDSVGOverlay({
       target: viewer.element.querySelector('.openseadragon-canvas'),
       props: {
-        viewer,
-        selected
+        viewer
       }
     });
   });
 
-  $: overlay && overlay.$set({ viewer, selected });
+  $: overlay && overlay.$set({ viewer });
 </script>
 

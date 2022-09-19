@@ -1,55 +1,43 @@
 <script type="ts">
   import { createEventDispatcher } from 'svelte';
-  import { Store } from "@/state";
-  import type { Rectangle } from "@/shapes";
-  
-  export let shape: Rectangle;
-  export let screenToImage: Function;
+  import { Store } from '@/state';
+  import type { Rectangle } from '@/shapes';
+  import { BoundsCorner, BoundsEdge } from '../ShapeTransform';
+  import { resize } from './transformRect';
 
   const dispatch = createEventDispatcher();
 
-  const EDGE_HANDLE_WIDTH = 6;
+  export let shape: Rectangle;
+  export let screenToImage: Function;
 
-  let grabbed = null; // Handle or Shape
+  let grabbedHandle: (BoundsEdge | BoundsCorner);
 
-  const onGrab = handle => evt => {
-    evt.target.setPointerCapture(evt.pointerId);
-    grabbed = handle;
+  const onGrab = (handle: BoundsEdge | BoundsCorner) => (evt: PointerEvent) => {
+    grabbedHandle = handle;    
 
+    const target = evt.target as Element;
+    target.setPointerCapture(evt.pointerId);
+    
     dispatch('grab');
   }
 
-  const onPointerMove = evt => {
-    if (grabbed) {
-      const { offsetX, offsetY } = evt;
+  const onPointerMove = (evt: PointerEvent) => {
+    if (grabbedHandle) {
+      const { x, y } = screenToImage(evt.offsetX, evt.offsetY);
 
-      const { x, y } = screenToImage(offsetX, offsetY);
+      const updated = resize(shape, grabbedHandle, [x, y]);
 
-      if (grabbed === 'TOP') {
-        const bottom = shape.geometry.y + shape.geometry.h;
+      Store.update(shape, updated);
 
-        const updated = { 
-          ...shape,
-          geometry: {
-            ...shape.geometry,
-            y: y,
-            h: bottom - y,
-            bounds: {
-              ...shape.geometry.bounds,
-              minY: y 
-            }
-          }
-        };
-
-        Store.update(shape, updated);
-        shape = updated;
-      }
+      shape = updated;
     }
   }
 
-  const onRelease = evt => {
-    evt.target.releasePointerCapture(evt.pointerId);
-    grabbed = null;
+  const onRelease = (evt: PointerEvent) => {
+    const target = evt.target as Element;    
+    target.releasePointerCapture(evt.pointerId);
+
+    grabbedHandle = null;
 
     dispatch('release');
   }
@@ -63,22 +51,22 @@
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-top" 
-    on:pointerdown={onGrab('TOP')}
+    on:pointerdown={onGrab(BoundsEdge.TOP)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
-    x={shape.geometry.x} y={shape.geometry.y - EDGE_HANDLE_WIDTH} width={shape.geometry.w} height={EDGE_HANDLE_WIDTH} />
+    x={shape.geometry.x} y={shape.geometry.y} height={1} width={shape.geometry.w} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-right" 
-    x={shape.geometry.x + shape.geometry.w} y={shape.geometry.y} width={EDGE_HANDLE_WIDTH} height={shape.geometry.h}/>
+    x={shape.geometry.x + shape.geometry.w} y={shape.geometry.y} height={shape.geometry.h} width={1}/>
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-bottom" 
-    x={shape.geometry.x} y={shape.geometry.y + shape.geometry.h} width={shape.geometry.w} height={EDGE_HANDLE_WIDTH}/>
+    x={shape.geometry.x} y={shape.geometry.y + shape.geometry.h} height={1} width={shape.geometry.w} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-left" 
-    x={shape.geometry.x - EDGE_HANDLE_WIDTH} y={shape.geometry.y} width={EDGE_HANDLE_WIDTH} height={shape.geometry.h}/>
+    x={shape.geometry.x} y={shape.geometry.y} height={shape.geometry.h} width={1} />
 </g>
 
 <style>
@@ -86,7 +74,7 @@
     fill:transparent;
     vector-effect: non-scaling-stroke;
     stroke: #ff0000;
-    stroke-width: 2px;
+    stroke-width: 4px;
   }
 
   .a9s-edge-handle {

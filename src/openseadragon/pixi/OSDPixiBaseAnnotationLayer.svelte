@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, afterUpdate, createEventDispatcher } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import OpenSeadragon from 'openseadragon';
   import * as PIXI from 'pixi.js';
   import { Store } from '@/state';
@@ -9,9 +9,6 @@
 
   // OpenSeadragon viewer
   export let viewer: any;
-
-  // Current selection
-  export let selected: Shape;
   
   // AnnotationLayer config
   export let config: {
@@ -28,9 +25,6 @@
 
   // Lookup table: rendered graphics objects by shape ID
   let renderedObjects = {}; 
-
-  // Objects currently removed due to selection
-  let removedObjects = [];
 
   // Current mouse hover state
   let currentHover: Shape | null;
@@ -132,24 +126,23 @@
     Store.all().forEach(drawShape);
   });
 
-  Store.observe(changes => changes.added.forEach(drawShape));
+  Store.observe(changes => {
+    changes.added.forEach(drawShape);
 
-  afterUpdate(() => {
-    // Restore removed objects
-    removedObjects.forEach(drawShape);
+    changes.updated.forEach(({ oldValue, newValue }) => {
+      if (oldValue.state.isSelected && !newValue.state.isSelected) {
+        // Deselect - restore shape
+        drawShape(newValue);
+      } else {
+        const g = renderedObjects[oldValue.id];
+        g?.destroy();
+        delete renderedObjects[oldValue.id];
 
-    if (selected) {
-      // Remove selected from Pixi layer
-      const g = renderedObjects[selected.id];
-      g.destroy();
-      delete renderedObjects[selected.id];
-
-      // Keep record of removed object
-      removedObjects = [ selected ];
-    } else {
-      // Set removed to empty
-      removedObjects = [];
-    }
+        // Add new (unless selected!)
+        if (!newValue.state.isSelected)
+          drawShape(newValue);
+      }
+    });
 
     refresh();
   });

@@ -1,4 +1,4 @@
-import type { Shape, Geometry } from '@/shapes';
+import type { Shape } from '@/shapes';
 import ShapeIndex from './ShapeIndex';
 import SpatialTree from './SpatialTree';
 import type ChangeEvent from './ChangeEvent';
@@ -28,14 +28,14 @@ const Store = () => {
       if (action === 'add') {
         added.push(index.get(key));
       } else if (action === 'update') {
-        updated.push({ previous: oldValue, updated: index.get(key) });
+        updated.push({ oldValue, newValue: index.get(key) });
       }
     }
 
     // Update the spatial tree
     tree.set(added, false);
     deleted.forEach(shape => tree.remove(shape));
-    updated.forEach(({ previous, updated }) => tree.update(previous, updated));
+    updated.forEach(({ oldValue, newValue }) => tree.update(oldValue, newValue));
 
     observers.forEach(observer => observer({ added, deleted, updated }));
   });
@@ -69,17 +69,11 @@ const Store = () => {
     index.update(previousShape, shape);
   }
 
-  const updateGeometry = <T extends Geometry>(shape: Shape | string, geometry: T) => { 
-    const previousShape = typeof shape === 'string' ? index.get(shape): shape;
-    const updatedShape = { ...previousShape, geometry };
-    index.update(previousShape, updatedShape);
-  }
-
   const bulkUpsert = (shapes: Shape[]) =>
     index.bulkUpsert(shapes);
 
   return {
-    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, update, updateGeometry
+    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, update
   }
 
 }

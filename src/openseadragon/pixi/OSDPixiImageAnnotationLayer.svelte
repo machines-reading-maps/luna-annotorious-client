@@ -1,10 +1,10 @@
 <script lang="ts">
   import * as PIXI from 'pixi.js';
+  import type OpenSeadragon from 'openseadragon';
   import { ShapeType, simplify, type Polygon, type Rectangle, type Shape } from '@/shapes';
   import BaseAnnotationLayer from './OSDPixiBaseAnnotationLayer.svelte';
 
-  export let viewer: any;
-  export let selected: Shape;
+  export let viewer: OpenSeadragon.Viewer;
 
   const drawShape = (shape: Shape) => {
     if (shape.type === ShapeType.RECTANGLE) {
@@ -40,7 +40,6 @@
 
 <BaseAnnotationLayer
   viewer={viewer}
-  selected={selected}
   config={{
     drawShape, 
     viewportToLayerPoint,
