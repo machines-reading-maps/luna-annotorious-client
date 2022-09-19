@@ -47,11 +47,7 @@
     viewer.setMouseNavEnabled(true);
 
   const onComplete = (shape: Shape) => {
-
     const transformed = imageRegionRectToLanLot(shape as Rectangle, map);
-
-    console.log(transformed);
-
     Store.update(shape.id, {
       ...transformed,
       state: {

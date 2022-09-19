@@ -23,14 +23,14 @@ export const imageRegionRectToLanLot = (rectangle: Rectangle, map: any): Rectang
     ...rectangle,
     geometry: {
       x: x0,
-      y: y1,
+      y: y0,
       w: x1 - x0,
-      h: y1 - y0,
+      h: y0 - y1,
       bounds: {
         minX: x0,
-        minY: y0,
+        minY: y1,
         maxX: x1,
-        maxY: y1
+        maxY: y0
       }
     }
   }

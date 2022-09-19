@@ -37,6 +37,8 @@
       });
     });
 
+    console.log('editing', shape);
+
     Store.update(shape, {
       ...shape,
       state: {

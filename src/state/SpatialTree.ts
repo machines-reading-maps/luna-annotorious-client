@@ -46,6 +46,7 @@ export default class SpatialTree {
   }
 
   update = (previous: Shape, shape: Shape) => {
+    console.log('tree', shape);
     this.remove(previous);
     this.insert(shape);
   }
