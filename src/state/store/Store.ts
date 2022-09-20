@@ -18,9 +18,11 @@ const Store = () => {
   index.observe(evt => {
     const { keys } = evt.changes;
     
-    const added = [];
-    const deleted = [];
-    const updated = [];
+    const added: Shape[] = [];
+
+    const deleted: Shape[] = [];
+    
+    const updated: Array<{ oldValue: Shape, newValue: Shape }> = [];
 
     for (const [key, value] of keys.entries()) {
       const { action, oldValue } = value;
@@ -34,7 +36,9 @@ const Store = () => {
 
     // Update the spatial tree
     tree.set(added, false);
+
     deleted.forEach(shape => tree.remove(shape));
+    
     updated.forEach(({ oldValue, newValue }) => tree.update(oldValue, newValue));
 
     observers.forEach(observer => observer({ added, deleted, updated }));
