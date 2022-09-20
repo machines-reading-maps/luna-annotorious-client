@@ -23,7 +23,7 @@
   const onGrab = (handle: Handle) => (evt: PointerEvent) => {
     grabbedHandle = handle;    
     grabbedOrigin = screenTransform(evt.offsetX, evt.offsetY);
-    initialShape = shapeTransform(shape as Rectangle);
+    initialShape = shapeTransform ? shapeTransform(shape as Rectangle) : shape as Rectangle;
 
     const target = evt.target as Element;
     target.setPointerCapture(evt.pointerId);
