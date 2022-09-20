@@ -4,7 +4,7 @@
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
 
   import { upsertFirst } from '@/formats/w3c';
-  import { Store, Selection } from '@/state';
+  import { Store, Selection, type HoverState } from '@/state';
   import type { Shape } from '@/shapes';
   import HUD from './HUD.svelte';
   import Transcription from './Transcription.svelte';
@@ -13,10 +13,7 @@
   export let viewer: any;
   export let user: any;
   export let serverTimeDifference: number = 0; 
-  export let shape: Shape;
-  export let offsetX: number;
-  export let offsetY: number;
-  export let viewportPoint: any;
+  export let hover: HoverState;
 
   /** State **/
   let isHUDOpen = false;
@@ -27,33 +24,23 @@
 
   const onEditShape = () => {
     // Deselect
-    $Selection.forEach(shape => {
-      Store.update(shape, {
-        ...shape,
-        state: {
-          ...shape.state,
-          isSelected: false
-        }
-      });
-    });
+    $Selection.forEach(shape =>
+      Store.setState(shape.id, { isSelected: false }));
 
-    Store.update(shape, {
-      ...shape,
-      state: {
-        ...shape.state,
-        isSelected: true
-      }
-    });
+    Store.setState(hover.shape.id, { isSelected: true });
   }
 
   /** Derived **/
-  $: transcription = shape.data.body.find(body => body.purpose === 'transcribing')?.value;
+  $: transcription = hover.shape.data.body.find(body => body.purpose === 'transcribing')?.value;
 
   $: {
+    /*
     if (transcription || viewportPoint)
       isHUDOpen = false;
+      */
   }
 
+  /*
   onMount(() => {
     const onUpdateViewport = () => {
       // Adjust popup position for viewport changes
@@ -66,9 +53,10 @@
     
     return () => viewer.removeHandler('update-viewport', onUpdateViewport);
   });
+  */
 
   const onChangeTranscription = (evt: CustomEvent<string>) => {
-    const updated = upsertFirst(shape, {
+    const updated = upsertFirst(hover.shape, {
       type: 'TextualBody',
       purpose: 'transcribing',
       value: evt.detail,
@@ -76,14 +64,14 @@
       created: currentTimeAdjusted()
     });
 
-    Store.update(shape, updated);
+    Store.update(hover.shape, updated);
 
-    shape = updated;
+    // shape = updated;
     isTranscriptionEditable = false;
   }
 </script>
 
-<div class="r8s-hover-container" style={`top: ${offsetY}px; left: ${offsetX}px`}>
+<div class="r8s-hover-container" style={`top: ${hover.originalEvent.offsetY}px; left: ${hover.originalEvent.offsetX}px`}>
   <div class="r8s-hover-main">
     <div class="r8s-hover-content">
       <Transcription 

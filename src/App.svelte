@@ -3,12 +3,10 @@
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import LunaAuth from '@/luna/auth/LunaAuth.svelte';
   import { OSDViewer, OSDPixiImageAnnotationLayer , OSDSVGDrawingLayer}  from '@/openseadragon';
-  import { Store, Selection } from '@/state';
+  import { Hover, Store, Selection } from '@/state';
   import { LunaStorageAdapter } from '@/storage';
   import { parseAnnotations } from '@/formats/iiif2';
   import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/Config';
-
-  let hovered: any;
 
   let loaded: boolean;
 
@@ -29,21 +27,19 @@
   const annotationUrl = 
     `https://www.davidrumsey.com/luna/servlet/iiif/m/${imageId}/list/luna`;
 
-  // OSD viewer config
-  const config = {
+  const openseadragonConfig = {
     tileSources: imageUrl,
     gestureSettingsTouch: {
       pinchRotate: true
     }
-  }
+  };
 
   // Load manifest for metadata
   fetch(manifestUrl).then(res => res.json()).then(metadata =>
     document.title = `${metadata.label} - David Rumsey Historical Map Collection | Annotation`); 
 
-  // Load data  
+  // Load annotation list  
   const fLoad = fetch(annotationUrl).then(res => res.json()).then(data => {
-    console.log('Loading annotations from Luna');
     const { parsed } = parseAnnotations(data.resources);
     Store.set(parsed);
   }).then(() => loaded = true);
@@ -67,10 +63,6 @@
       fLoad.then(() => initStorageAdapter());
   }
 
-  const onEnterShape = ({ detail }) => hovered = detail;
-
-  const onLeaveShape = () => hovered = null;
-
   onMount(() => {
     // Clock sync
     fetch(`${API_BASE}/time`).then(res => res.json()).then(({ timestamp }) =>
@@ -78,25 +70,19 @@
   });
 </script>
 
-<OSDViewer class="viewer" config={config} let:viewer={viewer}>
+<OSDViewer class="viewer" config={openseadragonConfig} let:viewer={viewer}>
 
   <OSDPixiImageAnnotationLayer 
-    viewer={viewer}
-    on:enterShape={onEnterShape} 
-    on:leaveShape={onLeaveShape} />
-
-  <OSDSVGDrawingLayer 
     viewer={viewer} />
 
-  {#if hovered && $Selection.length === 0}
+  <OSDSVGDrawingLayer viewer={viewer} />
+
+  {#if $Hover && $Selection.length === 0}
     <LunaPopup 
       viewer={viewer}
       user={user}
       serverTimeDifference={serverTimeDifference}
-      shape={hovered.shape}
-      offsetX={hovered.originalEvent.offsetX}
-      offsetY={hovered.originalEvent.offsetY} 
-      viewportPoint={hovered.viewportPoint} />
+      hover={$Hover} />
   {/if}
 
 </OSDViewer>

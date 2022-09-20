@@ -1,6 +1,5 @@
-import { ShapeState } from './ShapeState';
-
 export { default as Store } from './store/Store';
+export { default as Selection } from './Selection';
+export { default as Hover } from './Hover';
 
-export const Selection = ShapeState('isSelected');
-export const Hover = ShapeState('isHovered');
+export * from './Hover';

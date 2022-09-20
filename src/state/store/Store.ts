@@ -67,6 +67,22 @@ const Store = () => {
   const set = (shapes: Shape[]) =>
     index.set(shapes);
 
+  const setState = (id: string, diff: Object) => {
+    const shape = index.get(id);
+
+    if (shape) {
+      const updated = {
+        ...shape,
+        state: {
+          ...shape.state,
+          ...diff
+        }
+      }
+
+      index.add(updated);
+    }
+  }
+
   const update = (previous: Shape | string, shape: Shape) => {
     const previousShape = typeof previous === 'string' ? index.get(previous) : previous; 
     index.update(previousShape, shape);
@@ -76,7 +92,7 @@ const Store = () => {
     index.bulkUpsert(shapes);
 
   return {
-    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, update
+    add, all, bulkUpsert, clear, get, getAt, observe, remove, set, setState, update
   }
 
 }

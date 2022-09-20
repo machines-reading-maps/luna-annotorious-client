@@ -44,6 +44,4 @@
     drawShape, 
     viewportToLayerPoint,
     viewportToLayerDelta
-  }}
-  on:enterShape
-  on:leaveShape />
+  }} />

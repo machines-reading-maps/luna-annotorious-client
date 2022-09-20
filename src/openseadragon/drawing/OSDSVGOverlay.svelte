@@ -5,28 +5,20 @@
   import { ShapeType, type Shape } from '@/shapes';
 
   export let viewer: OpenSeadragon.Viewer;
+
   export let viewTransform: Function;
+  
   export let screenTransform: Function;
 
   let transform = null;
 
-  const onUpdateViewport = () =>
-    transform = viewTransform();
+  const onUpdateViewport = () => transform = viewTransform();
 
-  const onGrab = () =>
-    viewer.setMouseNavEnabled(false);
+  const onGrab = () => viewer.setMouseNavEnabled(false);
 
-  const onRelease = () =>
-    viewer.setMouseNavEnabled(true);
+  const onRelease = () => viewer.setMouseNavEnabled(true);
 
-  const onComplete = (shape: Shape) =>
-    Store.update(shape.id, {
-      ...shape,
-      state: {
-        ...shape.state,
-        isSelected: false
-      }
-    });
+  const onComplete = (shape: Shape) => Store.setState(shape.id, { isSelected: false });
 
   onMount(() => {
     viewer.addHandler('update-viewport', onUpdateViewport);

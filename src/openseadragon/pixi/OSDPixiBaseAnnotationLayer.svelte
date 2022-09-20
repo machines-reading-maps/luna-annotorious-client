@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount } from 'svelte';
   import OpenSeadragon from 'openseadragon';
   import * as PIXI from 'pixi.js';
-  import { Store } from '@/state';
+  import { Hover, Store } from '@/state';
   import type { Shape } from '@/shapes';
-
-  const dispatch = createEventDispatcher();
 
   // OpenSeadragon viewer
   export let viewer: any;
@@ -25,9 +23,6 @@
 
   // Lookup table: rendered graphics objects by shape ID
   let renderedObjects = {}; 
-
-  // Current mouse hover state
-  let currentHover: Shape | null;
 
   const drawShape = (shape: Shape) => {
     const g = config.drawShape(shape);
@@ -99,18 +94,16 @@
 
         const hovered = Store.getAt(img.x, img.y);
 
-        if (hovered !== currentHover) {
-          const { originalEvent } = evt;
-          if (currentHover) {
-            dispatch('leaveShape', { shape: currentHover, originalEvent, viewportPoint: vpt });
-            if (hovered)
-              dispatch('enterShape', { shape: hovered, originalEvent, viewportPoint: vpt });
-          } else {
-            dispatch('enterShape', { shape: hovered, originalEvent, viewportPoint: vpt });
-          }
+        if (hovered?.id !== $Hover?.shape.id) {
+          if (hovered)
+            Hover.set({ shape: hovered, originalEvent: evt.originalEvent as PointerEvent });
+          else 
+            Hover.set(null);
+        } else {
+          // Should we update the originalEvent in the hover state?
+          if (hovered)
+            Hover.set({ shape: hovered, originalEvent: evt.originalEvent as PointerEvent })
         }
-
-        currentHover = hovered;
       }
     });
 
