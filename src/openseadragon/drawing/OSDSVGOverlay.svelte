@@ -1,7 +1,7 @@
 <script type="ts">
   import { onMount } from 'svelte';
-  import { Store, Selection } from '@/state';
-  import EditableRect from '@/tools/rectangle/EditableRect.svelte';
+  import { Hover, Store, Selection } from '@/state';
+  import EditablePolygon from '@/tools/polygon/EditablePolygon.svelte';
   import { ShapeType, type Shape } from '@/shapes';
 
   export let viewer: OpenSeadragon.Viewer;
@@ -22,7 +22,20 @@
 
   const onRelease = () => viewer.setMouseNavEnabled(true);
 
-  const onComplete = (shape: Shape) => Store.setState(shape.id, { isSelected: false });
+  const onComplete = (shape: Shape) => {
+    // Live state from the store
+    const { state } = Store.get(shape.id);
+
+    Store.update(shape.id, { 
+      ...shape,
+      state: {
+        ...state,
+        isSelected: false
+      }
+    });
+
+    Hover.set(null);
+  }
 
   onMount(() => {
     viewer.addHandler('update-viewport', onUpdateViewport);
@@ -36,7 +49,7 @@
   <g transform={transform}>
     {#each $Selection as selected}
       {#if selected.type === ShapeType.RECTANGLE}
-        <EditableRect
+        <EditablePolygon
           shape={selected} 
           screenTransform={screenTransform} 
           shapeTransform={shapeTransform}
