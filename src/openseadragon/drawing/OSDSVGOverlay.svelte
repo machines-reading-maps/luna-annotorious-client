@@ -1,34 +1,17 @@
 <script type="ts">
   import { onMount } from 'svelte';
-  import OpenSeadragon from 'openseadragon';
   import { Store, Selection } from '@/state';
   import EditableRect from '@/tools/rectangle/EditableRect.svelte';
-  import { ShapeType, type Shape, type Rectangle} from '@/shapes';
+  import { ShapeType, type Shape } from '@/shapes';
 
   export let viewer: OpenSeadragon.Viewer;
+  export let viewTransform: Function;
+  export let screenTransform: Function;
 
   let transform = null;
 
-  const updateTransform = viewer => () => {
-    const containerWidth = viewer.viewport.getContainerSize().x;
-    const zoom = viewer.viewport.getZoom(true);
-    const flipped = viewer.viewport.getFlip();
-
-    const p = viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-    if (flipped)
-      p.x = viewer.viewport._containerInnerSize.x - p.x;
-
-    const scaleY = zoom * containerWidth / viewer.world.getContentFactor();
-    const scaleX = flipped ? - scaleY : scaleY;
-    const rotation = viewer.viewport.getRotation();
-
-    transform = `translate(${p.x}, ${p.y}) scale(${scaleX}, ${scaleY}) rotate(${rotation})`;
-  }
-
-  const screenToImage = (px: number, py: number) => {
-    const { x, y } = viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(px, py));
-    return [x, y];
-  }
+  const onUpdateViewport = () =>
+    transform = viewTransform();
 
   const onGrab = () =>
     viewer.setMouseNavEnabled(false);
@@ -45,11 +28,12 @@
       }
     });
 
-  onMount(() =>
-    viewer.addHandler('update-viewport', updateTransform(viewer)));
-  
-  // Making TypeScript happy
-  const rectangle = (shape: Shape) => shape as Rectangle;
+  onMount(() => {
+    viewer.addHandler('update-viewport', onUpdateViewport);
+
+    return () => 
+      viewer.removeHandler('update-viewport', onUpdateViewport);
+  });
 </script>
 
 <svg class="a9s-gl-drawing-pane">
@@ -57,8 +41,8 @@
     {#each $Selection as selected}
       {#if selected.type === ShapeType.RECTANGLE}
         <EditableRect
-          shape={rectangle(selected)} 
-          screenToImage={screenToImage} 
+          shape={selected} 
+          screenTransform={screenTransform} 
           on:grab={onGrab} 
           on:release={onRelease} 
           on:save={({ detail }) => onComplete(detail)} 

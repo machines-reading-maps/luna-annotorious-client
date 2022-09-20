@@ -1,14 +1,16 @@
 <script type="ts">
   import { onMount, createEventDispatcher } from 'svelte';
   import { Store } from '@/state';
-  import type { Rectangle } from '@/shapes';
+  import type { Shape, Rectangle, RectangleGeometry } from '@/shapes';
   import { Handle} from '../HandleType';
   import { resize } from './transformRect';
 
   const dispatch = createEventDispatcher();
 
-  export let shape: Rectangle;
-  export let screenToImage: Function;
+  export let shape: Shape;
+  export let screenTransform: Function;
+
+  $: geom = shape.geometry as RectangleGeometry;
 
   let grabbedHandle: Handle;
   let grabbedOrigin: number[];  
@@ -16,8 +18,8 @@
 
   const onGrab = (handle: Handle) => (evt: PointerEvent) => {
     grabbedHandle = handle;    
-    grabbedOrigin = screenToImage(evt.offsetX, evt.offsetY);
-    initialShape = shape;
+    grabbedOrigin = screenTransform(evt.offsetX, evt.offsetY);
+    initialShape = shape as Rectangle;
 
     const target = evt.target as Element;
     target.setPointerCapture(evt.pointerId);
@@ -27,7 +29,7 @@
 
   const onPointerMove = (evt: PointerEvent) => {
     if (grabbedHandle) {
-      const [x, y] = screenToImage(evt.offsetX, evt.offsetY);
+      const [x, y] = screenTransform(evt.offsetX, evt.offsetY);
 
       const delta = [x - grabbedOrigin[0], y - grabbedOrigin[1]];
 
@@ -70,35 +72,35 @@
     on:pointerdown={onGrab(Handle.SHAPE)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
-    x={shape.geometry.x} y={shape.geometry.y} width={shape.geometry.w} height={shape.geometry.h} />
+    x={geom.x} y={geom.y} width={geom.w} height={geom.h} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-top" 
     on:pointerdown={onGrab(Handle.TOP)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
-    x={shape.geometry.x} y={shape.geometry.y} height={1} width={shape.geometry.w} />
+    x={geom.x} y={geom.y} height={1} width={geom.w} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-right"
     on:pointerdown={onGrab(Handle.RIGHT)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
-    x={shape.geometry.x + shape.geometry.w} y={shape.geometry.y} height={shape.geometry.h} width={1}/>
+    x={geom.x + geom.w} y={geom.y} height={geom.h} width={1}/>
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-bottom" 
     on:pointerdown={onGrab(Handle.BOTTOM)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
-    x={shape.geometry.x} y={shape.geometry.y + shape.geometry.h} height={1} width={shape.geometry.w} />
+    x={geom.x} y={geom.y + geom.h} height={1} width={geom.w} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-left" 
     on:pointerdown={onGrab(Handle.LEFT)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
-    x={shape.geometry.x} y={shape.geometry.y} height={shape.geometry.h} width={1} />
+    x={geom.x} y={geom.y} height={geom.h} width={1} />
 </g>
 
 <style>
