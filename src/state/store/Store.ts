@@ -1,7 +1,7 @@
 import type { Shape } from '@/shapes';
 import ShapeIndex from './ShapeIndex';
 import SpatialTree from './SpatialTree';
-import type ChangeEvent from './ChangeEvent';
+import type StoreChangeEvent from './StoreChangeEvent';
 
 /**
  * A common facade across the spatial tree and the YJS shape index.
@@ -36,11 +36,10 @@ const Store = () => {
 
     // Update the spatial tree
     tree.set(added, false);
-
     deleted.forEach(shape => tree.remove(shape));
-    
     updated.forEach(({ oldValue, newValue }) => tree.update(oldValue, newValue));
 
+    // Forward event to subscribed observers
     observers.forEach(observer => observer({ added, deleted, updated }));
   });
 
@@ -59,7 +58,7 @@ const Store = () => {
   const getAt = (x: number, y: number): Shape | null =>
     tree.getAt(x, y);
 
-  const observe = (callback: (evt: ChangeEvent) => void) =>
+  const observe = (callback: (evt: StoreChangeEvent) => void) =>
     observers.push(callback);
 
   const remove = (shape: Shape | string) =>

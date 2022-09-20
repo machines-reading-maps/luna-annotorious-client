@@ -18,10 +18,32 @@
     const zoom = viewer.viewport.getZoom(true);
     const scale = zoom * containerWidth / viewer.world.getContentFactor();
 
+    const rotation = viewer.viewport.getRotation();
+    const rotationRad = Math.PI * rotation / 180;
+
     const dx = - (viewportBounds.x - map.imageRegion.x) * scale;
     const dy = - (viewportBounds.y - map.imageRegion.y) * scale;
 
-    transform = `translate(${dx}, ${dy}) scale(${scale})`;
+    let offsetX: number, offsetY: number;
+
+    if (rotationRad > 0 && rotationRad <= Math.PI / 2) {
+      offsetX = viewportBounds.height * scale;
+      offsetY = 0;
+    } else if (rotationRad > Math.PI / 2 && rotationRad <= Math.PI) {
+      offsetX = viewportBounds.width * scale;
+      offsetY = viewportBounds.height * scale;
+    } else if (rotationRad > Math.PI && rotationRad <= Math.PI * 1.5) {
+      offsetX = 0;
+      offsetY = viewportBounds.width * scale;
+    } else {
+      offsetX = 0;
+      offsetY = 0;
+    }
+
+    const tx = offsetX + dx * Math.cos(rotationRad) - dy * Math.sin(rotationRad);
+    const ty = offsetY + dx * Math.sin(rotationRad) + dy * Math.cos(rotationRad);
+
+    transform = `translate(${tx}, ${ty}) scale(${scale}) rotate(${rotation})`;
   }
 
   const toImageRegion = (shape: Shape) => { 
