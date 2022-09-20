@@ -9,8 +9,12 @@
 
   export let shape: Shape;
   export let screenTransform: Function;
+  export let shapeTransform: Function = null;
+  export let reverseShapeTransform: Function = null; 
 
-  $: geom = shape.geometry as RectangleGeometry;
+  $: geom = shapeTransform ?
+    shapeTransform(shape).geometry as RectangleGeometry :
+    shape.geometry as RectangleGeometry;
 
   let grabbedHandle: Handle;
   let grabbedOrigin: number[];  
@@ -19,7 +23,7 @@
   const onGrab = (handle: Handle) => (evt: PointerEvent) => {
     grabbedHandle = handle;    
     grabbedOrigin = screenTransform(evt.offsetX, evt.offsetY);
-    initialShape = shape as Rectangle;
+    initialShape = shapeTransform(shape as Rectangle);
 
     const target = evt.target as Element;
     target.setPointerCapture(evt.pointerId);
@@ -33,7 +37,10 @@
 
       const delta = [x - grabbedOrigin[0], y - grabbedOrigin[1]];
 
-      const updated = resize(initialShape, grabbedHandle, delta);
+      let updated = resize(initialShape, grabbedHandle, delta);
+
+      if (reverseShapeTransform)
+        updated = reverseShapeTransform(updated);
 
       Store.update(shape, updated);
 

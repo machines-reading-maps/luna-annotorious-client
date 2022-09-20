@@ -27,7 +27,7 @@
   const annotationUrl = 
     `https://www.davidrumsey.com/luna/servlet/iiif/m/${imageId}/list/luna`;
 
-  const openseadragonConfig = {
+  const osdConfig = {
     tileSources: imageUrl,
     gestureSettingsTouch: {
       pinchRotate: true
@@ -70,7 +70,7 @@
   });
 </script>
 
-<OSDViewer class="viewer" config={openseadragonConfig} let:viewer={viewer}>
+<OSDViewer class="viewer" config={osdConfig} let:viewer={viewer}>
 
   <OSDPixiImageAnnotationLayer 
     viewer={viewer} />

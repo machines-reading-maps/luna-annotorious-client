@@ -10,6 +10,10 @@
   
   export let screenTransform: Function;
 
+  export let shapeTransform: Function = null;
+
+  export let reverseShapeTransform: Function = null;
+
   let transform = null;
 
   const onUpdateViewport = () => transform = viewTransform();
@@ -35,6 +39,8 @@
         <EditableRect
           shape={selected} 
           screenTransform={screenTransform} 
+          shapeTransform={shapeTransform}
+          reverseShapeTransform={reverseShapeTransform}
           on:grab={onGrab} 
           on:release={onRelease} 
           on:save={({ detail }) => onComplete(detail)} 

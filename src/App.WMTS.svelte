@@ -2,14 +2,9 @@
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import { OSDViewer, WMTSPixiAnnotationLayer, WMTSTileSource, WMTSSVGDrawingLayer }  from '@/openseadragon';
   import { parseW3C } from '@/formats/w3c';
-  import { Store, Selection } from '@/state';
+  import { Hover, Selection, Store } from '@/state';
 
-  let hovered: any;
-
-  let selected: any;
-
-  // OSD viewer config
-  const config = {
+  const osdConfig = {
     gestureSettingsTouch: {
       pinchRotate: true
     }
@@ -23,35 +18,25 @@
   fetch('/hgnswtqypvcrtl.json').then(res => res.json()).then(data => {
     Store.set(parseW3C(data, true).parsed);
   });
-
-  const onEnterShape = ({ detail }) => hovered = detail;
-
-  const onLeaveShape = () => hovered = null;
 </script>
 
-<OSDViewer class="viewer" config={config} let:viewer={viewer}>
+<OSDViewer class="viewer" config={osdConfig} let:viewer={viewer}>
 
   <WMTSTileSource viewer={viewer} url={url} let:map={map}>
 
     <WMTSPixiAnnotationLayer 
       viewer={viewer} 
-      map={map} 
-      on:enterShape={onEnterShape} 
-      on:leaveShape={onLeaveShape} />
+      map={map} />
 
     <WMTSSVGDrawingLayer
       viewer={viewer}
       map={map} />
 
-    {#if hovered && $Selection.length === 0}
+    {#if $Hover && $Selection.length === 0}
       <LunaPopup 
         viewer={viewer}
-        shape={hovered.shape}
         user={{ id: 'dumy', name: 'dummy '}}
-        offsetX={hovered.originalEvent.offsetX}
-        offsetY={hovered.originalEvent.offsetY} 
-        viewportPoint={hovered.viewportPoint} 
-        on:editShape={evt => selected = evt.detail} />
+        hover={$Hover} />
     {/if}
       
   </WMTSTileSource>

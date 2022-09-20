@@ -1,12 +1,14 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import OpenSeadragon from 'openseadragon';
-  import WMTSSVGDrawingOverlay from './WMTSSVGOverlay.svelte';
+  import { latLonShapeToImageRegion, imageRegionRectToLanLot } from './transform';
+  import type { Shape, Rectangle } from '@/shapes';
+  import OSDSVGOverlay from '../drawing/OSDSVGOverlay.svelte';
 
   export let viewer: OpenSeadragon.Viewer;
   export let map: any;
 
-  let overlay: WMTSSVGDrawingOverlay;
+  let overlay: OSDSVGOverlay;
 
   /**
    * The view transform computes the CSS transform that aligns
@@ -56,13 +58,31 @@
     return [x, y];
   }
 
+  const shapeTransform = (shape: Shape) => { 
+    const transformed = latLonShapeToImageRegion(shape, map) as Rectangle;
+    return {
+      ...transformed,
+      geometry: {
+        ...transformed.geometry,
+        y: transformed.geometry.y - transformed.geometry.h 
+      }
+    };
+  };
+
+  const reverseShapeTransform = (shape: Shape) => {
+    const r = shape as Rectangle;
+    return imageRegionRectToLanLot(r, map);
+  }
+
   onMount(() => {
-    overlay = new WMTSSVGDrawingOverlay({
+    overlay = new OSDSVGOverlay({
       target: viewer.element.querySelector('.openseadragon-canvas'),
       props: {
         viewer,
         viewTransform,
-        screenTransform
+        screenTransform,
+        shapeTransform,
+        reverseShapeTransform   
       }
     });
   });
