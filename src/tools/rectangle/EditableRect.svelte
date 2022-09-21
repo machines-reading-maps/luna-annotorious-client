@@ -2,7 +2,7 @@
   import { onMount, createEventDispatcher } from 'svelte';
   import { Store } from '@/core/state';
   import type { Shape, Rectangle, RectangleGeometry } from '@/core/shapes';
-  import { Handle} from '../HandleType';
+  import { ToolHandle} from '@/tools';
   import { resize } from './transformRect';
 
   const dispatch = createEventDispatcher();
@@ -16,11 +16,11 @@
     shapeTransform(shape).geometry as RectangleGeometry :
     shape.geometry as RectangleGeometry;
 
-  let grabbedHandle: Handle;
+  let grabbedHandle: ToolHandle;
   let grabbedOrigin: number[];  
   let initialShape: Rectangle;
 
-  const onGrab = (handle: Handle) => (evt: PointerEvent) => {
+  const onGrab = (handle: ToolHandle) => (evt: PointerEvent) => {
     grabbedHandle = handle;    
     grabbedOrigin = screenTransform(evt.offsetX, evt.offsetY);
     initialShape = shapeTransform ? shapeTransform(shape as Rectangle) : shape as Rectangle;
@@ -76,35 +76,35 @@
   class:hover={shape.state.isHovered}>
 
   <rect 
-    on:pointerdown={onGrab(Handle.SHAPE)}
+    on:pointerdown={onGrab(ToolHandle.SHAPE)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
     x={geom.x} y={geom.y} width={geom.w} height={geom.h} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-top" 
-    on:pointerdown={onGrab(Handle.TOP)}
+    on:pointerdown={onGrab(ToolHandle.TOP)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
     x={geom.x} y={geom.y} height={1} width={geom.w} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-right"
-    on:pointerdown={onGrab(Handle.RIGHT)}
+    on:pointerdown={onGrab(ToolHandle.RIGHT)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
     x={geom.x + geom.w} y={geom.y} height={geom.h} width={1}/>
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-bottom" 
-    on:pointerdown={onGrab(Handle.BOTTOM)}
+    on:pointerdown={onGrab(ToolHandle.BOTTOM)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
     x={geom.x} y={geom.y + geom.h} height={1} width={geom.w} />
 
   <rect 
     class="a9s-edge-handle a9s-edge-handle-left" 
-    on:pointerdown={onGrab(Handle.LEFT)}
+    on:pointerdown={onGrab(ToolHandle.LEFT)}
     on:pointerup={onRelease}
     on:pointermove={onPointerMove}
     x={geom.x} y={geom.y} height={geom.h} width={1} />

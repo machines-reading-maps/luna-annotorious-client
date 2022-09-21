@@ -1,8 +1,7 @@
-export enum Handle {
+export enum ToolHandle {
  
   SHAPE = 'SHAPE',
 
-  
   TOP = 'TOP',
   
   RIGHT = 'RIGHT',
@@ -10,7 +9,6 @@ export enum Handle {
   BOTTOM = 'BOTTOM',
   
   LEFT = 'LEFT',
-
   
   TOP_LEFT = 'TOP_LEFT',
   

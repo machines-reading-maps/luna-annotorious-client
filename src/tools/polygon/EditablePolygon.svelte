@@ -1,8 +1,6 @@
 <script type="ts">
   import type { Shape } from '@/core/shapes';
-  import { Handle } from '../HandleType';
-  import Tool from '../Tool.svelte';
-
+  import { ToolHandle, Tool } from '@/tools';
   import { resize } from '../rectangle/transformRect';
 
   export let shape: Shape;
@@ -31,35 +29,35 @@
     class:hover={shape.state.isHovered}>
 
     <rect 
-      on:pointerdown={onGrab(Handle.SHAPE)}
+      on:pointerdown={onGrab(ToolHandle.SHAPE)}
       on:pointerup={onRelease}
       on:pointermove={onPointerMove}
       x={geometry.x} y={geometry.y} width={geometry.w} height={geometry.h} />
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-top" 
-      on:pointerdown={onGrab(Handle.TOP)}
+      on:pointerdown={onGrab(ToolHandle.TOP)}
       on:pointerup={onRelease}
       on:pointermove={onPointerMove}
       x={geometry.x} y={geometry.y} height={1} width={geometry.w} />
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-right"
-      on:pointerdown={onGrab(Handle.RIGHT)}
+      on:pointerdown={onGrab(ToolHandle.RIGHT)}
       on:pointerup={onRelease}
       on:pointermove={onPointerMove}
       x={geometry.x + geometry.w} y={geometry.y} height={geometry.h} width={1}/>
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-bottom" 
-      on:pointerdown={onGrab(Handle.BOTTOM)}
+      on:pointerdown={onGrab(ToolHandle.BOTTOM)}
       on:pointerup={onRelease}
       on:pointermove={onPointerMove}
       x={geometry.x} y={geometry.y + geometry.h} height={1} width={geometry.w} />
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-left" 
-      on:pointerdown={onGrab(Handle.LEFT)}
+      on:pointerdown={onGrab(ToolHandle.LEFT)}
       on:pointerup={onRelease}
       on:pointermove={onPointerMove}
       x={geometry.x} y={geometry.y} height={geometry.h} width={1} />

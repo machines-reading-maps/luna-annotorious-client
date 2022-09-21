@@ -1,9 +1,9 @@
 import type { Rectangle } from '@/core/shapes';
-import { Handle } from '../HandleType';
+import { ToolHandle } from '@/tools';
 
 export const resize = (
   rect: Rectangle, 
-  handle: Handle,
+  handle: ToolHandle,
   delta: number[]
 ): Rectangle => {
   const initialBounds = rect.geometry.bounds; 
@@ -13,39 +13,39 @@ export const resize = (
 
   const [ dx, dy ] = delta;
 
-  if (handle === Handle.SHAPE) {
+  if (handle === ToolHandle.SHAPE) {
     x0 += dx;
     x1 += dx;
     y0 += dy;
     y1 += dy;
   } else {
     switch (handle) {
-      case Handle.TOP:
-      case Handle.TOP_LEFT:
-      case Handle.TOP_RIGHT: {
+      case ToolHandle.TOP:
+      case ToolHandle.TOP_LEFT:
+      case ToolHandle.TOP_RIGHT: {
         y0 += dy;
         break;
       }
 
-      case Handle.BOTTOM:
-      case Handle.BOTTOM_LEFT:
-      case Handle.BOTTOM_RIGHT: {
+      case ToolHandle.BOTTOM:
+      case ToolHandle.BOTTOM_LEFT:
+      case ToolHandle.BOTTOM_RIGHT: {
         y1 += dy;
         break;
       }
     }
 
     switch (handle) {
-      case Handle.LEFT:
-      case Handle.TOP_LEFT:
-      case Handle.BOTTOM_LEFT: {
+      case ToolHandle.LEFT:
+      case ToolHandle.TOP_LEFT:
+      case ToolHandle.BOTTOM_LEFT: {
         x0 += dx;
         break
       }
 
-      case Handle.RIGHT:
-      case Handle.TOP_RIGHT:
-      case Handle.BOTTOM_RIGHT: {
+      case ToolHandle.RIGHT:
+      case ToolHandle.TOP_RIGHT:
+      case ToolHandle.BOTTOM_RIGHT: {
         x1 += dx;
         break
       }
