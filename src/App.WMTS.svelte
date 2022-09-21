@@ -1,7 +1,7 @@
 <script type="ts">
-  import { parseW3C } from '@/formats/w3c';
   import { Hover, Selection, Store } from '@/core/state';
-  import LunaPopup from '@/luna/popup/LunaPopup.svelte';
+  import { parseW3C } from '@/formats/w3c';
+  import { LunaPopup } from '@/luna';
   import { 
     OSDViewer, 
     WMTSTileSource,

@@ -1,11 +1,9 @@
 <script type="ts">
   import { onMount } from 'svelte';
-  import LunaPopup from '@/luna/popup/LunaPopup.svelte';
-  import LunaAuth from '@/luna/auth/LunaAuth.svelte';
-  import { OSDViewer, OSDPixiImageAnnotationLayer , OSDSVGDrawingLayer}  from '@/core/openseadragon';
   import { Hover, Store, Selection } from '@/core/state';
-  import { LunaStorageAdapter } from '@/storage';
   import { parseAnnotations } from '@/formats/iiif2';
+  import { OSDViewer, OSDPixiImageAnnotationLayer , OSDSVGDrawingLayer} from '@/core/openseadragon';
+  import { LunaAuth, LunaPopup, LunaStorageAdapter } from '@/luna';
   import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/config';
 
   let loaded: boolean;
