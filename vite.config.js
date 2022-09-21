@@ -29,7 +29,7 @@ export default defineConfig({
       input: 'index.html',
       output: {
         manualChunks: {
-          vendor: ['openseadragon', 'pixi.js']
+          vendor: ['openseadragon', 'pixi.js', 'yjs', 'nanoid', 'deep-equal']
         }
       }
     }
