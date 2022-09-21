@@ -1,7 +1,7 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import { Hover, Store, Selection } from '@/core/state';
-  import EditablePolygon from '@/tools/polygon/EditablePolygon.svelte';
+  import { EditableRectangle } from '@/tools';
   import { ShapeType, type Shape } from '@/core/shapes';
 
   export let viewer: OpenSeadragon.Viewer;
@@ -49,7 +49,7 @@
   <g transform={transform}>
     {#each $Selection as selected}
       {#if selected.type === ShapeType.RECTANGLE}
-        <EditablePolygon
+        <EditableRectangle
           shape={selected} 
           screenTransform={screenTransform} 
           shapeTransform={shapeTransform}

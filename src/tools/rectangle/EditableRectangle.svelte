@@ -1,7 +1,7 @@
 <script type="ts">
   import type { Shape } from '@/core/shapes';
   import { ToolHandle, Tool } from '@/tools';
-  import { resize } from '../rectangle/transformRect';
+  import { moveAndResize } from './moveAndResize';
 
   export let shape: Shape;
   export let screenTransform: Function;
@@ -14,52 +14,52 @@
   screenTransform={screenTransform}
   shapeTransform={shapeTransform}
   reverseShapeTransform={reverseShapeTransform} 
-  modify={resize}
+  onDrag={moveAndResize}
   on:grab
   on:release
   on:save
   on:cancel
   let:geometry={geometry}
-  let:onGrab={onGrab}
-  let:onPointerMove={onPointerMove}
-  let:onRelease={onRelease}>
+  let:grab={grab}
+  let:pointerMove={pointerMove}
+  let:release={release}>
 
   <g
     class="a9s-annotation selected"
     class:hover={shape.state.isHovered}>
 
     <rect 
-      on:pointerdown={onGrab(ToolHandle.SHAPE)}
-      on:pointerup={onRelease}
-      on:pointermove={onPointerMove}
+      on:pointerdown={grab(ToolHandle.SHAPE)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
       x={geometry.x} y={geometry.y} width={geometry.w} height={geometry.h} />
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-top" 
-      on:pointerdown={onGrab(ToolHandle.TOP)}
-      on:pointerup={onRelease}
-      on:pointermove={onPointerMove}
+      on:pointerdown={grab(ToolHandle.TOP)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
       x={geometry.x} y={geometry.y} height={1} width={geometry.w} />
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-right"
-      on:pointerdown={onGrab(ToolHandle.RIGHT)}
-      on:pointerup={onRelease}
-      on:pointermove={onPointerMove}
+      on:pointerdown={grab(ToolHandle.RIGHT)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
       x={geometry.x + geometry.w} y={geometry.y} height={geometry.h} width={1}/>
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-bottom" 
-      on:pointerdown={onGrab(ToolHandle.BOTTOM)}
-      on:pointerup={onRelease}
-      on:pointermove={onPointerMove}
+      on:pointerdown={grab(ToolHandle.BOTTOM)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
       x={geometry.x} y={geometry.y + geometry.h} height={1} width={geometry.w} />
 
     <rect 
       class="a9s-edge-handle a9s-edge-handle-left" 
-      on:pointerdown={onGrab(ToolHandle.LEFT)}
-      on:pointerup={onRelease}
-      on:pointermove={onPointerMove}
+      on:pointerdown={grab(ToolHandle.LEFT)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
       x={geometry.x} y={geometry.y} height={geometry.h} width={1} />
   </g>
 </Tool>

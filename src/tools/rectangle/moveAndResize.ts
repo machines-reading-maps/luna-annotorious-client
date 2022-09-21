@@ -1,11 +1,7 @@
 import type { Rectangle } from '@/core/shapes';
 import { ToolHandle } from '@/tools';
 
-export const resize = (
-  rect: Rectangle, 
-  handle: ToolHandle,
-  delta: number[]
-): Rectangle => {
+export const moveAndResize = (rect: Rectangle, handle: ToolHandle, delta: number[]): Rectangle => {
   const initialBounds = rect.geometry.bounds; 
 
   let [x0, y0] = [initialBounds.minX, initialBounds.minY];

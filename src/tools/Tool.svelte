@@ -7,21 +7,25 @@
   const dispatch = createEventDispatcher();
 
   export let shape: Shape;
+
   export let screenTransform: Function;
+  
   export let shapeTransform: Function = null;
+  
   export let reverseShapeTransform: Function = null; 
 
-  export let modify;
+  export let onDrag: (s: Shape, h: ToolHandle, delta: number[]) => Shape;
 
   $: geometry = shapeTransform ?
-    shapeTransform(shape).geometry :
-    shape.geometry;
-
-  let grabbedHandle: ToolHandle;
-  let grabbedShape: Shape;
-  let grabbedOrigin: number[];  
+    shapeTransform(shape).geometry : shape.geometry;
 
   let initialShape: Shape;
+
+  let grabbedHandle: ToolHandle;
+
+  let grabbedShape: Shape;
+  
+  let grabbedOrigin: number[];  
 
   const onGrab = (handle: ToolHandle) => (evt: PointerEvent) => {
     grabbedHandle = handle;    
@@ -40,7 +44,7 @@
 
       const delta = [x - grabbedOrigin[0], y - grabbedOrigin[1]];
 
-      let updated = modify(grabbedShape, grabbedHandle, delta);
+      let updated = onDrag(grabbedShape, grabbedHandle, delta);
 
       if (reverseShapeTransform)
         updated = reverseShapeTransform(updated);
@@ -78,6 +82,6 @@
 
 <slot 
   geometry={geometry} 
-  onGrab={onGrab}
-  onPointerMove={onPointerMove}
-  onRelease={onRelease} />
+  grab={onGrab}
+  pointerMove={onPointerMove}
+  release={onRelease} />
