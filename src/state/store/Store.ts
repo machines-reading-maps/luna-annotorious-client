@@ -1,7 +1,7 @@
-import type { Shape } from '@/shapes';
 import ShapeIndex from './ShapeIndex';
 import SpatialTree from './SpatialTree';
 import type StoreChangeEvent from './StoreChangeEvent';
+import type { Shape } from '@/shapes';
 
 /**
  * A common facade across the spatial tree and the YJS shape index.

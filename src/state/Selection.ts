@@ -1,23 +1,24 @@
 
 import { readable } from 'svelte/store';
-import type { Shape } from '@/shapes';
 import Store from './store/Store';
+import type { Shape } from '@/shapes';
 
 const Selection = readable<Shape[]>([], set => {
 
-  // Shapes that are currently selected
   let currentSelection: Shape[] = [];
 
   Store.observe(({ updated })  => {
     const withChangedState: Shape[] = updated
+
         .filter(({ oldValue, newValue}) =>
           oldValue.state.isSelected !== newValue.state.isSelected)
+
         .map(({ newValue }) => newValue);
 
     // Shapes that have changed to 'selected' in this update
     const selected = withChangedState.filter(newValue => newValue.state.isSelected);
 
-    // Ids for the shapes that have changed to 'deselected' in this update
+    // IDs for the shapes that have changed to 'deselected' in this update
     const deselectedIds = new Set(withChangedState.filter(newValue => 
       !newValue.state.isSelected).map(s => s.id));
   

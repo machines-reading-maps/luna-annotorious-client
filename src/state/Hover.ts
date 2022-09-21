@@ -15,8 +15,9 @@ const Hover = () => {
   const { subscribe, update } = writable<HoverState>();
 
   const changeHover = (state: HoverState) => update(currentHover => {
+    // Update the store only if the hovered shape changed 
+    // (change may only affect the event)
     if (currentHover?.shape.id !== state?.shape.id) {
-      // Update store only if hovered shape changed (but not original event)
       if (currentHover)
         Store.setState(currentHover.shape.id, { isHovered: false });
 
