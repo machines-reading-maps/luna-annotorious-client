@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest'
-
-import { SpatialTree } from '../../../../src/core/state';
-
+import { SpatialTree } from '@/core/state';
 import { Shapes } from './fixtures';
 
 describe('SpatialTree', () => {

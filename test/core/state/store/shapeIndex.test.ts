@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Shapes } from './fixtures';
-import { ShapeIndex } from '../../../../src/core/state';
+import { ShapeIndex } from '@/core/state';
 
 describe('ShapeIndex', () => {
 

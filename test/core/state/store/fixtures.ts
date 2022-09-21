@@ -1,4 +1,4 @@
-import { ShapeType } from '../../../../src/core/shapes';
+import { ShapeType } from '@/core/shapes';
 
 export const Shapes = [
   {

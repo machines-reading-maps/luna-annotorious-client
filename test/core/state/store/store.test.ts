@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest'
-
-import { Store, StoreChangeEvent } from '../../../../src/core/state';
-
+import { Store, StoreChangeEvent } from '@/core/state';
 import { Shapes } from './fixtures';
 
 describe('Store', () => {

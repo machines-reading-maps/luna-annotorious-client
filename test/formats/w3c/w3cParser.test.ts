@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
-
-import { ShapeType } from '../../../src/core/shapes';
-import { parseW3C } from '../../../src/formats/w3c/w3cParser';
+import { ShapeType } from '@/core/shapes';
+import { parseW3C } from '@/formats/w3c/w3cParser';
 
 import { Annotations } from './fixtures';
 
