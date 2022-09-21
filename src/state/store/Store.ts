@@ -4,8 +4,14 @@ import type { Shape } from '@/shapes';
 import { 
   type StoreChangeEvent,
   isEmptyEvent,
-  removeStateUpdates 
+  removeStateChanges 
 } from './StoreChangeEvent';
+
+export interface StoreObserveOptions {
+
+  ignoreHoverStateChanges?: boolean
+
+}
 
 /**
  * A common facade across the spatial tree and the YJS shape index.
@@ -17,7 +23,7 @@ const Store = () => {
 
   const index = new ShapeIndex();
 
-  const observers = [];
+  const observers: { callback: Function, opts: StoreObserveOptions}[] = [];
 
   index.observe(evt => {
     const { keys } = evt.changes;
@@ -47,13 +53,12 @@ const Store = () => {
 
     // Forward event to subscribed observers
     observers.forEach(({ callback, opts }) => {
-      if (opts.ignoreStateChanges) {
+      if (opts.ignoreHoverStateChanges) {
         // Don't fire the callback if this event has only state changes
-        const withoutStateChanges = removeStateUpdates(event);
+        const withoutStateChanges = removeStateChanges(event, [ 'isHovered' ]);
 
         if (!isEmptyEvent(withoutStateChanges))
           callback(event);
-
       } else {
         callback(event);
       }
@@ -77,8 +82,8 @@ const Store = () => {
 
   const observe = (
     callback: (evt: StoreChangeEvent) => void, 
-    ignoreStateChanges: boolean = false
-  ) => observers.push({ callback, opts: { ignoreStateChanges } });
+    opts: StoreObserveOptions = {}
+  ) => observers.push({ callback, opts });
 
   const remove = (shape: Shape | string) =>
     index.remove(shape);

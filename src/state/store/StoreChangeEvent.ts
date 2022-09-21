@@ -17,13 +17,24 @@ export interface StoreChangeEvent {
 
 }
 
-export const removeStateUpdates = (event: StoreChangeEvent): StoreChangeEvent=> {
+export const removeStateChanges = (event: StoreChangeEvent, propsToRemove: string[] = []): StoreChangeEvent=> {
   const { added, deleted, updated } = event;
 
   // Returns the shape object, without state
   const stripState = (shape: Shape) => {
     const { state, ...rest } = shape;
-    return rest;
+
+    if (propsToRemove.length === 0) {
+      // Remove all state
+      return rest;
+    } else {
+      // Remove specific state props only
+      propsToRemove.forEach(prop => {
+        delete state[prop];
+      });
+      
+      return { ...rest, state };
+    }
   }
 
   const updatesWithoutStateChanges = updated.filter(({ oldValue, newValue}) => {
