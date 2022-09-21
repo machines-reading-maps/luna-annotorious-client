@@ -1,4 +1,4 @@
-import type { RectangleGeometry } from '@/shapes';
+import type { RectangleGeometry } from '@/core/shapes';
 
 export const parseMediaFragment = (fragmentOrSelector: string | { value: string }, invertY = false): RectangleGeometry => {
   const fragment = typeof fragmentOrSelector === 'string' ? fragmentOrSelector : fragmentOrSelector.value;

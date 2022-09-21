@@ -1,4 +1,4 @@
-import type { Rectangle } from '@/shapes';
+import type { Rectangle } from '@/core/shapes';
 import { Handle } from '../HandleType';
 
 export const resize = (

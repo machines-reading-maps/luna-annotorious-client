@@ -1,4 +1,4 @@
-import type { Shape } from '@/shapes';
+import type { Shape } from '@/core/shapes';
 import type { AnnotationBody } from './WebAnnotation';
 
 export const getBodies = (shape: Shape, purpose: string): AnnotationBody[] => {

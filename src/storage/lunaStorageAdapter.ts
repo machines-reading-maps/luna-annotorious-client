@@ -1,7 +1,7 @@
 import { API_BASE } from '@/config';
-import { ShapeType, equalsIgnoreState }  from '@/shapes';
-import type { Rectangle, Shape } from '@/shapes';
-import type { Store } from '@/state';
+import { ShapeType, equalsIgnoreState }  from '@/core/shapes';
+import type { Rectangle, Shape } from '@/core/shapes';
+import type { Store } from '@/core/state';
 import { type Selector, parseW3C } from '@/formats/w3c';
 
 const toFragmentSelector = (rect: Rectangle): Selector => {

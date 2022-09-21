@@ -1,4 +1,4 @@
-import { type Shape, ShapeType } from '@/shapes';
+import { type Shape, ShapeType } from '@/core/shapes';
 import { parseMediaFragment } from '@/formats/mediafrags/mediaFragmentSelector';
 import type { IIIFAnnotation } from '.';
 

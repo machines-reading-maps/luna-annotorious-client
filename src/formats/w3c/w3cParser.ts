@@ -1,6 +1,6 @@
 import { nanoid  } from 'nanoid';
 
-import { type Shape, ShapeType } from '@/shapes';
+import { type Shape, ShapeType } from '@/core/shapes';
 import { parseMediaFragment } from '../mediafrags/mediaFragmentSelector';
 import { parseSVG } from '../svg/svgSelector';
 import type { WebAnnotation } from '.';

@@ -1,5 +1,5 @@
 <script type="ts">
-  import type { Shape } from '@/shapes';
+  import type { Shape } from '@/core/shapes';
   import { Handle } from '../HandleType';
   import Tool from '../Tool.svelte';
 

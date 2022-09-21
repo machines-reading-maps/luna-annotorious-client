@@ -1,7 +1,7 @@
 <script type="ts">
   import { onMount, createEventDispatcher } from 'svelte';
-  import { Store } from '@/state';
-  import type { Shape, Rectangle } from '@/shapes';
+  import { Store } from '@/core/state';
+  import type { Shape, Rectangle } from '@/core/shapes';
   import type { Handle } from './HandleType';
 
   const dispatch = createEventDispatcher();

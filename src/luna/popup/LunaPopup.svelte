@@ -4,8 +4,8 @@
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
 
   import { upsertFirst } from '@/formats/w3c';
-  import { Store, Selection, type HoverState } from '@/state';
-  import type { Shape } from '@/shapes';
+  import { Store, Selection, type HoverState } from '@/core/state';
+  import type { Shape } from '@/core/shapes';
   import HUD from './HUD.svelte';
   import Transcription from './Transcription.svelte';
 

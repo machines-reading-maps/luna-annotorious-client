@@ -1,4 +1,4 @@
-import { type Bounds, boundsFromPoints, ShapeType } from '@/shapes';
+import { type Bounds, boundsFromPoints, ShapeType } from '@/core/shapes';
 
 interface SVGGeometry {
 

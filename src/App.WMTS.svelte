@@ -1,13 +1,13 @@
 <script type="ts">
   import { parseW3C } from '@/formats/w3c';
-  import { Hover, Selection, Store } from '@/state';
+  import { Hover, Selection, Store } from '@/core/state';
   import LunaPopup from '@/luna/popup/LunaPopup.svelte';
   import { 
     OSDViewer, 
     WMTSTileSource,
     WMTSPixiAnnotationLayer, 
     WMTSSVGDrawingLayer 
-  } from '@/openseadragon';
+  } from '@/core/openseadragon';
 
   const osdConfig = {
     gestureSettingsTouch: {
