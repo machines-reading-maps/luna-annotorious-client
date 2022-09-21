@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import SpatialTree from '../../src/store/SpatialTree';
+import SpatialTree from '../../src/state/store/SpatialTree';
 
 import { Shapes } from './Fixtures';
 

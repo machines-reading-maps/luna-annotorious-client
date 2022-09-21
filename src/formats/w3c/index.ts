@@ -20,7 +20,7 @@ export interface Selector {
 
   type: string
 
-  conformsTo: string
+  conformsTo?: string
 
   value: string
 

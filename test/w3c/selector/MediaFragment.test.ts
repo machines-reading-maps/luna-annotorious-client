@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { parseMediaFragment } from '../../../src/w3c/selector/MediaFragment';
+import { parseMediaFragment } from '../../../src/formats/w3c/selector/MediaFragment';
 
 describe('MediaFragment', () => {
 

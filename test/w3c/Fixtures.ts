@@ -7,6 +7,7 @@ export const Annotations = [{
     value: 'A comment'
   },
   target: {
+    source: 'http://www.example.com/source/1',
     selector: {
       type: 'SvgSelector',
       value: '<svg><polygon points=\"-3.3391678328504297,55.981986729065156 -3.3385026450445885,55.98198072676713 -3.3385002412005096,55.982064106273576 -3.339165429006351,55.98207010855867\"/></svg>'
@@ -22,6 +23,7 @@ export const Annotations = [{
     purpose: 'tagging'
   }],
   target: [{
+    source: 'http://www.example.com/source/1',
     selector: [{
       type: 'FragmentSelector',
       conformsTo: 'http://www.w3.org/TR/media-frags/',

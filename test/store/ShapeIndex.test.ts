@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import ShapeIndex from '../../src/store/ShapeIndex';
+import ShapeIndex from '../../src/state/store/ShapeIndex';
 
 import { Shapes } from './Fixtures';
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
-import ChangeEvent from '../../src/store/ChangeEvent';
-import Store from '../../src/store/Store';
+import ChangeEvent from '../../src/state/store/StoreChangeEvent';
+import Store from '../../src/state/store/Store';
 
 import { Shapes } from './Fixtures';
 

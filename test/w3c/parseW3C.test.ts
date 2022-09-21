@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { ShapeType } from '../../src/shapes';
-import { parseW3C } from '../../src/w3c';
+import { parseW3C } from '../../src/formats/w3c';
 
 import { Annotations } from './Fixtures';
 
