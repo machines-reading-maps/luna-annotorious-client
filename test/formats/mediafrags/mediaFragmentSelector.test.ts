@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { parseMediaFragment } from '../../src/formats/mediaFragmentSelector';
+import { parseMediaFragment } from '../../../src/formats/mediafrags/mediaFragmentSelector';
 
 describe('MediaFragment', () => {
 

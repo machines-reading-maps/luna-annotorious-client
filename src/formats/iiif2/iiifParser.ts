@@ -1,5 +1,5 @@
 import { type Shape, ShapeType } from '@/shapes';
-import { parseMediaFragment } from '@/formats/mediaFragmentSelector';
+import { parseMediaFragment } from '@/formats/mediafrags/mediaFragmentSelector';
 import type { IIIFAnnotation } from '.';
 
 export const parseAnnotations = (annotations: IIIFAnnotation[]): ({ parsed: Shape[], failed: IIIFAnnotation[] }) =>
