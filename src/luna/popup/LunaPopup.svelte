@@ -66,7 +66,7 @@
 
     Store.update(hover.shape, updated);
 
-    // shape = updated;
+    hover = { ...hover, shape: updated };
     isTranscriptionEditable = false;
   }
 </script>

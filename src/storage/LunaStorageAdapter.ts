@@ -44,8 +44,10 @@ const LunaStorageAdapter = ({ store, source }) => {
       // Currently, the UI will only make updates, anyway
       const { updated }  = changes;
 
-      updated.forEach(({ previous, updated } : { previous: Shape, updated: Shape}) => {
-        const w3c = toW3C(updated, source);
+      updated.forEach(({ oldValue, newValue }) => {
+        console.log('Storing', newValue);
+        
+        const w3c = toW3C(newValue, source);
 
         fetch(`${API_BASE}/annotation`, {
           method: 'POST',
