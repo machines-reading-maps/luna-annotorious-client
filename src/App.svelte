@@ -6,7 +6,7 @@
   import { Hover, Store, Selection } from '@/state';
   import { LunaStorageAdapter } from '@/storage';
   import { parseAnnotations } from '@/formats/iiif2';
-  import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/Config';
+  import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/config';
 
   let loaded: boolean;
 

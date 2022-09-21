@@ -4,7 +4,7 @@
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import FiLogIn from 'svelte-icons-pack/fi/FiLogIn';
   import FiLogOut from 'svelte-icons-pack/fi/FiLogOut';
-  import { API_BASE } from '@/Config';
+  import { API_BASE } from '@/config';
 
   export let tokenUrl: string;
   export let loginUrl: string;

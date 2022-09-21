@@ -1,4 +1,4 @@
-import { API_BASE } from '@/Config';
+import { API_BASE } from '@/config';
 import { ShapeType, equalsIgnoreState }  from '@/shapes';
 import type { Rectangle, Shape } from '@/shapes';
 import type { Store } from '@/state';

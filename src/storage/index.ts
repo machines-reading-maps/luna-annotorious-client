@@ -1,1 +1,1 @@
-export { default as LunaStorageAdapter } from './LunaStorageAdapter';
+export { default as LunaStorageAdapter } from './lunaStorageAdapter';
