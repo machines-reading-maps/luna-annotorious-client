@@ -1,12 +1,6 @@
-import { nanoid } from 'nanoid';
 import s from 'simplify-js';
-
-import { type Geometry, ShapeType } from '../Shape';
-import { registerShapeUtil } from '../shapeUtils';
-
-import type { Bounds } from '../Bounds';
-import type { Shape } from '../Shape';
-import type { ShapeUtil } from '../shapeUtils';
+import { ShapeType, registerShapeUtil } from '@/core/shapes';
+import type { Bounds, Geometry, Shape, ShapeUtil } from '@/core/shapes';
 
 export interface Polygon extends Shape {
 
@@ -37,17 +31,6 @@ const computeBounds = (points: Array<Array<number>>): Bounds => {
 
   return { minX, minY, maxX, maxY };
 }
-
-export const polygon = (points: Array<Array<number>>, data?: Object, id?: string): Polygon => ({
-  id: id || nanoid(),
-  type: ShapeType.POLYGON,
-  data,
-  geometry: {
-    points,
-    bounds: computeBounds(points)
-  },
-  state: {}  
-});
 
 export const simplify = (polygon: Polygon): Polygon => {
   const points = polygon.geometry.points.map(([x, y]) => ({ x, y }));

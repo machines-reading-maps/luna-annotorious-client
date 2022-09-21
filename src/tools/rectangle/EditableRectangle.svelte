@@ -1,7 +1,7 @@
 <script type="ts">
   import type { Shape } from '@/core/shapes';
   import { ToolHandle, Tool } from '@/tools';
-  import { moveAndResize } from './moveAndResize';
+  import { editRectangle } from './editRectangle';
 
   export let shape: Shape;
   export let screenTransform: Function;
@@ -14,11 +14,13 @@
   screenTransform={screenTransform}
   shapeTransform={shapeTransform}
   reverseShapeTransform={reverseShapeTransform} 
-  onDrag={moveAndResize}
+  dragHandler={editRectangle}
+
   on:grab
   on:release
   on:save
   on:cancel
+
   let:geometry={geometry}
   let:grab={grab}
   let:pointerMove={pointerMove}

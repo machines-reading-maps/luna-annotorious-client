@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { ShapeType, registerShapeUtil } from '@/core/shapes';
 import type { Bounds, Geometry, Shape, ShapeUtil } from '@/core/shapes';
 
@@ -21,22 +20,6 @@ export interface RectangleGeometry extends Geometry {
   bounds: Bounds
 
 }
-
-export const rectangle = (x: number, y: number, w: number, h: number, data?: Object, id?: string): Rectangle => ({
-  id: id || nanoid(),
-  type: ShapeType.RECTANGLE,
-  data,
-  geometry: {
-    x, y, w, h,
-    bounds: {
-      minX: x,
-      minY: y,
-      maxX: x + w,
-      maxY: y + h
-    }
-  },
-  state: {}  
-});
 
 const RectangleUtil: ShapeUtil<Rectangle> = {
 

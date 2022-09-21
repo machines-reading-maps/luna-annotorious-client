@@ -1,8 +1,8 @@
 <script type="ts">
   import { onMount, createEventDispatcher } from 'svelte';
   import { Store } from '@/core/state';
-  import type { Shape, Rectangle } from '@/core/shapes';
   import type { ToolHandle } from '@/tools';
+  import type { Shape, Rectangle } from '@/core/shapes';
 
   const dispatch = createEventDispatcher();
 
@@ -14,10 +14,7 @@
   
   export let reverseShapeTransform: Function = null; 
 
-  export let onDrag: (s: Shape, h: ToolHandle, delta: number[]) => Shape;
-
-  $: geometry = shapeTransform ?
-    shapeTransform(shape).geometry : shape.geometry;
+  export let dragHandler: (s: Shape, h: ToolHandle, delta: number[]) => Shape;
 
   let initialShape: Shape;
 
@@ -26,6 +23,9 @@
   let grabbedShape: Shape;
   
   let grabbedOrigin: number[];  
+
+  $: geometry = shapeTransform ?
+    shapeTransform(shape).geometry : shape.geometry;
 
   const onGrab = (handle: ToolHandle) => (evt: PointerEvent) => {
     grabbedHandle = handle;    
@@ -44,7 +44,7 @@
 
       const delta = [x - grabbedOrigin[0], y - grabbedOrigin[1]];
 
-      let updated = onDrag(grabbedShape, grabbedHandle, delta);
+      let updated = dragHandler(grabbedShape, grabbedHandle, delta);
 
       if (reverseShapeTransform)
         updated = reverseShapeTransform(updated);
@@ -65,7 +65,8 @@
   }
 
   onMount(() => {
-    initialShape = shapeTransform ? shapeTransform(shape as Rectangle) : shape as Rectangle;
+    initialShape = shapeTransform ? 
+      shapeTransform(shape as Rectangle) : shape as Rectangle;
 
     const onKeyDown = (evt: KeyboardEvent) => {
       if (evt.code === 'Enter')
@@ -80,8 +81,8 @@
   });
 </script>
 
-<slot 
-  geometry={geometry} 
-  grab={onGrab}
-  pointerMove={onPointerMove}
-  release={onRelease} />
+<slot  
+  grab={onGrab} 
+  pointerMove={onPointerMove} 
+  release={onRelease} 
+  geometry={geometry} />
