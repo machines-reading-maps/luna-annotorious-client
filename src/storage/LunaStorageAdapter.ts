@@ -63,7 +63,7 @@ const LunaStorageAdapter = ({ store, source }) => {
           console.error('ERROR storing annotation', error);
         });
       });
-    });
+    }, true); // Ignore state changes
   });
 
 }

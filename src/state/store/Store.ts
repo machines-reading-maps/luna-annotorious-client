@@ -1,7 +1,11 @@
 import ShapeIndex from './ShapeIndex';
 import SpatialTree from './SpatialTree';
-import type StoreChangeEvent from './StoreChangeEvent';
 import type { Shape } from '@/shapes';
+import { 
+  type StoreChangeEvent,
+  isEmptyEvent,
+  removeStateUpdates 
+} from './StoreChangeEvent';
 
 /**
  * A common facade across the spatial tree and the YJS shape index.
@@ -39,8 +43,21 @@ const Store = () => {
     deleted.forEach(shape => tree.remove(shape));
     updated.forEach(({ oldValue, newValue }) => tree.update(oldValue, newValue));
 
+    const event = { added, deleted, updated };
+
     // Forward event to subscribed observers
-    observers.forEach(observer => observer({ added, deleted, updated }));
+    observers.forEach(({ callback, opts }) => {
+      if (opts.ignoreStateChanges) {
+        // Don't fire the callback if this event has only state changes
+        const withoutStateChanges = removeStateUpdates(event);
+
+        if (!isEmptyEvent(withoutStateChanges))
+          callback(event);
+
+      } else {
+        callback(event);
+      }
+    });
   });
 
   const add = (shape: Shape) =>
@@ -58,8 +75,10 @@ const Store = () => {
   const getAt = (x: number, y: number): Shape | null =>
     tree.getAt(x, y);
 
-  const observe = (callback: (evt: StoreChangeEvent) => void) =>
-    observers.push(callback);
+  const observe = (
+    callback: (evt: StoreChangeEvent) => void, 
+    ignoreStateChanges: boolean = false
+  ) => observers.push({ callback, opts: { ignoreStateChanges } });
 
   const remove = (shape: Shape | string) =>
     index.remove(shape);
