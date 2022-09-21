@@ -1,7 +1,7 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import OpenSeadragon from 'openseadragon';
-  import { latLonShapeToImageRegion, imageRegionRectToLanLot } from './transform';
+  import { latLonShapeToImageRegion, imageRegionRectToLatLon } from './transform';
   import type { Shape, Rectangle } from '@/core/shapes';
   import OSDSVGOverlay from '../drawing/OSDSVGOverlay.svelte';
 
@@ -71,7 +71,7 @@
 
   const reverseShapeTransform = (shape: Shape) => {
     const r = shape as Rectangle;
-    return imageRegionRectToLanLot(r, map);
+    return imageRegionRectToLatLon(r, map);
   }
 
   onMount(() => {
