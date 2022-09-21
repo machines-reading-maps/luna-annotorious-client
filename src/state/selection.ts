@@ -1,6 +1,6 @@
 
 import { readable } from 'svelte/store';
-import Store from './store/Store';
+import Store from './store/store';
 import type { Shape } from '@/shapes';
 
 const Selection = readable<Shape[]>([], set => {

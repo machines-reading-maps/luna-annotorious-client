@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
-import Store from './store/Store';
+import Store from './store/store';
 import type { Shape } from "@/shapes";
 
-export interface HoverState {
+interface HoverState {
 
   shape: Shape
 

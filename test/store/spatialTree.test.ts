@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 
-import SpatialTree from '../../src/state/store/SpatialTree';
+import SpatialTree from '../../src/state/store/spatialTree';
 
-import { Shapes } from './Fixtures';
+import { Shapes } from './fixtures';
 
 describe('SpatialTree', () => {
 

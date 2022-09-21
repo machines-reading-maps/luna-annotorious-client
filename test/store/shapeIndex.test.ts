@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 
-import ShapeIndex from '../../src/state/store/ShapeIndex';
+import ShapeIndex from '../../src/state/store/shapeIndex';
 
-import { Shapes } from './Fixtures';
+import { Shapes } from './fixtures';
 
 describe('ShapeIndex', () => {
 

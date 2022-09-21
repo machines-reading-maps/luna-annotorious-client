@@ -1,11 +1,8 @@
-import ShapeIndex from './ShapeIndex';
-import SpatialTree from './SpatialTree';
+import equal from 'deep-equal';
 import type { Shape } from '@/shapes';
-import { 
-  type StoreChangeEvent,
-  isEmptyEvent,
-  removeStateChanges 
-} from './StoreChangeEvent';
+import ShapeIndex from './shapeIndex';
+import SpatialTree from './spatialTree';
+import { StoreChangeEvent } from './storeChangeEvent';
 
 export interface StoreObserveOptions {
 
@@ -49,15 +46,15 @@ const Store = () => {
     deleted.forEach(shape => tree.remove(shape));
     updated.forEach(({ oldValue, newValue }) => tree.update(oldValue, newValue));
 
-    const event = { added, deleted, updated };
+    const event = new StoreChangeEvent(added, deleted, updated);
 
     // Forward event to subscribed observers
     observers.forEach(({ callback, opts }) => {
       if (opts.ignoreHoverStateChanges) {
         // Don't fire the callback if this event has only state changes
-        const withoutStateChanges = removeStateChanges(event, [ 'isHovered' ]);
-
-        if (!isEmptyEvent(withoutStateChanges))
+        const withoutStateChanges = event.removeStateChanges([ 'isHovered' ]);
+        
+        if (!withoutStateChanges.isEmpty())
           callback(event);
       } else {
         callback(event);
@@ -65,31 +62,24 @@ const Store = () => {
     });
   });
 
-  const add = (shape: Shape) =>
-    index.add(shape);
+  const add = (shape: Shape) => index.add(shape);
 
-  const all = (): Shape[] =>
-    index.all();
+  const all = (): Shape[] => index.all();
 
-  const clear = () =>
-    index.clear();
+  const clear = () => index.clear();
 
-  const get = (id: string): Shape | null =>
-    index.get(id);
+  const get = (id: string): Shape | null => index.get(id);
 
-  const getAt = (x: number, y: number): Shape | null =>
-    tree.getAt(x, y);
+  const getAt = (x: number, y: number): Shape | null => tree.getAt(x, y);
 
   const observe = (
     callback: (evt: StoreChangeEvent) => void, 
     opts: StoreObserveOptions = {}
   ) => observers.push({ callback, opts });
 
-  const remove = (shape: Shape | string) =>
-    index.remove(shape);
+  const remove = (shape: Shape | string) => index.remove(shape);
 
-  const set = (shapes: Shape[]) =>
-    index.set(shapes);
+  const set = (shapes: Shape[]) => index.set(shapes);
 
   const setState = (id: string, diff: Object) => {
     const shape = index.get(id);
@@ -112,8 +102,7 @@ const Store = () => {
     index.update(previousShape, shape);
   }
 
-  const bulkUpsert = (shapes: Shape[]) =>
-    index.bulkUpsert(shapes);
+  const bulkUpsert = (shapes: Shape[]) => index.bulkUpsert(shapes);
 
   return {
     add, all, bulkUpsert, clear, get, getAt, observe, remove, set, setState, update

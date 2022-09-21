@@ -1,24 +1,5 @@
 import type { Shape } from '@/shapes';
-
-interface AnnotationBody {
-
-  type?: string
-
-  purpose?: string
-
-  value?: string
-
-  created?: Date
-
-  creator?: {
-
-    id: string
-
-    name?: string
-
-  }
-
-}
+import type { AnnotationBody } from './WebAnnotation';
 
 export const getBodies = (shape: Shape, purpose: string): AnnotationBody[] => {
   if (shape.data) {

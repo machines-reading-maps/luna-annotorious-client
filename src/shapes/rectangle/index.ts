@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid';
 
 import { type Geometry, ShapeType } from '../Shape';
-import { registerShapeUtil } from '../ShapeUtils';
+import { registerShapeUtil } from '../shapeUtils';
 
 import type { Bounds } from '../Bounds';
 import type { Shape } from '../Shape';
-import type { ShapeUtil } from '../ShapeUtils';
+import type { ShapeUtil } from '../shapeUtils';
 
 export interface Rectangle extends Shape {
 

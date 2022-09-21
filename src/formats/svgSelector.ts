@@ -1,6 +1,6 @@
 import { type Bounds, boundsFromPoints, ShapeType } from '@/shapes';
 
-interface InlineSVG {
+interface SVGGeometry {
 
   type: ShapeType
 
@@ -14,9 +14,11 @@ interface InlineSVG {
 
 }
 
-export const parseSVG = (fragment: string): InlineSVG => {
-  // Hack!
-  const [, str] = fragment.match(/<polygon points="(.*)"/) || [];
+export const parseSVG = (valueOrSelector: string | { value: string }): SVGGeometry => {
+  const value = typeof valueOrSelector === 'string' ? valueOrSelector : valueOrSelector.value;
+
+  // TODO hack for testing - need to port the original Annotorious code for this
+  const [, str] = value.match(/<polygon points="(.*)"/) || [];
 
   if (!str)
     return;

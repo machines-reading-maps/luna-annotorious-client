@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest'
 
-import ChangeEvent from '../../src/state/store/StoreChangeEvent';
-import Store from '../../src/state/store/Store';
+import { Store, StoreChangeEvent } from '../../src/state';
 
-import { Shapes } from './Fixtures';
+import { Shapes } from './fixtures';
 
 describe('Store', () => {
 
@@ -54,8 +53,8 @@ describe('Store', () => {
   it('should emit an event when shapes are added', async () => {
     Store.clear();
 
-    const result: ChangeEvent = await new Promise(resolve => {
-      const callback = event => {
+    const result: StoreChangeEvent = await new Promise(resolve => {
+      const callback = (event: StoreChangeEvent) => {
         resolve(event);
       }
 

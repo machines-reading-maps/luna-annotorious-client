@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
-import { ShapeType } from '../../src/shapes';
-import { parseW3C } from '../../src/formats/w3c';
+import { ShapeType } from '../../../src/shapes';
+import { parseW3C } from '../../../src/formats/w3c/w3cParser';
 
-import { Annotations } from './Fixtures';
+import { Annotations } from './fixtures';
 
 describe('parseW3C', () => {
 
