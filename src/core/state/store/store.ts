@@ -1,6 +1,7 @@
 import type { Shape } from '@/core/shapes';
 import { ShapeIndex, SpatialTree, StoreChangeEvent } from '.';
 import type { StoreObserveOptions } from '.';
+import { schedule_update } from 'svelte/internal';
 
 /**
  * A common facade across the spatial tree and the YJS shape index.
@@ -73,7 +74,9 @@ const Store = () => {
 
   const set = (shapes: Shape[]) => index.set(shapes);
 
-  const setState = (id: string, diff: Object) => {
+  const setState = (shapeOrId: Shape | string, diff: Object) => {
+    // Always get latest shape state from store
+    const id = typeof shapeOrId === 'string' ? shapeOrId : shapeOrId.id; 
     const shape = index.get(id);
 
     if (shape) {
