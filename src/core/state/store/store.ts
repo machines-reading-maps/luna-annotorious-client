@@ -74,9 +74,7 @@ const Store = () => {
 
   const set = (shapes: Shape[]) => index.set(shapes);
 
-  const setState = (shapeOrId: Shape | string, diff: Object) => {
-    // Always get latest shape state from store
-    const id = typeof shapeOrId === 'string' ? shapeOrId : shapeOrId.id; 
+  const setState = (id: string, diff: Object) => {
     const shape = index.get(id);
 
     if (shape) {
