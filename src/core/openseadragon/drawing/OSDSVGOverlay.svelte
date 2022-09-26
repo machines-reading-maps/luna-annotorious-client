@@ -16,7 +16,17 @@
 
   let transform = null;
 
-  const onUpdateViewport = () => transform = viewTransform();
+  let scale = 1;
+
+  const onUpdateViewport = () => {
+    // Keep SVG layer in sync with OSD state
+    transform = viewTransform();
+
+    // Current OSD scale to counter-scale constant-size elements
+    const containerWidth = viewer.viewport.getContainerSize().x;
+    const zoom = viewer.viewport.getZoom(true);
+    scale = zoom * containerWidth / viewer.world.getContentFactor();
+  }
 
   const onGrab = () => viewer.setMouseNavEnabled(false);
 
@@ -54,6 +64,7 @@
           screenTransform={screenTransform} 
           shapeTransform={shapeTransform}
           reverseShapeTransform={reverseShapeTransform}
+          viewportScale={scale}
           on:grab={onGrab} 
           on:release={onRelease} 
           on:save={({ detail }) => onComplete(detail)} 

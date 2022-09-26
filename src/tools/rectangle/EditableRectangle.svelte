@@ -7,6 +7,9 @@
   export let screenTransform: Function;
   export let shapeTransform: Function = null;
   export let reverseShapeTransform: Function = null;
+  export let viewportScale: number = null;
+
+  $: handleSize = 14 / viewportScale;
 </script>
 
 <Tool
@@ -63,6 +66,34 @@
       on:pointerup={release}
       on:pointermove={pointerMove}
       x={geometry.x} y={geometry.y} height={geometry.h} width={1} />
+
+    <rect 
+      class="a9s-corner-handle a9s-corner-handle-topleft"
+      on:pointerdown={grab(ToolHandle.TOP_LEFT)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
+      x={geometry.x - handleSize / 2} y={geometry.y - handleSize / 2} height={handleSize} width={handleSize} />
+
+    <rect 
+      class="a9s-corner-handle a9s-corner-handle-topright"
+      on:pointerdown={grab(ToolHandle.TOP_RIGHT)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
+      x={geometry.x + geometry.w - handleSize / 2} y={geometry.y - handleSize / 2} height={handleSize} width={handleSize} />
+    
+    <rect 
+      class="a9s-corner-handle a9s-corner-handle-bottomright"
+      on:pointerdown={grab(ToolHandle.BOTTOM_RIGHT)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
+      x={geometry.x + geometry.w - handleSize / 2} y={geometry.y + geometry.h - handleSize / 2} height={handleSize} width={handleSize} />
+      
+    <rect 
+      class="a9s-corner-handle a9s-corner-handle-bottomleft"
+      on:pointerdown={grab(ToolHandle.BOTTOM_LEFT)}
+      on:pointerup={release}
+      on:pointermove={pointerMove}
+      x={geometry.x - handleSize / 2} y={geometry.y + geometry.h - handleSize / 2} height={handleSize} width={handleSize} />
   </g>
 </Tool>
 
