@@ -15,7 +15,8 @@
       const { x, y, w, h } = (translated as Rectangle).geometry;
       
       const rect = new PIXI.Graphics();
-      rect.beginFill(0xff0000, 0.45);
+
+      rect.beginFill(0x1a73e8, 0.45);
       rect.drawRect(x, y, w, - h);
       rect.endFill();
 
@@ -25,7 +26,7 @@
       const flattend = simplified.geometry.points.reduce((flat, xy) => ([...flat, ...xy]), []);  
       
       const poly = new PIXI.Graphics();
-      poly.beginFill(0xff0000, 0.45);
+      poly.beginFill(0x1a73e8, 0.45);
       poly.drawPolygon(flattend);
       poly.endFill();
 
