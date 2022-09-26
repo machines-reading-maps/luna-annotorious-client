@@ -34,6 +34,25 @@
     on:pointerup={release}
     on:pointermove={pointerMove}>
 
+    <g class="a9s-selection-outline">
+      <line x1={geometry.x + handleSize / 2} y1={geometry.y} x2={geometry.x + geometry.w - handleSize / 2} y2={geometry.y} />
+      <line x1={geometry.x + geometry.w} y1={geometry.y + handleSize / 2} x2={geometry.x + geometry.w} y2={geometry.y + geometry.h - handleSize / 2} />
+      <line x1={geometry.x + handleSize / 2} y1={geometry.y + geometry.h} x2={geometry.x + geometry.w - handleSize / 2} y2={geometry.y + geometry.h} />
+      <line x1={geometry.x} y1={geometry.y + handleSize / 2} x2={geometry.x} y2={geometry.y + geometry.h - handleSize / 2} />  
+
+      <rect 
+        x={geometry.x - handleSize / 2} y={geometry.y - handleSize / 2} height={handleSize} width={handleSize} />
+
+      <rect 
+        x={geometry.x + geometry.w - handleSize / 2} y={geometry.y - handleSize / 2} height={handleSize} width={handleSize} />
+      
+      <rect 
+        x={geometry.x + geometry.w - handleSize / 2} y={geometry.y + geometry.h - handleSize / 2} height={handleSize} width={handleSize} />
+        
+      <rect 
+        x={geometry.x - handleSize / 2} y={geometry.y + geometry.h - handleSize / 2} height={handleSize} width={handleSize} />
+    </g>
+
     <line x1={geometry.x + handleSize / 2} y1={geometry.y} x2={geometry.x + geometry.w - handleSize / 2} y2={geometry.y} />
     <line x1={geometry.x + geometry.w} y1={geometry.y + handleSize / 2} x2={geometry.x + geometry.w} y2={geometry.y + geometry.h - handleSize / 2} />
     <line x1={geometry.x + handleSize / 2} y1={geometry.y + geometry.h} x2={geometry.x + geometry.w - handleSize / 2} y2={geometry.y + geometry.h} />
@@ -94,10 +113,21 @@
     stroke-width: 2px;
   }
 
+  rect:hover {
+    fill: #06acee;
+  }
+
   line {
     vector-effect: non-scaling-stroke;
     stroke: #06acee;
     stroke-width: 2px;
+  }
+
+  .a9s-selection-outline rect,
+  .a9s-selection-outline line {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.7);
+    stroke-width: 5px;
   }
 
   .a9s-edge-handle {
@@ -119,5 +149,21 @@
 
   .a9s-edge-handle-left {
     cursor:w-resize;
+  }
+
+  .a9s-corner-handle-topleft {
+    cursor:nw-resize;
+  }
+
+  .a9s-corner-handle-topright {
+    cursor:ne-resize;
+  }
+
+  .a9s-corner-handle-bottomright {
+    cursor:se-resize;
+  }
+
+  .a9s-corner-handle-bottomleft {
+    cursor:sw-resize;
   }
 </style>
