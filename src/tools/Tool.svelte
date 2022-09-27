@@ -65,9 +65,8 @@
   }
 
   onMount(() => {
-    initialShape = shapeTransform ? 
-      shapeTransform(shape as Rectangle) : shape as Rectangle;
-
+    initialShape = shape;
+     
     const onKeyDown = (evt: KeyboardEvent) => {
       if (evt.code === 'Enter')
         dispatch('save', shape)
