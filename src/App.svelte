@@ -62,9 +62,10 @@
   }
 
   onMount(() => {
-    // Clock sync
+    /* Clock sync
     fetch(`${API_BASE}/time`).then(res => res.json()).then(({ timestamp }) =>
       serverTimeDifference = timestamp - Date.now());
+      */
   });
 </script>
 

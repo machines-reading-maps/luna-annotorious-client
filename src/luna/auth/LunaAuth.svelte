@@ -20,6 +20,8 @@
   let iframe: HTMLIFrameElement;
 
   onMount(() => {
+    console.log('Authenticating...');
+
     const afterIFrameOpened = () => {
       if (iframe.contentDocument) {
         // iframe loaded content - now wait if we receive a token message
@@ -36,6 +38,7 @@
     const onMessage = (evt: MessageEvent) => {
       try {
         const { accessToken } = JSON.parse(evt.data);
+        console.log('Got access token', accessToken);
 
         // 'Log in' on the server with the token. The server will verify the 
         // token, set an HttpOnly cookie (not accessible to JS), and respond
@@ -67,9 +70,6 @@
     
     return () => window.removeEventListener('message', onMessage);
   });
-
-  const doLogin = () =>
-    window.open(loginUrl, "_blank", "height=377,width=606");
 </script>
 
 <div class="luna-auth-widget">
