@@ -23,7 +23,7 @@
     `https://www.davidrumsey.com/luna/servlet/iiif/${imageId}/info.json`;
   
   const annotationUrl = 
-    `https://www.davidrumsey.com/luna/servlet/iiif/m/${imageId}/list/luna`;
+    `https://clone.davidrumsey.com/luna/servlet/iiif/m/${imageId}/list/luna`;
 
   const osdConfig = {
     tileSources: imageUrl,
@@ -37,11 +37,13 @@
     document.title = `${metadata.label} - David Rumsey Historical Map Collection | Annotation`); 
 
   // Load annotation list  
-  const fLoad = fetch(annotationUrl).then(res => res.json()).then(data => {
+  const fLoad = fetch(annotationUrl, {
+    // credentials: 'include'
+  }).then(res => res.json()).then(data => {
     const { parsed } = parseAnnotations(data.resources);
     Store.set(parsed);
   }).then(() => loaded = true);
-  
+
   const onAuth = (evt: CustomEvent) => {
     const initStorageAdapter = () => {
       console.log('Authorization successful - fetching personal corrections');
@@ -62,10 +64,9 @@
   }
 
   onMount(() => {
-    /* Clock sync
+    // Clock sync
     fetch(`${API_BASE}/time`).then(res => res.json()).then(({ timestamp }) =>
       serverTimeDifference = timestamp - Date.now());
-      */
   });
 </script>
 

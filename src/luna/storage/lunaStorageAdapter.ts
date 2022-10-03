@@ -55,10 +55,10 @@ const LunaStorageAdapter = ({ store, source }: { store: typeof Store, source: st
       const { updated }  = changes;
 
       updated.forEach(({ newValue }) => {
-        if (newValue.state.isSelected) {
+        if (newValue.state.isSelected)
           lastSelection = newValue;
 
-        } else if (lastSelection && equalsIgnoreState(lastSelection, newValue)) {          
+        // if (lastSelection && equalsIgnoreState(lastSelection, newValue)) {          
           const w3c = toW3CAnnotation(newValue, source);
 
           fetch(`${API_BASE}/annotation`, {
@@ -76,7 +76,7 @@ const LunaStorageAdapter = ({ store, source }: { store: typeof Store, source: st
             console.error('ERROR storing annotation', error);
 
           });
-        }
+        // }
       });
     }, observeOptions);
   });
