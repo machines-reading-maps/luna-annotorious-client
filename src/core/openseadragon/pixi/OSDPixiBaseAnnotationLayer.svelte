@@ -93,7 +93,7 @@
         const img = config.viewportToLayerPoint(vpt, viewer);
 
         const hovered = Store.getAt(img.x, img.y);
-
+        
         if (hovered?.id !== $Hover?.shape.id) {
           if (hovered)
             Hover.set({ shape: hovered, originalEvent: evt.originalEvent as PointerEvent });

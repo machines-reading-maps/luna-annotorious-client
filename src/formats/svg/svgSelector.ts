@@ -18,7 +18,7 @@ export const parseSVG = (valueOrSelector: string | { value: string }): SVGGeomet
   const value = typeof valueOrSelector === 'string' ? valueOrSelector : valueOrSelector.value;
 
   // TODO hack for testing - need to port the original Annotorious code for this
-  const [, str] = value.match(/<polygon points="(.*)"/) || [];
+  const [a, b, str] = value.match(/(<polygon points=")([^"]*)/) || [];
 
   if (!str)
     return;

@@ -1,6 +1,8 @@
+import { nanoid  } from 'nanoid';
 import { type Shape, ShapeType } from '@/core/shapes';
 import { parseMediaFragment } from '@/formats/mediafrags/mediaFragmentSelector';
 import type { IIIFAnnotation } from '.';
+import { parseSVG } from '../svg/svgSelector';
 
 export const parseAnnotations = (annotations: IIIFAnnotation[]): ({ parsed: Shape[], failed: IIIFAnnotation[] }) =>
   annotations.reduce((result, annotation) => {
@@ -26,6 +28,24 @@ export const parseAnnotations = (annotations: IIIFAnnotation[]): ({ parsed: Shap
         geometry: parseMediaFragment(on.selector.value),
         
         state: {}  
+      }
+    } else if (on.selector['@type'] === 'oa:SvgSelector') {
+      const parsed = parseSVG(on.selector.value);
+      if (parsed) {
+        shape = {
+          id: annotation['@id'] || nanoid(),
+          type: parsed.type,
+          data: {
+            body: [{
+            purpose: 'transcribing',
+            value: resource.chars
+            }]
+          },
+          geometry: {
+            ...parsed.geometry,
+          },
+          state: {}
+        }
       }
     }
 
