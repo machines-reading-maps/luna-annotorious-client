@@ -1,7 +1,6 @@
 import type { Shape } from '@/core/shapes';
 import { ShapeIndex, SpatialTree, StoreChangeEvent } from '.';
 import type { StoreObserveOptions } from '.';
-import { schedule_update } from 'svelte/internal';
 
 /**
  * A common facade across the spatial tree and the YJS shape index.
@@ -72,7 +71,8 @@ const Store = () => {
 
   const remove = (shape: Shape | string) => index.remove(shape);
 
-  const set = (shapes: Shape[]) => index.set(shapes);
+  const set = (shapes: Shape[], clear = true) => 
+    index.set(shapes, clear);
 
   const setState = (id: string, diff: Object) => {
     const shape = index.get(id);

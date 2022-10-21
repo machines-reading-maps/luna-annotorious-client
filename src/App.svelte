@@ -1,9 +1,9 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import { Hover, Store, Selection } from '@/core/state';
-  import { parseAnnotations } from '@/formats/iiif2';
+  // import { parseAnnotations } from '@/formats/iiif2';
   import { OSDViewer, OSDPixiImageAnnotationLayer , OSDSVGDrawingLayer} from '@/core/openseadragon';
-  import { LunaAuth, LunaPopup, LunaStorageAdapter } from '@/luna';
+  import { LunaAuth, LunaPopup, LunaStorageAdapter, loadPaginated } from '@/luna';
   import { API_BASE, LUNA_LOGIN_URL, LUNA_LOGOUT_URL, LUNA_TOKEN_URL } from '@/config';
 
   let loaded: boolean;
@@ -37,12 +37,15 @@
     document.title = `${metadata.label} - David Rumsey Historical Map Collection | Annotation`); 
 
   // Load annotation list  
+  /*
   const fLoad = fetch(annotationUrl, {
     // credentials: 'include'
   }).then(res => res.json()).then(data => {
     const { parsed } = parseAnnotations(data.resources);
     Store.set(parsed);
   }).then(() => loaded = true);
+  */
+  const fLoad = loadPaginated(annotationUrl, Store).then(() => loaded = true);
 
   const onAuth = (evt: CustomEvent) => {
     const initStorageAdapter = () => {

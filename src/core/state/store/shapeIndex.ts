@@ -23,8 +23,9 @@ export default class ShapeIndex {
       this.map.forEach((_, key) => this.map.delete(key)));
   }
 
-  set = (shapes: Shape[]) => {
-    this.clear();
+  set = (shapes: Shape[], clear = true) => {
+    if (clear)
+      this.clear();
 
     this.doc.transact(() =>
       shapes.forEach(shape => this.map.set(shape.id, shape)));
