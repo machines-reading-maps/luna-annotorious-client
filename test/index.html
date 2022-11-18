@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Annotorious 3 | OpenSeadragon Example</title>
+    <style>
+      html,
+      body,
+      #openseadragon {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script type="module">
+      import Annotorious, { OpenSeadragon } from '@annotorious/openseadragon';
+
+      window.onload = function () {
+        var viewer = OpenSeadragon({
+          id: 'openseadragon',
+          prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/images/',
+          tileSources: {
+            type: 'image',
+            url: '1280px-Hallstatt.jpg'
+          },
+          gestureSettingsMouse: {
+            clickToZoom: false
+          },
+          gestureSettingsTouch: {
+            pinchRotate: true
+          }
+        });
+
+        var anno = Annotorious.init(viewer);
+
+        anno.loadAnnotations('annotations.w3c.json');
+
+        anno.on('createAnnotation', function (annotation) {
+          console.log('created', annotation);
+        });
+
+        anno.on('deleteAnnotation', function (annotation) {
+          console.log('deleted', annotation);
+        });
+
+        anno.on('updateAnnotation', function (annotation, previous) {
+          console.log('updated', previous, 'with', annotation);
+        });
+
+        anno.on('selectAnnotation', function (annotation) {
+          console.log('selected', annotation);
+        });
+
+        anno.on('mouseEnterAnnotation', function (annotation) {
+          console.log('mouse enter', annotation);
+        });
+
+        anno.on('mouseLeaveAnnotation', function (annotation) {
+          console.log('mouse leave', annotation);
+        });
+      };
+    </script>
+  </head>
+
+  <body>
+    <div id="openseadragon"></div>
+  </body>
+</html>

@@ -1,37 +1,20 @@
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import sveltePreprocess from 'svelte-preprocess';
 
-import path from 'path';
-
 export default defineConfig({
-  resolve:{
-    alias:{
-      '@' : path.resolve(__dirname, './src')
-    }
-  },
-  plugins: [
-    svelte({ preprocess: sveltePreprocess() }), 
-    splitVendorChunkPlugin()
-  ],
+  plugins: [ svelte({ preprocess: sveltePreprocess() }) ],
   server: {
-    open: '/',
-    proxy: {
-      '/api': 'http://localhost'
-      // '/api': {
-      //   target: 'http://localhost:3000',
-      //   rewrite: (path) => path.replace(/^\/api/, '')
-      // }
-    }
+    open: '/test/index.html'
   },
   build: {
+    sourcemap: true,
     rollupOptions: {
-      input: 'index.html',
-      output: {
-        manualChunks: {
-          vendor: ['openseadragon', 'pixi.js', 'yjs', 'nanoid', 'deep-equal']
-        }
+      external: ['openseadragon'],
+      lib: {
+        entry: './src/index.tx',
+        name: 'LunaAnnotorious'
       }
     }
   }
-})
+});

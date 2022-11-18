@@ -34,6 +34,7 @@
     "vitest": "^0.18.1"
   },
   "dependencies": {
+    "@annotorious/openseadragon": "file:../../recogito/annotorious-3/packages/openseadragon",
     "autosize-input": "^1.0.2",
     "deep-equal": "^2.0.5",
     "nanoid": "^4.0.0",
