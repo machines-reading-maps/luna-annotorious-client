@@ -1,24 +1,29 @@
 <script type="ts">
+  /*
   import { onMount } from 'svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
 
   import { upsertFirst } from '@/formats/w3c';
-  import { Store, Selection, type HoverState } from '@/core/state';
+  import { Store, Selection, type HoverState } from '@annotorious/core/state';
   import type { Shape } from '@/core/shapes';
   import HUD from './HUD.svelte';
   import Transcription from './Transcription.svelte';
+  */
 
-  /** Props **/
+  /** Props **
   export let viewer: any;
   export let user: any;
   export let serverTimeDifference: number = 0; 
   export let hover: HoverState;
+  */
 
-  /** State **/
+  /** State **
   let isHUDOpen = false;
   let isTranscriptionEditable = false;
+  */
 
+  /*
   const currentTimeAdjusted = () =>
     new Date(Date.now() + serverTimeDifference);
 
@@ -31,14 +36,14 @@
   }
 
   /** Derived **/
-  $: transcription = hover.shape.data.body.find(body => body.purpose === 'transcribing')?.value;
+  // $: transcription = hover.shape.data.body.find(body => body.purpose === 'transcribing')?.value;
 
-  $: {
+  // $: {
     /*
     if (transcription || viewportPoint)
       isHUDOpen = false;
       */
-  }
+  // }
 
   /*
   onMount(() => {
@@ -55,6 +60,7 @@
   });
   */
 
+  /*
   const onChangeTranscription = (evt: CustomEvent<string>) => {
     const updated = upsertFirst(hover.shape, {
       type: 'TextualBody',
@@ -69,8 +75,10 @@
     hover = { ...hover, shape: updated };
     isTranscriptionEditable = false;
   }
+  */
 </script>
 
+/*
 <div class="r8s-hover-container" style={`top: ${hover.originalEvent.offsetY}px; left: ${hover.originalEvent.offsetX}px`}>
   <div class="r8s-hover-main">
     <div class="r8s-hover-content">
@@ -98,6 +106,7 @@
 
   <div class="mousetrap" />
 </div>
+*/
 
 <style>
   .r8s-hover-container {

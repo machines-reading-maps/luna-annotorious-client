@@ -15,6 +15,7 @@
     </style>
     <script type="module">
       import Annotorious, { OpenSeadragon } from '@annotorious/openseadragon';
+      import LunaPlugin from '../src/index.ts';
 
       window.onload = function () {
         var viewer = OpenSeadragon({
@@ -34,31 +35,9 @@
 
         var anno = Annotorious.init(viewer);
 
+        var luna = new LunaPlugin(anno);
+
         anno.loadAnnotations('annotations.w3c.json');
-
-        anno.on('createAnnotation', function (annotation) {
-          console.log('created', annotation);
-        });
-
-        anno.on('deleteAnnotation', function (annotation) {
-          console.log('deleted', annotation);
-        });
-
-        anno.on('updateAnnotation', function (annotation, previous) {
-          console.log('updated', previous, 'with', annotation);
-        });
-
-        anno.on('selectAnnotation', function (annotation) {
-          console.log('selected', annotation);
-        });
-
-        anno.on('mouseEnterAnnotation', function (annotation) {
-          console.log('mouse enter', annotation);
-        });
-
-        anno.on('mouseLeaveAnnotation', function (annotation) {
-          console.log('mouse leave', annotation);
-        });
       };
     </script>
   </head>
