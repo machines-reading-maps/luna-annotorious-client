@@ -4,11 +4,10 @@
 
   const dispatch = createEventDispatcher();
 
-  /** Props **/
   export let value: string;
+
   export let editable: boolean;
 
-  /** Derived **/
   $: {
     if (editable) {
       tick().then(() => {
