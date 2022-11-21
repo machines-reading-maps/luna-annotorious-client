@@ -22,30 +22,17 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
-    "@types/deep-equal": "^1.0.1",
-    "@types/openseadragon": "^3.0.3",
-    "@types/rbush": "^3.0.0",
-    "c8": "^7.11.3",
     "svelte": "^3.49.0",
     "svelte-preprocess": "^4.10.7",
     "typescript": "^4.7.4",
     "vite": "^3.0.0",
-    "vite-aliases": "^0.9.2",
     "vitest": "^0.18.1"
   },
   "dependencies": {
+    "@annotorious/formats": "file:../../recogito/annotorious-3/packages/formats",
     "@annotorious/openseadragon": "file:../../recogito/annotorious-3/packages/openseadragon",
     "autosize-input": "^1.0.2",
-    "deep-equal": "^2.0.5",
-    "nanoid": "^4.0.0",
-    "openseadragon": "^3.1.0",
-    "openseadragon-wmts": "^0.7.1",
-    "pixi.js": "^6.4.2",
-    "rbush": "^3.0.1",
-    "simplify-js": "^1.2.4",
     "svelte-helpers": "^0.2.5",
-    "svelte-icons-pack": "^2.0.0",
-    "svelte-loading-spinners": "^0.1.7",
-    "yjs": "^13.5.39"
+    "svelte-icons-pack": "^2.0.0"
   }
 }
