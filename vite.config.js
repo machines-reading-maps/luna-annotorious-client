@@ -9,12 +9,14 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    lib: {
+      entry: './src/index.ts',
+      name: 'LunaAnnotorious',
+      formats: ['umd'],
+      fileName: () => 'luna-annotorious.js',
+    },
     rollupOptions: {
-      external: ['openseadragon'],
-      lib: {
-        entry: './src/index.tx',
-        name: 'LunaAnnotorious'
-      }
+      external: ['openseadragon']
     }
   }
 });

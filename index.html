@@ -3,10 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Loading...</title>
+    <title>Luna | Annotorious 3</title>
+    <style>
+      html,
+      body,
+      #openseadragon {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
+    <script>
+      window.onload = function () {
+        var viewer = OpenSeadragon({
+          id: 'openseadragon',
+          prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/images/',
+          tileSources: {
+            type: 'image',
+            url: '1280px-Hallstatt.jpg'
+          },
+          gestureSettingsMouse: {
+            clickToZoom: false
+          },
+          gestureSettingsTouch: {
+            pinchRotate: true
+          }
+        });
+
+        var anno = Annotorious.init(viewer);
+
+        var luna = new LunaPlugin(anno);
+
+        anno.loadAnnotations('annotations.w3c.json');
+
+        anno.on('createAnnotation', annotation => {
+          console.log('created', annotation);
+        });
+
+        anno.on('deleteAnnotation', annotation => {
+          console.log('deleted', annotation);
+        });
+
+        anno.on('updateAnnotation', (annotation, previous) => {
+          console.log('updated', previous, 'with', annotation);
+        });
+      };
+    </script>
   </head>
+  
   <body>
-    <div id="app"></div>
-    <script type="module" src="./src/main.ts"></script>
+    <div id="openseadragon"></div>
   </body>
 </html>
