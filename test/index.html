@@ -38,6 +38,18 @@
         var luna = new LunaPlugin(anno);
 
         anno.loadAnnotations('annotations.w3c.json');
+
+        anno.on('createAnnotation', annotation => {
+          console.log('created', annotation);
+        });
+
+        anno.on('deleteAnnotation', annotation => {
+          console.log('deleted', annotation);
+        });
+
+        anno.on('updateAnnotation', (annotation, previous) => {
+          console.log('updated', previous, 'with', annotation);
+        });
       };
     </script>
   </head>

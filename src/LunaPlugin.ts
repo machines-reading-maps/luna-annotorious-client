@@ -4,11 +4,15 @@ import { LunaPopup } from './popup';
 
 export class LunaPlugin {
 
-  popup: LunaPopup;
+  anno: Annotorious;
 
   viewer: OpenSeadragon.Viewer;
 
+  popup: LunaPopup;
+  
   constructor(anno: Annotorious, viewer: OpenSeadragon.Viewer) {
+    this.anno = anno;
+    
     this.viewer = viewer;
 
     anno.on('mouseEnterAnnotation', (annotation, evt) => {
@@ -29,6 +33,12 @@ export class LunaPlugin {
         viewer: this.viewer
       }
     });
+
+    this.popup.$on('transcriptionChanged', (evt: CustomEvent<WebAnnotation>) =>
+      this.anno.updateAnnotation(evt.detail.id, evt.detail));
+
+    this.popup.$on('editShape', (evt: CustomEvent<WebAnnotation>) =>
+      this.anno.selectAnnotation(evt.detail.id));
   }
 
   hidePopup = () => {

@@ -1,9 +1,13 @@
 <script type="ts">
+  import { createEventDispatcher } from 'svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPencil from 'svelte-icons-pack/bs/BsPencil';
   import type { WebAnnotation } from '@annotorious/formats';
-  import HUD from './HUD.svelte';
+
   import Transcription from './Transcription.svelte';
+  import HUD from './HUD.svelte';
+
+  const dispatch = createEventDispatcher();
 
   export let annotation: WebAnnotation;
 
@@ -15,42 +19,65 @@
 
   let isTranscriptionEditable = false;
 
-  let transcription;
+  let isShapeEditable = false;
+
+  let transcription: string;
 
   $: {
-    console.log(annotation);
     const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation. body ];
     transcription = bodies.find(body => body.purpose === 'transcribing')?.value;
   }
 
+  const onFixShape = () => {
+    dispatch('editShape', annotation);
+    isShapeEditable = true;
+  }
+
   const onChangeTranscription = (evt: CustomEvent<string>) => {
-    /*
-    const updated = upsertFirst(hover.shape, {
-      type: 'TextualBody',
-      purpose: 'transcribing',
-      value: evt.detail,
-      creator: user,
-      created: currentTimeAdjusted()
-    });
+    const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation.body ];
 
-    Store.update(hover.shape, updated);
+    const updated = [
+      ...bodies.filter(b => b.purpose !== 'transcribing'),
+      {
+        type: 'TextualBody',
+        purpose: 'transcribing',
+        value: evt.detail,
+        // TODO
+        // creator: user,
+        // created: currentTimeAdjusted()
+      }
+    ];
 
-    hover = { ...hover, shape: updated };
+    annotation = {
+      ...annotation,
+      body: updated
+    };
+    
+    dispatch('transcriptionChanged', annotation);
+
     isTranscriptionEditable = false;
-    */
   }
 
-  const onEditShape = () => {
-    /* Deselect
-    $Selection.forEach(shape =>
-      Store.setState(shape.id, { isSelected: false }));
+    /*
+  onMount(() => {
+    const onUpdateViewport = () => {
+      // Adjust popup position for viewport changes
+      const xy = viewer.viewport.viewportToViewerElementCoordinates(viewportPoint);
+      offsetX = xy.x;
+      offsetY = xy.y;
+    }
+    
+    viewer.addHandler('update-viewport', onUpdateViewport);
+    
+    return () => viewer.removeHandler('update-viewport', onUpdateViewport);
+  });
+  */
 
-    Store.setState(hover.shape.id, { isSelected: true });
-    */
-  }
 </script>
 
-<div class="r8s-hover-container" style={`top: ${originalEvent.offsetY}px; left: ${originalEvent.offsetX}px`}>
+<div class="r8s-hover-container" 
+  class:ghost={isShapeEditable}
+  style={`top: ${originalEvent.offsetY}px; left: ${originalEvent.offsetX}px`}>
   <div class="r8s-hover-main">
     <div class="r8s-hover-content">
       <Transcription 
@@ -72,7 +99,7 @@
   {#if isHUDOpen}
     <HUD 
       on:fixTranscription={() => isTranscriptionEditable = true} 
-      on:editShape={onEditShape} />
+      on:editShape={() => onFixShape()} />
   {/if}
 
   <div class="mousetrap" />
@@ -86,6 +113,11 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+  }
+
+  .r8s-hover-container.ghost {
+    opacity: 0.4;
+    pointer-events: none;
   }
 
   .r8s-hover-main {
