@@ -18,6 +18,8 @@ To use the plugin in your own Web page, include
 - The alpha build of Annotorious OpenSeadragon 3 (JS + stylesheet)
 - This plugin (JS + stylesheet)
 
+Recent versions of the Annotorious alpha build & the plugin (JS and stylesheet) are included in this folder.
+
 ```html
 <!-- add this to your HTML <head> -->
 <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
