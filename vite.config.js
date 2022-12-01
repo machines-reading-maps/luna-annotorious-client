@@ -13,10 +13,13 @@ export default defineConfig({
       entry: './src/index.ts',
       name: 'LunaAnnotorious',
       formats: ['umd'],
-      fileName: () => 'luna-annotorious.js',
+      fileName: () => 'luna-annotorious.js'
     },
     rollupOptions: {
-      external: ['openseadragon']
+      external: ['openseadragon'],
+      output: {
+        assetFileNames: "luna-annotorious.[ext]"
+      }
     }
   }
 });

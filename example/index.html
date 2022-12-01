@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Luna | Annotorious 3</title>
+    <meta charset="utf-8" />
+    <title>Annotorious 3 | OpenSeadragon Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
+    <script src="annotorious-openseadragon.js"></script>
+    <script src="luna-annotorious.js"></script>
+    <link rel="stylesheet" href="annotorious-openseadragon.css">
+    <link rel="stylesheet" href="luna-annotorious.css">
     <style>
       html,
       body,
@@ -14,8 +18,7 @@
         height: 100%;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
-    <script>
+    <script type="module">
       window.onload = function () {
         var viewer = OpenSeadragon({
           id: 'openseadragon',
@@ -32,9 +35,9 @@
           }
         });
 
-        var anno = Annotorious.init(viewer);
+        var anno = new Annotorious(viewer);
 
-        var luna = new LunaPlugin(anno);
+        var luna = new LunaAnnotorious(anno);
 
         anno.loadAnnotations('annotations.w3c.json');
 
@@ -52,7 +55,7 @@
       };
     </script>
   </head>
-  
+
   <body>
     <div id="openseadragon"></div>
   </body>
