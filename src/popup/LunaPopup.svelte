@@ -1,11 +1,7 @@
 <script type="ts">
   import { createEventDispatcher } from 'svelte';
-  import Icon from 'svelte-icons-pack/Icon.svelte';
-  import BsPencil from 'svelte-icons-pack/bs/BsPencil';
+  import Transcriptions from './Transcriptions.svelte';
   import type { WebAnnotation } from '@annotorious/formats';
-
-  import Transcription from './Transcription.svelte';
-  import HUD from './HUD.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -13,26 +9,53 @@
 
   export let originalEvent: PointerEvent;
 
-  export let viewer: OpenSeadragon.Viewer;
-
-  let isHUDOpen = false;
-
-  let isTranscriptionEditable = false;
-
-  let isShapeEditable = false;
-
-  let transcription: string;
+  // For testing
+  let transcriptions = [{
+    "type" : "TextualBody",
+    "value" : "Phaim",
+    "created" : "2023-01-22T14:52:03Z",
+    "creator" : {
+      "type" : "Person",
+      "name" : "Katie"
+    }
+  }, {
+    "type" : "TextualBody",
+    "value" : "Phaime",
+    "created" : "2023-01-20T14:52:03Z",
+    "creator" : {
+      "type" : "Person",
+      "name" : "Rainer"
+    }
+  }, {
+    "type" : "TextualBody",
+    "value" : "Phem",
+    "created" : "2023-01-19T14:52:03Z",
+    "creator" : {
+      "type" : "Software",
+      "name" : "mapKurator:ocr"
+    }
+  }, {
+    "type" : "TextualBody",
+    "value" : "PHAM",
+    "created" : "2023-01-19T14:52:03Z",
+    "creator" : {
+      "type" : "Software",
+      "name" : "mapKurator:post-ocr-correction"
+    }
+  }];
 
   $: {
+    /*
     const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation. body ];
-    transcription = bodies.find(body => body.purpose === 'transcribing')?.value;
+    transcriptions = bodies.filter(body => !body.purpose || body.purpose === 'transcribing');
+    */
   }
 
-  const onFixShape = () => {
-    dispatch('editShape', annotation);
-    isShapeEditable = true;
+  const onAddTranscription = (evt: CustomEvent<string>) => {
+
   }
 
+  /* TODO
   const onChangeTranscription = (evt: CustomEvent<string>) => {
     const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation.body ];
 
@@ -54,53 +77,19 @@
     };
     
     dispatch('transcriptionChanged', annotation);
-
-    isTranscriptionEditable = false;
   }
-
-    /*
-  onMount(() => {
-    const onUpdateViewport = () => {
-      // Adjust popup position for viewport changes
-      const xy = viewer.viewport.viewportToViewerElementCoordinates(viewportPoint);
-      offsetX = xy.x;
-      offsetY = xy.y;
-    }
-    
-    viewer.addHandler('update-viewport', onUpdateViewport);
-    
-    return () => viewer.removeHandler('update-viewport', onUpdateViewport);
-  });
   */
-
 </script>
 
 <div class="r8s-hover-container" 
-  class:ghost={isShapeEditable}
   style={`top: ${originalEvent.offsetY}px; left: ${originalEvent.offsetX}px`}>
   <div class="r8s-hover-main">
     <div class="r8s-hover-content">
-      <Transcription 
-        value={transcription} 
-        editable={isTranscriptionEditable}
-        on:change={onChangeTranscription} />
-    </div>
-
-    <div class="r8s-hover-actions">
-      <div class="r8s-hover-action r8s-hover-action-improve">
-        <button id="r8s-button-improve" on:click={() => isHUDOpen = !isHUDOpen}>
-          <Icon src={BsPencil} />
-        </button>
-        <label for="r8s-button-improve">Improve our data</label>
-      </div>
+      <Transcriptions
+        data={transcriptions} 
+        on:addTranscription={onAddTranscription} />
     </div>
   </div>
-
-  {#if isHUDOpen}
-    <HUD 
-      on:fixTranscription={() => isTranscriptionEditable = true} 
-      on:editShape={() => onFixShape()} />
-  {/if}
 
   <div class="mousetrap" />
 </div>
@@ -113,70 +102,24 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-  }
-
-  .r8s-hover-container.ghost {
-    opacity: 0.4;
-    pointer-events: none;
+    min-width: 240px;
+    max-width: 460px;
   }
 
   .r8s-hover-main {
     display: flex;
     color: #333;
-    min-width: 260px;
     padding: 14px;
     border-radius: 3px;
     background-color: #fff;
     border: 1px solid #cbccce;
     box-shadow:0 0 24px rgba(0, 0, 0, 0.1);
     z-index: 1;
+    width: 100%;
   }
 
   .r8s-hover-content {
     flex-grow: 1;
-  }
-
-  .r8s-hover-actions {
-    flex-basis: 70px;
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
-
-  .r8s-hover-action-improve {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .r8s-hover-action-improve button {
-    outline: none;
-    border: none;
-    border-radius: 50%;
-    background-color: #4285f4;
-    width: 46px;
-    height: 46px;
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .r8s-hover-action-improve button:hover {
-    background-color: #68a1ff;
-  }
-
-  .r8s-hover-action-improve label {
-    padding-top: 5px;
-    color: #4285f4;
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: bold;
-  }
-
-  :global(.r8s-hover-action-improve button svg) {
-    fill: #fff;
   }
 
   .mousetrap {

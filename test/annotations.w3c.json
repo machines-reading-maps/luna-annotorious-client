@@ -4,7 +4,7 @@
     "body": [
       {
         "type": "TextualBody",
-        "value": "Annotation #1",
+        "value": "PARIS",
         "purpose": "transcribing",
         "creator": {
           "id": "http://www.example.com/rainer",
@@ -18,7 +18,7 @@
       "selector": {
         "type": "FragmentSelector",
         "conformsTo": "http://www.w3.org/TR/media-frags/",
-        "value": "xywh=pixel:865,170,268,260"
+        "value": "xywh=pixel:2760,1912,125,57"
       }
     },
     "@context": "http://www.w3.org/ns/anno.jsonld",
@@ -31,7 +31,7 @@
     "body": [
       {
         "type": "TextualBody",
-        "value": "Annotation #2",
+        "value": "DEPARTEMENT",
         "purpose": "transcribing"
       }
     ],
@@ -39,7 +39,7 @@
       "selector": {
         "type": "FragmentSelector",
         "conformsTo": "http://www.w3.org/TR/media-frags/",
-        "value": "xywh=540,240,180,340"
+        "value": "xywh=pixel:2774,1477,367,49"
       }
     }
   },

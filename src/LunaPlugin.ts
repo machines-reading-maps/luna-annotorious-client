@@ -30,7 +30,7 @@ export class LunaPlugin {
       props: { 
         annotation,
         originalEvent,
-        viewer: this.viewer
+        // viewer: this.viewer
       }
     });
 
@@ -42,8 +42,8 @@ export class LunaPlugin {
   }
 
   hidePopup = () => {
-    this.popup.$destroy();
-    this.popup = null;
+    // this.popup.$destroy();
+    // this.popup = null;
   }
 
 }
