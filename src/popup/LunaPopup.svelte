@@ -1,5 +1,6 @@
 <script type="ts">
   import { createEventDispatcher } from 'svelte';
+  import { draggable } from '@neodrag/svelte';
   import Transcriptions from './Transcriptions.svelte';
   import { Env } from '@annotorious/annotorious';
   import type { WebAnnotation } from '@annotorious/formats';
@@ -45,9 +46,11 @@
   }
 </script>
 
-<div class="r8s-hover-container" 
+<div 
+  class="r8s-hover-container" 
   style={`top: ${originalEvent.offsetY}px; left: ${originalEvent.offsetX}px`}>
-  <div class="r8s-hover-main">
+
+  <div class="r8s-hover-main" use:draggable>
     <div class="r8s-hover-content">
       <Transcriptions
         data={transcriptions} 
@@ -80,6 +83,7 @@
     box-shadow:0 0 24px rgba(0, 0, 0, 0.1);
     z-index: 1;
     width: 100%;
+    cursor: move;
   }
 
   .r8s-hover-content {
