@@ -1,5 +1,6 @@
 <script>
   import { tick, createEventDispatcher } from 'svelte';
+  import { slide } from 'svelte/transition';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPatchCheckFill from 'svelte-icons-pack/bs/BsPatchCheckFill';
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
@@ -93,7 +94,7 @@
     </p>
 
     {#if showAllTranscriptions}
-      <ul class="all-transcriptions">
+      <ul class="all-transcriptions" transition:slide={{ duration: 120 }}>
         {#each sorted as body}
           <li>
             {body.value} <span class="transcribed-by">{timeago.format(body.created)} by {#if body.creator?.type === 'Software'}
