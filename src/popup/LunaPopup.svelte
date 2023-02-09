@@ -16,8 +16,9 @@
   $: {
     const bodies = annotation.body ? 
       Array.isArray(annotation.body) ? annotation.body : [ annotation.body ] : [];
-    
-    transcriptions = bodies.filter(body => !body.purpose || body.purpose === 'transcribing');
+      
+    transcriptions = bodies.filter(body => 
+      (!body.purpose || body.purpose === 'transcribing') && body.creator?.name !== 'mapKurator:post-ocr');
   }
 
   const onAddTranscription = (evt: CustomEvent<string>) => {
