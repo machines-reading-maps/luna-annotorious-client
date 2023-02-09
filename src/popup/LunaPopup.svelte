@@ -21,7 +21,7 @@
   }, {
     "type" : "TextualBody",
     "value" : "Phaime",
-    "created" : "2023-01-20T14:52:03Z",
+    "created" : "2023-01-14T14:52:03Z",
     "creator" : {
       "type" : "Person",
       "name" : "Rainer"
@@ -29,18 +29,10 @@
   }, {
     "type" : "TextualBody",
     "value" : "Phem",
-    "created" : "2023-01-19T14:52:03Z",
+    "created" : "2023-01-02T14:52:03Z",
     "creator" : {
       "type" : "Software",
       "name" : "mapKurator:ocr"
-    }
-  }, {
-    "type" : "TextualBody",
-    "value" : "PHAM",
-    "created" : "2023-01-19T14:52:03Z",
-    "creator" : {
-      "type" : "Software",
-      "name" : "mapKurator:post-ocr-correction"
     }
   }];
 

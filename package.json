@@ -33,6 +33,7 @@
     "@annotorious/openseadragon": "file:../../recogito/annotorious-3/packages/openseadragon",
     "autosize-input": "^1.0.2",
     "svelte-helpers": "^0.2.5",
-    "svelte-icons-pack": "^2.0.0"
+    "svelte-icons-pack": "^2.0.0",
+    "timeago.js": "^4.0.2"
   }
 }

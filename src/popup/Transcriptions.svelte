@@ -3,6 +3,7 @@
   import BsPatchCheckFill from 'svelte-icons-pack/bs/BsPatchCheckFill';
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
   import FaSolidUser from 'svelte-icons-pack/fa/FaSolidUser';
+  import * as timeago from 'timeago.js';
   import { tick, createEventDispatcher } from 'svelte';
   import autosizeInput from 'autosize-input';
 
@@ -33,7 +34,7 @@
     if (byPerson.length > 0) {
       best = byPerson[0];
     } else {
-      const byMK = sorted.finde(body => body.creator?.type === 'Software' && body.creator?.name === 'mapKurator:ocr');
+      const byMK = sorted.find(body => body.creator?.type === 'Software' && body.creator?.name === 'mapKurator:ocr');
       if (byMK) {
         best = byMK;
         isOCR = true;
@@ -72,46 +73,35 @@
   {:else}
     <span class="transcription">{best?.value}</span> 
 
+    {#if best?.creator?.type === 'Person'}
+      <Icon className="verified-transcription" src={BsPatchCheckFill} />
+    {/if}
+
     {#if data.length > 1}
       <p class="transcription-details transcription-count">
-        <button on:click={() => showAllTranscriptions = !showAllTranscriptions}>
+        <button 
+          class="show-all" 
+          on:click={() => showAllTranscriptions = !showAllTranscriptions}>
           + {data.length - 1} more transcriptions 
-        </button>
+        </button> · [ <button class="add-transcription">Edit</button> ]
       </p>
 
       {#if showAllTranscriptions}
-        <!-- <Icon src={BsPatchCheckFill} /> -->
-        <ul>
-          <li>
-            <p class="t">
-              PARIS <span>7 weeks ago by Katie</span>
-            </p>
-          </li>
-
-          <li>
-            <p class="t">
-              Paris <span>8 weeks ago by Valeria</span>
-            </p>
-          </li>
-
-          <li>
-            <p class="t">
-              PVRIS <span>9 weeks ago by Rainer</span>
-            </p>
-          </li>
-
-          <li>
-            <p class="t">
-              PRIS <span>6 months ago by <Icon src={FaSolidRobot} /> mapKurator</span>
-            </p>
-          </li>   
+        <ul class="all-transcriptions">
+          {#each data as body}
+            <li>
+              {body.value} <span class="transcribed-by">{timeago.format(body.created)} by {#if body.creator?.type === 'Software'}
+                <Icon src={FaSolidRobot} /> mapKurator {:else} {body.creator.name} {/if}</span>
+            </li>
+          {/each}
         </ul>
       {/if}
 
     {:else}
       <p class="transcription-details transcribed-by">
-        Transcribed by <Icon src={isOCR ? FaSolidRobot : FaSolidUser} /> {best?.creator?.name}   
-        <!-- [ <a href="#">Confirm</a> | [ <a href="#">Edit</a> ]   -->
+        Transcribed by {#if isOCR} <Icon src={FaSolidRobot} /> mapKurator {:else} 
+          {best?.creator?.name} 
+        {/if}  · [ <button class="add-transcription">Edit</button> ]
       </p>
     {/if}
   {/if}
@@ -127,26 +117,41 @@
     background-color: #e0ebff;
   }
 
+  .transcription {
+    font-size: 1.15em;
+  }
+
   :global(svg) {
     fill: #7a7a7a;
   }
 
+  :global(.verified-transcription) {
+    fill: green;
+    vertical-align: text-top;
+  }
+
   .transcription-details {
     color: #7a7a7a;
-    padding: 0 3px;
+    padding: 0;
     margin: 0;
-    font-size: 12px;
+    font-size: 13px;
+  }
+
+  .transcribed-by {
+    color: #7a7a7a;
+    font-size: 13px;
   }
 
   :global(.transcribed-by svg) {
-    font-size: 13px;
+    font-size: 1.2em;
     vertical-align: text-top;
     position: relative;
     top: -1px;
     padding: 0 1px;
   }
 
-  .transcription-count button {
+  .transcription-count button,
+  .transcription-details button {
     margin: 0;
     padding: 0;
     border: none;
@@ -154,12 +159,14 @@
     background: none;
     color: #7a7a7a;
     cursor: pointer;
+    font-size: 13px;
   }
 
-  ul {
+  ul.all-transcriptions {
     padding: 10px 0 0 0;
     margin: 0;
     list-style-type: none;
+    font-size: 13px;
   }
 
   li {
