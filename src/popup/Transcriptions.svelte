@@ -1,10 +1,9 @@
 <script>
+  import { tick, createEventDispatcher } from 'svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPatchCheckFill from 'svelte-icons-pack/bs/BsPatchCheckFill';
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
-  import FaSolidUser from 'svelte-icons-pack/fa/FaSolidUser';
   import * as timeago from 'timeago.js';
-  import { tick, createEventDispatcher } from 'svelte';
   import autosizeInput from 'autosize-input';
 
   const dispatch = createEventDispatcher();
@@ -44,7 +43,6 @@
     }
   }
 
-  /*
   $: {
     if (editable) {
       tick().then(() => {
@@ -52,11 +50,6 @@
         inputEl.focus();
       });
     }
-  }
-  */
-
-  const onEditTranscription = evt => {
-    editable = true;
   }
 
   const onSaveTranscription = evt => {
@@ -76,45 +69,46 @@
     {#if best?.creator?.type === 'Person'}
       <Icon className="verified-transcription" src={BsPatchCheckFill} />
     {/if}
+  {/if}
 
-    {#if data.length > 1}
-      <p class="transcription-details transcription-count">
-        <button 
-          class="show-all" 
-          on:click={() => showAllTranscriptions = !showAllTranscriptions}>
-          + {data.length - 1} more transcriptions 
-        </button> · [ <button class="add-transcription">Edit</button> ]
-      </p>
+  {#if data.length > 1}
+    <p class="transcription-details transcription-count">
+      <button 
+        class="show-all" 
+        on:click={() => showAllTranscriptions = !showAllTranscriptions}>
+        + {data.length - 1} more transcriptions 
+      </button> · [ <button on:click={() => editable = true} class="add-transcription">Edit</button> ]
+    </p>
 
-      {#if showAllTranscriptions}
-        <ul class="all-transcriptions">
-          {#each data as body}
-            <li>
-              {body.value} <span class="transcribed-by">{timeago.format(body.created)} by {#if body.creator?.type === 'Software'}
-                <Icon src={FaSolidRobot} /> mapKurator {:else} {body.creator.name} {/if}</span>
-            </li>
-          {/each}
-        </ul>
-      {/if}
-
-    {:else}
-      <p class="transcription-details transcribed-by">
-        Transcribed by {#if isOCR} <Icon src={FaSolidRobot} /> mapKurator {:else} 
-          {best?.creator?.name} 
-        {/if}  · [ <button class="add-transcription">Edit</button> ]
-      </p>
+    {#if showAllTranscriptions}
+      <ul class="all-transcriptions">
+        {#each data as body}
+          <li>
+            {body.value} <span class="transcribed-by">{timeago.format(body.created)} by {#if body.creator?.type === 'Software'}
+              <Icon src={FaSolidRobot} /> mapKurator {:else} {body.creator.name} {/if}</span>
+          </li>
+        {/each}
+      </ul>
     {/if}
+
+  {:else}
+    <p class="transcription-details transcribed-by">
+      Transcribed by {#if isOCR} <Icon src={FaSolidRobot} /> mapKurator {:else} 
+        {best?.creator?.name} 
+      {/if}  · [ <button class="add-transcription" on:click={() => editable = true}>Edit</button> ]
+    </p>
   {/if}
 </div>
 
 <style>
   input {
     font-size: 16px;
-    padding: 2px 3px;
+    padding: 2px 4px;
     outline: none;
     border: 1px solid #4285f4;
     border-radius: 2px;
     background-color: #e0ebff;
+    margin-bottom: 4px;
   }
 
   .transcription {
@@ -162,6 +156,12 @@
     font-size: 13px;
   }
 
+  .transcription-count button.add-transcription,
+  .transcription-details button.add-transcription {
+    color: #0645ad;
+  }
+
+
   ul.all-transcriptions {
     padding: 10px 0 0 0;
     margin: 0;
@@ -171,13 +171,5 @@
 
   li {
     padding: 3px 0;
-  }
-
-  .t {
-    color: #333;
-  }
-
-  .t span {
-    color: #7c7c7c;
   }
 </style>
