@@ -1,6 +1,7 @@
 <script type="ts">
   import { createEventDispatcher } from 'svelte';
   import Transcriptions from './Transcriptions.svelte';
+  import { Env } from '@annotorious/annotorious';
   import type { WebAnnotation } from '@annotorious/formats';
 
   const dispatch = createEventDispatcher();
@@ -9,57 +10,29 @@
 
   export let originalEvent: PointerEvent;
 
-  // For testing
-  let transcriptions = [{
-    "type" : "TextualBody",
-    "value" : "Phaim",
-    "created" : "2023-01-22T14:52:03Z",
-    "creator" : {
-      "type" : "Person",
-      "name" : "Katie"
-    }
-  }, {
-    "type" : "TextualBody",
-    "value" : "Phaime",
-    "created" : "2023-01-14T14:52:03Z",
-    "creator" : {
-      "type" : "Person",
-      "name" : "Rainer"
-    }
-  }, {
-    "type" : "TextualBody",
-    "value" : "Phem",
-    "created" : "2023-01-02T14:52:03Z",
-    "creator" : {
-      "type" : "Software",
-      "name" : "mapKurator:ocr"
-    }
-  }];
+  let transcriptions = [];
 
   $: {
-    /*
-    const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation. body ];
+    const bodies = annotation.body ? 
+      Array.isArray(annotation.body) ? annotation.body : [ annotation.body ] : [];
+    
     transcriptions = bodies.filter(body => !body.purpose || body.purpose === 'transcribing');
-    */
   }
 
   const onAddTranscription = (evt: CustomEvent<string>) => {
-
-  }
-
-  /* TODO
-  const onChangeTranscription = (evt: CustomEvent<string>) => {
     const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation.body ];
 
     const updated = [
-      ...bodies.filter(b => b.purpose !== 'transcribing'),
+      ...bodies,
       {
         type: 'TextualBody',
         purpose: 'transcribing',
         value: evt.detail,
-        // TODO
-        // creator: user,
-        // created: currentTimeAdjusted()
+        creator: {
+          type: 'Person',
+          name: Env.currentUser.id
+        },
+        created: Env.getCurrentTimeAdjusted()
       }
     ];
 
@@ -70,7 +43,6 @@
     
     dispatch('transcriptionChanged', annotation);
   }
-  */
 </script>
 
 <div class="r8s-hover-container" 

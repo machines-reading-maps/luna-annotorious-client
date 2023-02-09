@@ -29,6 +29,7 @@
     "vitest": "^0.18.1"
   },
   "dependencies": {
+    "@annotorious/annotorious": "file:../../recogito/annotorious-3/packages/annotorious",
     "@annotorious/formats": "file:../../recogito/annotorious-3/packages/formats",
     "@annotorious/openseadragon": "file:../../recogito/annotorious-3/packages/openseadragon",
     "autosize-input": "^1.0.2",

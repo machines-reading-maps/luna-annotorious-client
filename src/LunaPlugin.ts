@@ -42,8 +42,8 @@ export class LunaPlugin {
   }
 
   hidePopup = () => {
-    // this.popup.$destroy();
-    // this.popup = null;
+    this.popup.$destroy();
+    this.popup = null;
   }
 
 }

@@ -39,6 +39,11 @@
 
         anno.loadAnnotations('annotations.w3c.json');
 
+        anno.setAuthInfo({
+          id: 'aboutgeo',
+          displayName: 'Rainer Simon'
+        });
+
         anno.on('createAnnotation', annotation => {
           console.log('created', annotation);
         });

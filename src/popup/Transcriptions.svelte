@@ -10,6 +10,8 @@
 
   export let data;
 
+  let sorted;
+
   let inputEl;
 
   let editable = false;
@@ -27,7 +29,7 @@
     // we'll fall back to the first in the list.
 
     // Sort by timestamp
-    const sorted = data.slice().sort((a, b) => a.created < b.created ? 1 : -1);
+    sorted = data.slice().sort((a, b) => a.created < b.created ? 1 : -1);
 
     const byPerson = sorted.filter(body => body.creator?.type === 'Person'); 
     if (byPerson.length > 0) {
@@ -52,17 +54,27 @@
     }
   }
 
-  const onSaveTranscription = evt => {
-    evt.preventDefault();
-    dispatch('addTranscription', inputEl.value);
+  const onKeyDown = evt => {
+    if (evt.key === 'Enter') {
+      const { value } = inputEl;
+
+      if (value !== best?.value)
+        dispatch('addTranscription', inputEl.value);
+
+      editable = false;
+    } else if (evt.key === 'Escape') {
+      editable = false;
+    }
   }
 </script>
 
 <div class="transcription-container">
   {#if editable}
-    <form on:submit={onSaveTranscription}>
-      <input bind:this={inputEl} value={best?.value} spellcheck={false} />
-    </form>
+    <input 
+      bind:this={inputEl} 
+      value={best?.value} 
+      spellcheck={false} 
+      on:keydown={onKeyDown}/>
   {:else}
     <span class="transcription">{best?.value}</span> 
 
@@ -82,7 +94,7 @@
 
     {#if showAllTranscriptions}
       <ul class="all-transcriptions">
-        {#each data as body}
+        {#each sorted as body}
           <li>
             {body.value} <span class="transcribed-by">{timeago.format(body.created)} by {#if body.creator?.type === 'Software'}
               <Icon src={FaSolidRobot} /> mapKurator {:else} {body.creator.name} {/if}</span>
@@ -158,7 +170,7 @@
 
   .transcription-count button.add-transcription,
   .transcription-details button.add-transcription {
-    color: #0645ad;
+    color: #3165b9;
   }
 
 
