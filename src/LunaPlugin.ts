@@ -1,4 +1,4 @@
-import type { Annotorious } from '@annotorious/openseadragon';
+import type Annotorious from '@annotorious/openseadragon';
 import type { WebAnnotation } from '@annotorious/formats';
 import { LunaPopup } from './popup';
 

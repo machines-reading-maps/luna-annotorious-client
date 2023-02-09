@@ -33,7 +33,9 @@
           }
         });
 
-        var anno = Annotorious.init(viewer);
+        var anno = Annotorious.init(viewer, {
+          pointerSelection: false
+        });
 
         var luna = new LunaPlugin(anno);
 
