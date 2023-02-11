@@ -25,7 +25,7 @@
           prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/images/',
           tileSources: {
             type: 'image',
-            url: '1280px-Hallstatt.jpg'
+            url: 'map.jpg'
           },
           gestureSettingsMouse: {
             clickToZoom: false
@@ -37,7 +37,9 @@
 
         var anno = new Annotorious(viewer);
 
-        var luna = new LunaAnnotorious(anno);
+        var luna = new LunaAnnotorious(anno, {
+          pointerSelection: false
+        });
 
         anno.loadAnnotations('annotations.w3c.json');
 
