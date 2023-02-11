@@ -77,7 +77,7 @@
       spellcheck={false} 
       on:keydown={onKeyDown}/>
   {:else}
-    <span class="transcription">{best?.value}</span> 
+    <span on:click={() => showAllTranscriptions = !showAllTranscriptions} class="transcription">{best?.value}</span> 
 
     {#if best?.creator?.type === 'Person'}
       <Icon className="verified-transcription" src={BsPatchCheckFill} />
