@@ -3,15 +3,13 @@
     "type": "Annotation",
     "body": [
       {
-        "type": "TextualBody",
-        "value": "PARIS",
-        "purpose": "transcribing",
-        "creator": {
-          "id": "http://www.example.com/rainer",
-          "name": "rainer"
-        },
-        "created": "2021-08-04T05:29:06.251Z",
-        "modified": "2021-08-04T05:29:09.797Z"
+        "type" : "TextualBody",
+        "value" : "Paris",
+        "created" : "2023-01-02T14:52:03Z",
+        "creator" : {
+          "type" : "Software",
+          "name" : "mapKurator:ocr"
+        }
       }
     ],
     "target": {

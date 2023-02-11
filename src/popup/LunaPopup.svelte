@@ -57,6 +57,11 @@
         data={transcriptions} 
         on:addTranscription={onAddTranscription} />
     </div>
+
+    <div class="r8s-hover-alert">
+      Transcribed by artificial intelligence. Please help us improve our data 
+      by confirming or fixing this transcription.
+    </div>
   </div>
 
   <div class="mousetrap" />
@@ -67,17 +72,12 @@
     font-family: Arial, Helvetica, sans-serif;
     position: absolute;
     z-index: 999;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
     min-width: 240px;
-    max-width: 460px;
+    max-width: 360px;
   }
 
   .r8s-hover-main {
-    display: flex;
     color: #333;
-    padding: 14px;
     border-radius: 3px;
     background-color: #fff;
     border: 1px solid #cbccce;
@@ -88,7 +88,27 @@
   }
 
   .r8s-hover-content {
-    flex-grow: 1;
+    padding: 14px;
+  }
+
+  .r8s-hover-alert {
+    padding: 12px 14px;
+    background-color: #ffeba6;
+    color: #8f720f;
+    border-top: 1px solid #d1b13f59;
+    font-size: 13px;
+    display: flex;
+    align-items: flex-start;
+    line-height: 140%;
+  }
+
+  :global(.r8s-hover-alert svg) {
+    font-size: 18px;
+    fill: #8f720f;
+    position: relative;
+    top: 1px;
+    padding-right: 4px;
+    flex: 0 0 24px;
   }
 
   .mousetrap {

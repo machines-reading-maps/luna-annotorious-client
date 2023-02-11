@@ -108,7 +108,7 @@
     <p class="transcription-details transcribed-by">
       Transcribed by {#if isOCR} <Icon src={FaSolidRobot} /> mapKurator {:else} 
         {best?.creator?.name} 
-      {/if}  · [ <button class="add-transcription" on:click={() => editable = true}>Edit</button> ]
+      {/if}  · [ <button class="add-transcription">Confirm</button> | <button class="add-transcription" on:click={() => editable = true}>Edit</button> ]
     </p>
   {/if}
 </div>
