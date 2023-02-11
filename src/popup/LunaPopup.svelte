@@ -59,8 +59,8 @@
     </div>
 
     <div class="r8s-hover-alert">
-      Transcribed by artificial intelligence. Please help us improve our data 
-      by confirming or fixing this transcription.
+      <strong>Transcribed by Artificial Intelligence.</strong> Please help improve our data 
+      by confirming or correcting. <a href="#">Learn more</a>.
     </div>
   </div>
 
@@ -97,9 +97,11 @@
     color: #8f720f;
     border-top: 1px solid #d1b13f59;
     font-size: 13px;
-    display: flex;
-    align-items: flex-start;
     line-height: 140%;
+  }
+
+  .r8s-hover-alert a {
+    color: #8f720f;
   }
 
   :global(.r8s-hover-alert svg) {
