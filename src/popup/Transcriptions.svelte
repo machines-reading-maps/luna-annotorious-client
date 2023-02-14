@@ -3,6 +3,7 @@
   import { slide } from 'svelte/transition';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import BsPatchCheckFill from 'svelte-icons-pack/bs/BsPatchCheckFill';
+  import FiChevronDown from 'svelte-icons-pack/fi/FiChevronDown';
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
   import * as timeago from 'timeago.js';
   import autosizeInput from 'autosize-input';
@@ -88,8 +89,9 @@
     <p class="transcription-details transcription-count">
       <button 
         class="show-all" 
+        class:open={showAllTranscriptions}
         on:click={() => showAllTranscriptions = !showAllTranscriptions}>
-        + {data.length - 1} more transcriptions 
+        <Icon src={FiChevronDown} /> {data.length - 1} more transcriptions 
       </button> · [ <button on:click={() => editable = true} class="add-transcription">Edit</button> ]
     </p>
 
@@ -106,7 +108,7 @@
 
   {:else}
     <p class="transcription-details transcribed-by">
-      Transcribed by {#if isOCR} <Icon src={FaSolidRobot} /> mapKurator {:else} 
+      Transcribed by {#if isOCR} <Icon src={FaSolidRobot} /> mapKurator {:else if (best?.creator?.name)} 
         {best?.creator?.name} 
       {/if}  · [ <button class="add-transcription" on:click={() => editable = true}>Edit</button> ]
     </p>
@@ -174,6 +176,16 @@
     color: #3165b9;
   }
 
+  :global(.show-all svg) {
+    font-size: 14px;
+    fill: none;
+    vertical-align: text-bottom;
+    transition: transform 250ms;
+  }
+
+  :global(.show-all.open svg) {
+    transform: rotateZ(180deg);
+  }
 
   ul.all-transcriptions {
     padding: 10px 0 0 0;
