@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import { draggable } from '@neodrag/svelte';
   import Transcriptions from './Transcriptions.svelte';
-  import { Env } from '@annotorious/annotorious';
+  import type { Env } from '@annotorious/annotorious';
   import type { WebAnnotation } from '@annotorious/formats';
 
   const dispatch = createEventDispatcher();
@@ -10,6 +10,8 @@
   export let annotation: WebAnnotation;
 
   export let originalEvent: PointerEvent;
+
+  export let env: typeof Env;
 
   let transcriptions = [];
 
@@ -32,9 +34,9 @@
         value: evt.detail,
         creator: {
           type: 'Person',
-          name: Env.currentUser.id
+          name: env.currentUser.id
         },
-        created: Env.getCurrentTimeAdjusted()
+        created: env.getCurrentTimeAdjusted()
       }
     ];
 

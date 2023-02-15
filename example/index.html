@@ -37,6 +37,11 @@
 
         var anno = new Annotorious(viewer);
 
+        anno.setAuthInfo({
+          id: 'aboutgeo',
+          displayName: 'Rainer Simon'
+        });
+
         var luna = new LunaAnnotorious(anno, {
           pointerSelection: false
         });

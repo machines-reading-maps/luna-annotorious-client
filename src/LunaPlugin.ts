@@ -30,7 +30,7 @@ export class LunaPlugin {
       props: { 
         annotation,
         originalEvent,
-        // viewer: this.viewer
+        env: this.anno.env
       }
     });
 
