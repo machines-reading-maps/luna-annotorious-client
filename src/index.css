@@ -1,0 +1,13 @@
+:root {
+  /** colors **/
+  --bright-blue: #4285f4;
+  --bright-blue-darker: #2254aa;
+  --bright-blue-white: #eaf2ff;
+
+  --darkgrey-font: #333;
+  --lightgrey-font: #595959;
+  --lightgrey-border: #cbccce;
+
+  /** other design params **/
+  --border-radius: 3px;
+}

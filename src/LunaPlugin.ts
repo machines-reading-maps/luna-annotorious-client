@@ -15,12 +15,8 @@ export class LunaPlugin {
     
     this.viewer = viewer;
 
-    anno.on('mouseEnterAnnotation', (annotation, evt) => {
+    anno.on('clickAnnotation', (annotation, evt) => {
       this.showPopup(annotation, evt);
-    });
-
-    anno.on('mouseLeaveAnnotation', () => {
-      this.hidePopup();
     });
   }
 
@@ -34,16 +30,13 @@ export class LunaPlugin {
       }
     });
 
-    this.popup.$on('transcriptionChanged', (evt: CustomEvent<WebAnnotation>) =>
+    this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) =>
       this.anno.updateAnnotation(evt.detail.id, evt.detail));
-
-    this.popup.$on('editShape', (evt: CustomEvent<WebAnnotation>) =>
-      this.anno.selectAnnotation(evt.detail.id));
   }
 
   hidePopup = () => {
-    this.popup.$destroy();
-    this.popup = null;
+    // this.popup.$destroy();
+    // this.popup = null;
   }
 
 }

@@ -1,9 +1,14 @@
 <script type="ts">
   import { createEventDispatcher } from 'svelte';
   import { draggable } from '@neodrag/svelte';
-  import Transcriptions from './Transcriptions.svelte';
+  import Icon from 'svelte-icons-pack/Icon.svelte';
+  import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
+  import FiChevronDown from 'svelte-icons-pack/fi/FiChevronDown';
   import type { Env } from '@annotorious/annotorious';
   import type { WebAnnotation } from '@annotorious/formats';
+  import EditableTranscription from './components/EditableTranscription.svelte';
+  import TranscriptionList from './components/TranscriptionList.svelte';
+  import { getTranscriptions, getBestTranscription, isOCR } from './utils';
 
   const dispatch = createEventDispatcher();
 
@@ -13,84 +18,185 @@
 
   export let env: typeof Env;
 
-  let transcriptions = [];
+  let isEditable = false;
 
-  $: {
-    const bodies = annotation.body ? 
-      Array.isArray(annotation.body) ? annotation.body : [ annotation.body ] : [];
-      
-    transcriptions = bodies.filter(body => 
-      (!body.purpose || body.purpose === 'transcribing') && body.creator?.name !== 'mapKurator:post-ocr');
-  }
+  let showAllTranscriptions = false;
 
-  const onAddTranscription = (evt: CustomEvent<string>) => {
-    const bodies = Array.isArray(annotation.body) ? annotation.body : [ annotation.body ];
+  let originalAnnotation = annotation;
 
-    const updated = [
-      ...bodies,
-      {
-        type: 'TextualBody',
-        purpose: 'transcribing',
-        value: evt.detail,
-        creator: {
-          type: 'Person',
-          name: env.currentUser.id
-        },
-        created: env.getCurrentTimeAdjusted()
-      }
-    ];
+  $: transcriptions = getTranscriptions(originalAnnotation);
+
+  $: bestTranscription = getBestTranscription(transcriptions);
+
+  const onTranscriptionChanged = evt => {
+    const bodies = Array.isArray(originalAnnotation.body) ? originalAnnotation.body : [ originalAnnotation.body ];
+
+    const changedTranscription = {
+      type: 'TextualBody',
+      purpose: 'transcribing',
+      value: evt.detail,
+      creator: {
+        type: 'Person',
+        name: env.currentUser.id
+      },
+      created: env.getCurrentTimeAdjusted()
+    };
 
     annotation = {
-      ...annotation,
-      body: updated
+      ...originalAnnotation,
+      body: [...bodies, changedTranscription ]
     };
+  }
+
+  const onSaveEdit = () => {
+    dispatch('save', annotation);
+
+    originalAnnotation = annotation;
+
+    isEditable = false;
+  }
+
+  const onCancelEdit = () => {
+    annotation = originalAnnotation;
     
-    dispatch('transcriptionChanged', annotation);
+    isEditable = false;
   }
 </script>
 
 <div 
-  class="r8s-hover-container" 
+  class="r8s-hover-wrapper" 
   style={`top: ${originalEvent.offsetY}px; left: ${originalEvent.offsetX}px`}>
 
-  <div class="r8s-hover-main" use:draggable>
+  <div class="r8s-hover" class:editable={isEditable} use:draggable>
     <div class="r8s-hover-content">
-      <Transcriptions
-        data={transcriptions} 
-        on:addTranscription={onAddTranscription} />
+      <EditableTranscription 
+        isEditable={isEditable} 
+        transcription={bestTranscription}
+        on:change={onTranscriptionChanged} 
+        on:save={onSaveEdit} 
+        on:cancel={onCancelEdit} />
+
+        {#if transcriptions.length === 1}
+          <p class="transcription-details transcribed-by">
+            Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
+            {bestTranscription.creator?.name} 
+            {/if}  · [ <button class="add-transcription" on:click={() => isEditable = true}>Edit</button> ]
+          </p>
+        {:else if transcriptions.length > 1}
+          <p class="transcription-details transcription-count">
+            <button 
+              class="show-all" 
+              class:open={showAllTranscriptions}
+              on:click={() => showAllTranscriptions = !showAllTranscriptions}>
+              <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
+            </button> · [ <button on:click={() => isEditable = true} class="add-transcription">Edit</button> ]
+          </p>
+
+          <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
+        {/if}
     </div>
+
+    {#if isEditable}
+      <div class="r8s-hover-buttons">
+        <button on:click={onCancelEdit} class="cancel">Cancel</button>
+        <button on:click={onSaveEdit} class="ok">Save Edits</button>
+      </div>
+    {/if}
   </div>
 
   <div class="mousetrap" />
 </div>
 
 <style>
-  .r8s-hover-container {
-    font-family: Arial, Helvetica, sans-serif;
-    position: absolute;
-    z-index: 999;
+  .r8s-hover-wrapper {
+    align-items: flex-start;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    min-width: 240px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.875em;
     max-width: 460px;
+    min-width: 280px;
+    position: absolute;
+    z-index: 999;
   }
 
-  .r8s-hover-main {
-    display: flex;
-    color: #333;
-    padding: 14px;
-    border-radius: 3px;
-    background-color: #fff;
-    border: 1px solid #cbccce;
-    box-shadow:0 0 24px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-    width: 100%;
+  .r8s-hover {
+    color: var(--darkgrey-font);
     cursor: move;
+    background-color: #fff;
+    border: 1px solid var(--lightgrey-border);
+    border-radius: var(--border-radius);
+    box-shadow:1px 1px 24px rgba(0, 0, 0, 0.65);
+    width: 100%;
+    z-index: 1;
+  }
+
+  .r8s-hover.editable {
+    border-color: var(--bright-blue);
+    box-shadow:1px 1px 24px rgba(0, 0, 0, 0.65), inset 0 0 1px 2px #4285f4;
   }
 
   .r8s-hover-content {
-    flex-grow: 1;
+    padding: 14px;
+    position: relative;
+  }
+
+  p.transcription-details {
+    margin: 0;
+    padding: 0.3em 0;
+  }
+
+  p.transcription-details button {
+    background: none;
+    border: none;
+    color: var(--bright-blue-darker);
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+    outline: none;
+    padding: 0;
+  }
+
+  p.transcription-details button.show-all {
+    color: var(--lightgrey-font);
+  }
+
+  :global(p.transcription-details button.show-all svg) {
+    vertical-align: text-top;
+  }
+
+  .r8s-hover-buttons {
+    align-items: center;
+    background-color: var(--bright-blue);
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 14px;
+  }
+
+  .r8s-hover-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    outline: none;
+  }
+
+  .r8s-hover-buttons .ok {
+    background-color: #fff;
+    border-radius: 1px;
+    color: var(--bright-blue-darker);
+    padding: 5px 10px;
+  }
+
+  .r8s-hover-buttons .cancel {
+    color: #fff;
+    padding: 0 12px;
+  }
+
+  .r8s-hover-buttons .cancel:hover {
+    text-decoration: underline;
   }
 
   .mousetrap {
