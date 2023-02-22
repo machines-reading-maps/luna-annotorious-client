@@ -3,6 +3,7 @@
   import { draggable } from '@neodrag/svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
+  import FaTrashAlt from 'svelte-icons-pack/fa/FaTrashAlt';
   import FiChevronDown from 'svelte-icons-pack/fi/FiChevronDown';
   import type { Env } from '@annotorious/annotorious';
   import type { WebAnnotation } from '@annotorious/formats';
@@ -98,8 +99,16 @@
 
     {#if isEditable}
       <div class="r8s-hover-buttons">
-        <button on:click={onCancelEdit} class="cancel">Cancel</button>
-        <button on:click={onSaveEdit} class="ok">Save Edits</button>
+        <div class="left">
+          <button class="delete">
+            <Icon src={FaTrashAlt} />
+          </button>
+        </div>
+
+        <div class="right-slot">
+          <button on:click={onCancelEdit} class="cancel">Cancel</button>
+          <button on:click={onSaveEdit} class="ok">Save Edits</button>
+        </div>
       </div>
     {/if}
   </div>
@@ -170,8 +179,8 @@
     align-items: center;
     background-color: var(--bright-blue);
     display: flex;
-    justify-content: flex-end;
-    padding: 12px 14px;
+    justify-content: space-between;
+    padding: 10px 14px 10px 8px;
   }
 
   .r8s-hover-buttons button {
@@ -181,6 +190,25 @@
     font-size: 1em;
     font-weight: 500;
     outline: none;
+  }
+
+  .r8s-hover-buttons .delete {
+    border-radius: 50%;
+    display: block;
+    height: 32px;
+    padding: 4px;
+    width: 32px;
+  }
+
+  .r8s-hover-buttons .delete:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  :global(.r8s-hover-buttons .delete svg) {
+    fill: #fff;
+    font-size: 13px;
+    width: 16px;
+    height: 16px;
   }
 
   .r8s-hover-buttons .ok {
