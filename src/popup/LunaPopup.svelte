@@ -62,6 +62,12 @@
     
     isEditable = false;
   }
+
+  const makeEditable = () => {
+    isEditable = true;
+
+    dispatch('edit');
+  }
 </script>
 
 <div 
@@ -81,7 +87,7 @@
           <p class="transcription-details transcribed-by">
             Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
             {bestTranscription.creator?.name} 
-            {/if}  · [ <button class="add-transcription" on:click={() => isEditable = true}>Edit</button> ]
+            {/if}  · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]
           </p>
         {:else if transcriptions.length > 1}
           <p class="transcription-details transcription-count">
@@ -90,7 +96,7 @@
               class:open={showAllTranscriptions}
               on:click={() => showAllTranscriptions = !showAllTranscriptions}>
               <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-            </button> · [ <button on:click={() => isEditable = true} class="add-transcription">Edit</button> ]
+            </button> · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]
           </p>
 
           <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />

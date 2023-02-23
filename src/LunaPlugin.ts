@@ -30,8 +30,23 @@ export class LunaPlugin {
       }
     });
 
-    this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) =>
-      this.anno.updateAnnotation(evt.detail.id, evt.detail));
+    this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) => {
+      // Merge modified annotation bodies from the popup with
+      // latest target from the annotation layer
+      const latestState = this.anno.getAnnotationById(annotation.id);
+
+      const updated = {
+        ...evt.detail,
+        target: {
+          ...latestState.target
+        }
+      }
+
+      this.anno.updateAnnotation(evt.detail.id, updated);
+    });
+
+    this.popup.$on('edit', () =>
+      this.anno.selectAnnotation(annotation));
   }
 
   hidePopup = () => {
