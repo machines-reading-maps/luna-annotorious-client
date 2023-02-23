@@ -2,8 +2,11 @@
 export const getTranscriptions = annotation => {
   const bodies = annotation.body ?
     Array.isArray(annotation.body) ? annotation.body : [ annotation.body ] : [];
-      
-  return bodies.filter(body =>  (!body.purpose || body.purpose === 'transcribing'));
+
+  const transcriptions = bodies.filter(body =>  (!body.purpose || body.purpose === 'transcribing'));
+
+  // Return sorted by time of creation
+  return transcriptions.slice().sort((a, b) => a.created < b.created ? 1 : -1);
 }
 
 /** 
