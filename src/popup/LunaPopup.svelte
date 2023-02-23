@@ -227,13 +227,4 @@
   .r8s-hover-buttons .cancel:hover {
     text-decoration: underline;
   }
-
-  .mousetrap {
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    left: -20px;
-    bottom: -20px;
-    z-index: -1;
-  }
 </style>
