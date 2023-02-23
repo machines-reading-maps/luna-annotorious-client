@@ -1,21 +1,22 @@
 import type Annotorious from '@annotorious/openseadragon';
 import type { WebAnnotation } from '@annotorious/formats';
 import { LunaPopup } from './popup';
+import type { LunaPluginOpts } from './LunaPluginOpts';
 
 export class LunaPlugin {
 
   anno: Annotorious;
 
-  viewer: OpenSeadragon.Viewer;
+  opts: LunaPluginOpts;
 
   popup: LunaPopup;
   
   isEditing: boolean;
 
-  constructor(anno: Annotorious, viewer: OpenSeadragon.Viewer) {
+  constructor(anno: Annotorious, opts: LunaPluginOpts = {}) {
     this.anno = anno;
-    
-    this.viewer = viewer;
+
+    this.opts = opts;
 
     anno.on('pointerdown', (annotation, evt) => {
       if (!this.isEditing) {  
@@ -36,7 +37,8 @@ export class LunaPlugin {
       props: { 
         annotation,
         originalEvent,
-        env: this.anno.env
+        env: this.anno.env,
+        readOnly: this.opts.readOnly
       }
     });
 

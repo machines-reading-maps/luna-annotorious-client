@@ -37,7 +37,9 @@
           pointerSelection: false
         });
 
-        var luna = new LunaPlugin(anno);
+        var luna = new LunaPlugin(anno, {
+          readOnly: true
+        });
 
         anno.loadAnnotations('annotations.w3c.json');
 

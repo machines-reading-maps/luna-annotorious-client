@@ -19,6 +19,8 @@
 
   export let env: typeof Env;
 
+  export let readOnly: boolean;
+
   let isEditable = false;
 
   let showAllTranscriptions = false;
@@ -81,7 +83,7 @@
 
   <div class="r8s-hover-content">
     <EditableTranscription 
-      isEditable={isEditable} 
+      isEditable={readOnly ? false : isEditable} 
       transcription={bestTranscription}
       on:change={onTranscriptionChanged} 
       on:save={onSaveEdit} 
@@ -91,7 +93,7 @@
         <p class="transcription-details transcribed-by">
           Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
           {bestTranscription.creator?.name} 
-          {/if}  · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]
+          {/if}{#if !readOnly} · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]{/if}
         </p>
       {:else if transcriptions.length > 1}
         <p class="transcription-details transcription-count">
@@ -100,7 +102,7 @@
             class:open={showAllTranscriptions}
             on:click={() => showAllTranscriptions = !showAllTranscriptions}>
             <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-          </button> · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]
+          </button>{#if !readOnly} · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]{/if}
         </p>
 
         <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
