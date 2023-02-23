@@ -21,6 +21,9 @@ export class LunaPlugin {
   }
 
   showPopup = (annotation: WebAnnotation, originalEvent: PointerEvent) => {
+    if (this.popup)
+      this.hidePopup();
+  
     this.popup = new LunaPopup({
       target: document.body,
       props: { 
@@ -31,6 +34,8 @@ export class LunaPlugin {
     });
 
     this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) => {
+      this.hidePopup();
+
       // Merge modified annotation bodies from the popup with
       // latest target from the annotation layer
       const latestState = this.anno.getAnnotationById(annotation.id);
@@ -47,11 +52,17 @@ export class LunaPlugin {
 
     this.popup.$on('edit', () =>
       this.anno.selectAnnotation(annotation));
+
+    this.popup.$on('delete', () => {
+      this.hidePopup();
+
+      this.anno.removeAnnotation(annotation);
+    });
   }
 
   hidePopup = () => {
-    // this.popup.$destroy();
-    // this.popup = null;
+    this.popup.$destroy();
+    this.popup = null;
   }
 
 }

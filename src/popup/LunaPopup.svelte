@@ -63,6 +63,8 @@
     isEditable = false;
   }
 
+  const onDelete = () => dispatch('delete');
+
   const makeEditable = () => {
     isEditable = true;
 
@@ -106,7 +108,7 @@
     {#if isEditable}
       <div class="r8s-hover-buttons">
         <div class="left">
-          <button class="delete">
+          <button class="delete" on:click={onDelete}>
             <Icon src={FaTrashAlt} />
           </button>
         </div>
