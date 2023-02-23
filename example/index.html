@@ -35,7 +35,9 @@
           }
         });
 
-        var anno = new Annotorious(viewer);
+        var anno = new Annotorious(viewer, {
+          pointerSelection: false
+        });
 
         anno.setAuthInfo({
           id: 'aboutgeo',
@@ -43,7 +45,7 @@
         });
 
         var luna = new LunaAnnotorious(anno, {
-          pointerSelection: false
+          // readOnly: true
         });
 
         anno.loadAnnotations('annotations.w3c.json');

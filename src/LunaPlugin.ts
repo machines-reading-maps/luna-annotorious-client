@@ -26,6 +26,17 @@ export class LunaPlugin {
           this.hidePopup();
       }
     });
+
+    document.addEventListener('keydown', (evt: KeyboardEvent) => {
+      if (evt.key === 'Escape') {
+        // Cancel on Escape key
+        this.isEditing = false;
+
+        this.hidePopup();
+
+        this.anno.deselectAll();
+      }
+    });
   }
 
   showPopup = (annotation: WebAnnotation, originalEvent: PointerEvent) => {
