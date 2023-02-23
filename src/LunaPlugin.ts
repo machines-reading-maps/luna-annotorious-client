@@ -10,13 +10,20 @@ export class LunaPlugin {
 
   popup: LunaPopup;
   
+  isEditing: boolean;
+
   constructor(anno: Annotorious, viewer: OpenSeadragon.Viewer) {
     this.anno = anno;
     
     this.viewer = viewer;
 
-    anno.on('clickAnnotation', (annotation, evt) => {
-      this.showPopup(annotation, evt);
+    anno.on('pointerdown', (annotation, evt) => {
+      if (!this.isEditing) {  
+        if (annotation)
+          this.showPopup(annotation, evt);
+        else
+          this.hidePopup();
+      }
     });
   }
 
@@ -34,6 +41,8 @@ export class LunaPlugin {
     });
 
     this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) => {
+      this.isEditing = false;
+
       this.hidePopup();
 
       // Merge modified annotation bodies from the popup with
@@ -50,10 +59,23 @@ export class LunaPlugin {
       this.anno.updateAnnotation(evt.detail.id, updated);
     });
 
-    this.popup.$on('edit', () =>
-      this.anno.selectAnnotation(annotation));
+    this.popup.$on('cancel', () => {
+      this.isEditing = false;
+
+      this.hidePopup();
+
+      this.anno.deselectAll();
+    });
+
+    this.popup.$on('edit', () => {
+      this.isEditing = true;
+
+      this.anno.selectAnnotation(annotation);
+    });
 
     this.popup.$on('delete', () => {
+      this.isEditing = false;
+
       this.hidePopup();
 
       this.anno.removeAnnotation(annotation);
@@ -61,8 +83,10 @@ export class LunaPlugin {
   }
 
   hidePopup = () => {
-    this.popup.$destroy();
-    this.popup = null;
+    if (this.popup) {
+      this.popup.$destroy();
+      this.popup = null;
+    } 
   }
 
 }

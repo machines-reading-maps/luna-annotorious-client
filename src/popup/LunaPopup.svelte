@@ -58,6 +58,8 @@
   }
 
   const onCancelEdit = () => {
+    dispatch('cancel', annotation);
+    
     annotation = originalAnnotation;
     
     isEditable = false;
@@ -73,79 +75,68 @@
 </script>
 
 <div 
-  class="r8s-hover-wrapper" 
+  class="r8s-hover" 
+  class:editable={isEditable} use:draggable
   style={`top: ${originalEvent.offsetY}px; left: ${originalEvent.offsetX}px`}>
 
-  <div class="r8s-hover" class:editable={isEditable} use:draggable>
-    <div class="r8s-hover-content">
-      <EditableTranscription 
-        isEditable={isEditable} 
-        transcription={bestTranscription}
-        on:change={onTranscriptionChanged} 
-        on:save={onSaveEdit} 
-        on:cancel={onCancelEdit} />
+  <div class="r8s-hover-content">
+    <EditableTranscription 
+      isEditable={isEditable} 
+      transcription={bestTranscription}
+      on:change={onTranscriptionChanged} 
+      on:save={onSaveEdit} 
+      on:cancel={onCancelEdit} />
 
-        {#if transcriptions.length === 1}
-          <p class="transcription-details transcribed-by">
-            Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
-            {bestTranscription.creator?.name} 
-            {/if}  · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]
-          </p>
-        {:else if transcriptions.length > 1}
-          <p class="transcription-details transcription-count">
-            <button 
-              class="show-all" 
-              class:open={showAllTranscriptions}
-              on:click={() => showAllTranscriptions = !showAllTranscriptions}>
-              <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-            </button> · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]
-          </p>
+      {#if transcriptions.length === 1}
+        <p class="transcription-details transcribed-by">
+          Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
+          {bestTranscription.creator?.name} 
+          {/if}  · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]
+        </p>
+      {:else if transcriptions.length > 1}
+        <p class="transcription-details transcription-count">
+          <button 
+            class="show-all" 
+            class:open={showAllTranscriptions}
+            on:click={() => showAllTranscriptions = !showAllTranscriptions}>
+            <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
+          </button> · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]
+        </p>
 
-          <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
-        {/if}
-    </div>
-
-    {#if isEditable}
-      <div class="r8s-hover-buttons">
-        <div class="left">
-          <button class="delete" on:click={onDelete}>
-            <Icon src={FaTrashAlt} />
-          </button>
-        </div>
-
-        <div class="right-slot">
-          <button on:click={onCancelEdit} class="cancel">Cancel</button>
-          <button on:click={onSaveEdit} class="ok">Save Edits</button>
-        </div>
-      </div>
-    {/if}
+        <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
+      {/if}
   </div>
 
-  <div class="mousetrap" />
+  {#if isEditable}
+    <div class="r8s-hover-buttons">
+      <div class="left">
+        <button class="delete" on:click={onDelete}>
+          <Icon src={FaTrashAlt} />
+        </button>
+      </div>
+
+      <div class="right-slot">
+        <button on:click={onCancelEdit} class="cancel">Cancel</button>
+        <button on:click={onSaveEdit} class="ok">Save Edits</button>
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>
-  .r8s-hover-wrapper {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: row;
+  .r8s-hover {
+    background-color: #fff;
+    border: 1px solid var(--lightgrey-border);
+    border-radius: var(--border-radius);
+    box-shadow:1px 1px 24px rgba(0, 0, 0, 0.65);
+    color: var(--darkgrey-font);
+    cursor: move;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.875em;
     max-width: 460px;
     min-width: 280px;
     position: absolute;
     z-index: 999;
-  }
-
-  .r8s-hover {
-    color: var(--darkgrey-font);
-    cursor: move;
-    background-color: #fff;
-    border: 1px solid var(--lightgrey-border);
-    border-radius: var(--border-radius);
-    box-shadow:1px 1px 24px rgba(0, 0, 0, 0.65);
-    width: 100%;
-    z-index: 1;
   }
 
   .r8s-hover.editable {
