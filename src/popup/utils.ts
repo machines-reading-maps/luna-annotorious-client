@@ -1,5 +1,21 @@
+import type { WebAnnotation, WebAnnotationBody } from '@annotorious/formats';
+
+interface Transcription extends WebAnnotationBody {
+
+  creator: {
+
+    id: string
+    
+    type: string,
+
+    name: string
+  
+  }
+
+}
+
 /** Returns all transcription bodies from this annotation **/
-export const getTranscriptions = annotation => {
+export const getTranscriptions = (annotation: WebAnnotation): Transcription[] => {
   const bodies = annotation.body ?
     Array.isArray(annotation.body) ? annotation.body : [ annotation.body ] : [];
 
@@ -16,8 +32,8 @@ export const getTranscriptions = annotation => {
  * 'Software', name 'mapKurator:ocr'). If there is none, we'll fall back 
  * to the first in the list.
  */
-export const getBestTranscription = bodies => {
-  let best;
+export const getBestTranscription = (bodies: Transcription[]) => {
+  let best: Transcription;
 
   // Sort by timestamp
   const sorted = bodies.slice().sort((a, b) => a.created < b.created ? 1 : -1);
@@ -38,5 +54,5 @@ export const getBestTranscription = bodies => {
 }
 
 /** Tests if this body represents an OCR transcription **/
-export const isOCR = transcription =>
+export const isOCR = (transcription: Transcription): boolean =>
   transcription.creator?.type === 'Software' && transcription.creator?.name == 'mapKurator:ocr';
