@@ -85,6 +85,7 @@
     <EditableTranscription 
       isEditable={readOnly ? false : isEditable} 
       transcription={bestTranscription}
+      on:click={() => showAllTranscriptions = !showAllTranscriptions}
       on:change={onTranscriptionChanged} 
       on:save={onSaveEdit} 
       on:cancel={onCancelEdit} />
@@ -92,8 +93,7 @@
       {#if transcriptions.length === 1}
         <p class="transcription-details transcribed-by">
           Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
-          {bestTranscription.creator?.name} 
-          {/if}{#if !readOnly} · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]{/if}
+          {bestTranscription.creator?.name} {/if}{#if !readOnly} · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]{/if}
         </p>
       {:else if transcriptions.length > 1}
         <p class="transcription-details transcription-count">
@@ -102,7 +102,7 @@
             class:open={showAllTranscriptions}
             on:click={() => showAllTranscriptions = !showAllTranscriptions}>
             <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-          </button>{#if !readOnly} · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]{/if}
+          </button> {#if !readOnly} · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]{/if}
         </p>
 
         <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
@@ -174,6 +174,11 @@
 
   :global(p.transcription-details button.show-all svg) {
     vertical-align: text-top;
+    transition: transform 250ms;
+  }
+
+  :global(p.transcription-details button.show-all.open svg) {
+    transform: rotateZ(180deg);
   }
 
   .r8s-hover-buttons {

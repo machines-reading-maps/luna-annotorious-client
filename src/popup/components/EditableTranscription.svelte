@@ -42,7 +42,7 @@
     spellcheck={false} 
     on:keyup={onKeyUp} />
 {:else}
-  <span class="transcription">{transcription?.value}</span> 
+  <span on:click class="transcription">{transcription?.value}</span> 
 
   {#if transcription?.creator?.type === 'Person'}
     <Icon className="verified-mark" src={BsPatchCheckFill} />
