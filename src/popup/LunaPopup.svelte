@@ -77,6 +77,32 @@
 
     dispatch('edit');
   }
+
+  const confirm = () => {
+    const bodies = Array.isArray(originalAnnotation.body) ? originalAnnotation.body : [ originalAnnotation.body ];
+
+    const confirmation = {
+      type: 'TextualBody',
+      purpose: 'verifying',
+      value: 'verified',
+      creator: {
+        type: 'Person',
+        name: env.currentUser.id
+      },
+      created: env.getCurrentTimeAdjusted()
+    };
+
+    const confirmedAnnotation = {
+      ...originalAnnotation,
+      body: [...bodies, confirmation ]
+    };
+
+    originalAnnotation = confirmedAnnotation;
+    
+    isEditable = false;
+
+    dispatch('confirm', confirmedAnnotation);
+  }
 </script>
 
 <div 
@@ -96,7 +122,10 @@
       {#if transcriptions.length === 1}
         <p class="transcription-details transcribed-by">
           Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
-          {bestTranscription.creator?.name} {/if}{#if !readOnly} · [ <button class="add-transcription" on:click={makeEditable}>Edit</button> ]{/if}
+          {bestTranscription.creator?.name} {/if}{#if !readOnly} · [ 
+            <button class="action add-transcription" on:click={makeEditable}>Edit</button> | 
+            <button class="action confirm" on:click={confirm}>Confirm</button>
+          ]{/if}
         </p>
       {:else if transcriptions.length > 1}
         <p class="transcription-details transcription-count">
@@ -105,7 +134,10 @@
             class:open={showAllTranscriptions}
             on:click={() => showAllTranscriptions = !showAllTranscriptions}>
             <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-          </button> {#if !readOnly} · [ <button on:click={makeEditable} class="add-transcription">Edit</button> ]{/if}
+          </button> {#if !readOnly} · [ 
+            <button class="action add-transcription" on:click={makeEditable} >Edit</button> |
+            <button class="action confirm" on:click={confirm}>Confirm</button>
+          ]{/if}
         </p>
 
         <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />

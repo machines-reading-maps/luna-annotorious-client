@@ -53,6 +53,14 @@ export class LunaPlugin {
       }
     });
 
+    this.popup.$on('confirm', (evt: CustomEvent<WebAnnotation>) => {
+      this.isEditing = false;
+
+      this.hidePopup();
+
+      this.anno.updateAnnotation(evt.detail.id, evt.detail);
+    });
+
     this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) => {
       this.isEditing = false;
 
