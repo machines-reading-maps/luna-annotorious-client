@@ -56,3 +56,12 @@ export const getBestTranscription = (bodies: Transcription[]) => {
 /** Tests if this body represents an OCR transcription **/
 export const isOCR = (transcription: Transcription): boolean =>
   transcription.creator?.type === 'Software' && transcription.creator?.name == 'mapKurator:ocr';
+
+export const isVerified = (annotation: WebAnnotation): boolean => {
+  const bodies = annotation.body ?
+    Array.isArray(annotation.body) ? annotation.body : [ annotation.body ] : [];
+
+  const verifiedBody = bodies.find(b => b.purpose === 'verifying');
+
+  return Boolean(verifiedBody);
+}

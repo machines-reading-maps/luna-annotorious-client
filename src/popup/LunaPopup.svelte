@@ -10,7 +10,7 @@
   import EditableTranscription from './components/EditableTranscription.svelte';
   import TranscriptionList from './components/TranscriptionList.svelte';
   import DeleteConfirmation from './components/DeleteConfirmation.svelte';
-  import { getTranscriptions, getBestTranscription, isOCR } from './utils';
+  import { getTranscriptions, getBestTranscription, isVerified, isOCR } from './utils';
 
   const dispatch = createEventDispatcher();
 
@@ -33,6 +33,8 @@
   $: transcriptions = getTranscriptions(originalAnnotation);
 
   $: bestTranscription = getBestTranscription(transcriptions);
+
+  $: verified = isVerified(originalAnnotation);
 
   const onTranscriptionChanged = evt => {
     const bodies = Array.isArray(originalAnnotation.body) ? originalAnnotation.body : [ originalAnnotation.body ];
@@ -113,6 +115,7 @@
   <div class="r8s-hover-content">
     <EditableTranscription 
       isEditable={readOnly ? false : isEditable} 
+      isVerified={verified}
       transcription={bestTranscription}
       on:click={() => showAllTranscriptions = !showAllTranscriptions}
       on:change={onTranscriptionChanged} 
@@ -123,8 +126,7 @@
         <p class="transcription-details transcribed-by">
           Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
           {bestTranscription.creator?.name} {/if}{#if !readOnly} · [ 
-            <button class="action add-transcription" on:click={makeEditable}>Edit</button> | 
-            <button class="action confirm" on:click={confirm}>Confirm</button>
+            <button class="action add-transcription" on:click={makeEditable}>Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
           ]{/if}
         </p>
       {:else if transcriptions.length > 1}
@@ -135,8 +137,7 @@
             on:click={() => showAllTranscriptions = !showAllTranscriptions}>
             <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
           </button> {#if !readOnly} · [ 
-            <button class="action add-transcription" on:click={makeEditable} >Edit</button> |
-            <button class="action confirm" on:click={confirm}>Confirm</button>
+            <button class="action add-transcription" on:click={makeEditable} >Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
           ]{/if}
         </p>
 

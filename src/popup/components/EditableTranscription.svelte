@@ -10,6 +10,8 @@
 
   export let isEditable;
 
+  export let isVerified;
+
   let inputEl;
 
   $: {
@@ -44,7 +46,7 @@
 {:else}
   <span on:click class="transcription">{transcription?.value}</span> 
 
-  {#if transcription?.creator?.type === 'Person'}
+  {#if isVerified}
     <Icon className="verified-mark" src={BsPatchCheckFill} />
   {/if}
 {/if}
