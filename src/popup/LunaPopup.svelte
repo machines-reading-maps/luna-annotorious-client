@@ -9,6 +9,7 @@
   import type { WebAnnotation } from '@annotorious/formats';
   import EditableTranscription from './components/EditableTranscription.svelte';
   import TranscriptionList from './components/TranscriptionList.svelte';
+  import DeleteConfirmation from './components/DeleteConfirmation.svelte';
   import { getTranscriptions, getBestTranscription, isOCR } from './utils';
 
   const dispatch = createEventDispatcher();
@@ -26,6 +27,8 @@
   let showAllTranscriptions = false;
 
   let originalAnnotation = annotation;
+
+  let showConfirmDelete = false;
 
   $: transcriptions = getTranscriptions(originalAnnotation);
 
@@ -112,7 +115,7 @@
   {#if isEditable}
     <div class="r8s-hover-buttons">
       <div class="left">
-        <button class="delete" on:click={onDelete}>
+        <button class="delete" on:click={() => showConfirmDelete = true}>
           <Icon src={FaTrashAlt} />
         </button>
       </div>
@@ -124,6 +127,12 @@
     </div>
   {/if}
 </div>
+
+{#if showConfirmDelete}
+  <DeleteConfirmation 
+    on:cancel={() => showConfirmDelete = false} 
+    on:delete={onDelete} />
+{/if}
 
 <style>
   .r8s-hover {
@@ -138,7 +147,7 @@
     max-width: 460px;
     min-width: 280px;
     position: absolute;
-    z-index: 999;
+    z-index: 998;
   }
 
   .r8s-hover.editable {
