@@ -40,6 +40,9 @@ export class LunaPlugin {
   }
 
   showPopup = (annotation: WebAnnotation, originalEvent: PointerEvent) => {
+    console.log('opening popup');
+    console.log(annotation);
+    
     if (this.popup)
       this.hidePopup();
   
