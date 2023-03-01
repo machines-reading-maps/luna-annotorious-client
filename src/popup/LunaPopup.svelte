@@ -196,6 +196,7 @@
   p.transcription-details {
     margin: 0;
     padding: 0.3em 0;
+    white-space: nowrap;
   }
 
   p.transcription-details button {
