@@ -86,7 +86,7 @@
     const confirmation = {
       type: 'TextualBody',
       purpose: 'verifying',
-      value: 'verified',
+      value: bestTranscription?.value,
       creator: {
         type: 'Person',
         name: env.currentUser.id
