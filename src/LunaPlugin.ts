@@ -49,7 +49,7 @@ export class LunaPlugin {
         annotation,
         originalEvent,
         env: this.anno.env,
-        readOnly: this.opts.readOnly
+        opts: this.opts
       }
     });
 

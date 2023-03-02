@@ -11,6 +11,7 @@
   import TranscriptionList from './components/TranscriptionList.svelte';
   import DeleteConfirmation from './components/DeleteConfirmation.svelte';
   import { getTranscriptions, getBestTranscription, isVerified, isOCR } from './utils';
+  import type { LunaPluginOpts } from '../LunaPluginOpts';
 
   const dispatch = createEventDispatcher();
 
@@ -20,7 +21,7 @@
 
   export let env: typeof Env;
 
-  export let readOnly: boolean;
+  export let opts: LunaPluginOpts;
 
   let isEditable = false;
 
@@ -114,7 +115,7 @@
 
   <div class="r8s-hover-content">
     <EditableTranscription 
-      isEditable={readOnly ? false : isEditable} 
+      isEditable={opts.readOnly ? false : isEditable} 
       isVerified={verified}
       transcription={bestTranscription}
       on:click={() => showAllTranscriptions = !showAllTranscriptions}
@@ -125,7 +126,7 @@
       {#if transcriptions.length === 1}
         <p class="transcription-details transcribed-by">
           Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
-          {bestTranscription.creator?.name} {/if}{#if !readOnly} · [ 
+          {bestTranscription.creator?.name} {/if}{#if !opts.readOnly} · [ 
             <button class="action add-transcription" on:click={makeEditable}>Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
           ]{/if}
         </p>
@@ -136,7 +137,7 @@
             class:open={showAllTranscriptions}
             on:click={() => showAllTranscriptions = !showAllTranscriptions}>
             <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-          </button> {#if !readOnly} · [ 
+          </button> {#if !opts.readOnly} · [ 
             <button class="action add-transcription" on:click={makeEditable} >Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
           ]{/if}
         </p>
@@ -163,6 +164,7 @@
 
 {#if showConfirmDelete}
   <DeleteConfirmation 
+    opts={opts}
     on:cancel={() => showConfirmDelete = false} 
     on:delete={onDelete} />
 {/if}

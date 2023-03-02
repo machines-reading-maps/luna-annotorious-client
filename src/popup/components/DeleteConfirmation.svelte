@@ -3,6 +3,8 @@
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import CgClose from 'svelte-icons-pack/cg/CgClose';
 
+  export let opts;
+
   const dispatch = createEventDispatcher();
 
   const onDelete = () => dispatch('delete');
@@ -16,9 +18,19 @@
       <Icon src={CgClose} />
     </button>
 
-    <h1>Confirm Delete</h1>
+    <h1>
+      {#if opts.deletePromptHeading}
+        {opts.deletePromptHeading}
+      {:else}
+        Confirm Delete
+      {/if}
+    </h1>
     <p>
-      Are you sure you want to delete this transcription?
+      {#if opts.deletePromptText}
+        {opts.deletePromptText}
+      {:else}
+        Are you sure you want to delete this transcription?
+      {/if}
     </p>
 
     <div class="buttons">
@@ -52,6 +64,7 @@
     background-color: #fff;
     border-radius: var(--border-radius);
     box-shadow:1px 1px 24px rgba(0, 0, 0, 0.65);
+    color: #333;
     padding: 30px;
     position: relative;
     width: 480px;
