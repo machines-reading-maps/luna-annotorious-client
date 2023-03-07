@@ -46,7 +46,7 @@
       value: evt.detail,
       creator: {
         type: 'Person',
-        name: env.currentUser.id
+        name: 'displayName' in env.currentUser ? env.currentUser.displayName : env.currentUser.id 
       },
       created: env.getCurrentTimeAdjusted()
     };
@@ -90,9 +90,8 @@
       value: bestTranscription?.value,
       creator: {
         type: 'Person',
-        name: env.currentUser.id
-      },
-      created: env.getCurrentTimeAdjusted()
+        name: 'displayName' in env.currentUser ? env.currentUser.displayName : env.currentUser.id
+      }
     };
 
     const confirmedAnnotation = {
