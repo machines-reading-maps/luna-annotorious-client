@@ -91,7 +91,8 @@
       creator: {
         type: 'Person',
         name: 'displayName' in env.currentUser ? env.currentUser.displayName : env.currentUser.id
-      }
+      },
+      created: env.getCurrentTimeAdjusted()
     };
 
     const confirmedAnnotation = {
