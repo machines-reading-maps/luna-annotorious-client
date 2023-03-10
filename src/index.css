@@ -8,6 +8,10 @@
   --lightgrey-font: #595959;
   --lightgrey-border: #cbccce;
 
+  --instructions-bg: #ffeba6;
+  --instructions-border: #edcf66;
+  --instructions-font: #605220;
+
   /** other design params **/
   --border-radius: 3px;
 }

@@ -10,6 +10,7 @@
   import EditableTranscription from './components/EditableTranscription.svelte';
   import TranscriptionList from './components/TranscriptionList.svelte';
   import DeleteConfirmation from './components/DeleteConfirmation.svelte';
+  import InstructionsPrompt from './components/InstructionsPrompt.svelte';
   import { getTranscriptions, getBestTranscription, isVerified, isOCR } from './utils';
   import type { LunaPluginOpts } from '../LunaPluginOpts';
 
@@ -36,6 +37,8 @@
   $: bestTranscription = getBestTranscription(transcriptions);
 
   $: verified = isVerified(originalAnnotation);
+
+  $: showInstructions = !(opts.readOnly || verified || !isOCR(bestTranscription));
 
   const onTranscriptionChanged = evt => {
     const bodies = Array.isArray(originalAnnotation.body) ? originalAnnotation.body : [ originalAnnotation.body ];
@@ -123,27 +126,27 @@
       on:save={onSaveEdit} 
       on:cancel={onCancelEdit} />
 
-      {#if transcriptions.length === 1}
-        <p class="transcription-details transcribed-by">
-          Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
-          {bestTranscription.creator?.name} {/if}{#if !opts.readOnly} · [ 
-            <button class="action add-transcription" on:click={makeEditable}>Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
-          ]{/if}
-        </p>
-      {:else if transcriptions.length > 1}
-        <p class="transcription-details transcription-count">
-          <button 
-            class="show-all" 
-            class:open={showAllTranscriptions}
-            on:click={() => showAllTranscriptions = !showAllTranscriptions}>
-            <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
-          </button> {#if !opts.readOnly} · [ 
-            <button class="action add-transcription" on:click={makeEditable} >Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
-          ]{/if}
-        </p>
+    {#if transcriptions.length === 1}
+      <p class="transcription-details transcribed-by">
+        Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
+        {bestTranscription.creator?.name} {/if}{#if !opts.readOnly} · [ 
+          <button class="action add-transcription" on:click={makeEditable}>Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
+        ]{/if}
+      </p>
+    {:else if transcriptions.length > 1}
+      <p class="transcription-details transcription-count">
+        <button 
+          class="show-all" 
+          class:open={showAllTranscriptions}
+          on:click={() => showAllTranscriptions = !showAllTranscriptions}>
+          <Icon src={FiChevronDown} /> {transcriptions.length - 1} more transcriptions 
+        </button> {#if !opts.readOnly} · [ 
+          <button class="action add-transcription" on:click={makeEditable} >Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
+        ]{/if}
+      </p>
 
-        <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
-      {/if}
+      <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
+    {/if}
   </div>
 
   {#if isEditable}
@@ -159,6 +162,10 @@
         <button on:click={onSaveEdit} class="ok">Save Edits</button>
       </div>
     </div>
+  {/if}
+
+  {#if showInstructions}
+    <InstructionsPrompt />
   {/if}
 </div>
 
