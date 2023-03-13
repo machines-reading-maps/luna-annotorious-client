@@ -1,4 +1,8 @@
 <script>
+  export let text = `<strong>Transcribed by Artificial Intelligence.</strong> Please 
+    help improve our data by confirming or 
+    correcting. <a href="#">Learn more</a>`
+
   let showMessage = !Boolean(localStorage.getItem('r8s-disable-ai-prompt'));
 
   const onHideMessage = () => {
@@ -9,9 +13,7 @@
 
 {#if showMessage}
   <div class="r8s-edit-instructions">
-    <strong>Transcribed by Artificial Intelligence.</strong> Please 
-    help improve our data by confirming or 
-    correcting. <a href="#">Learn more</a> · <button on:click={onHideMessage}>Hide message</button>
+    {@html text} · <button on:click={onHideMessage}>Hide message</button>
   </div>
 {/if}
 
@@ -24,7 +26,7 @@
     padding: 14px;
   }
 
-  .r8s-edit-instructions a {
+  :global(.r8s-edit-instructions a) {
     color: var(--instructions-font);
   }
 

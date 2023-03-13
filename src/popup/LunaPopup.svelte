@@ -165,7 +165,7 @@
   {/if}
 
   {#if showInstructions}
-    <InstructionsPrompt />
+    <InstructionsPrompt text={opts.crowdsourcePrompt} />
   {/if}
 </div>
 
