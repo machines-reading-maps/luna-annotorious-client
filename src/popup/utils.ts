@@ -1,6 +1,6 @@
 import type { WebAnnotation, WebAnnotationBody } from '@annotorious/formats';
 
-interface Transcription extends WebAnnotationBody {
+export interface Transcription extends WebAnnotationBody {
 
   creator: {
 
@@ -22,7 +22,7 @@ export const getTranscriptions = (annotation: WebAnnotation): Transcription[] =>
   const transcriptions = bodies.filter(body =>  (!body.purpose || body.purpose === 'transcribing'));
 
   // Return sorted by time of creation
-  return transcriptions.slice().sort((a, b) => a.created < b.created ? 1 : -1);
+  return transcriptions.slice().sort((a, b) => a.created > b.created ? -1 : 1);
 }
 
 /** 

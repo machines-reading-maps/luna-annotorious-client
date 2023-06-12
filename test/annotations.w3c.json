@@ -39,13 +39,29 @@
     "id": "#07475897-d2eb-4dce-aa12-ecb50771c734",
     "type": "Annotation",
     "body": [
-        {
+      {
         "type" : "TextualBody",
         "value" : "Phem",
         "created" : "2023-01-02T14:52:03Z",
         "creator" : {
           "type" : "Software",
           "name" : "mapKurator:ocr"
+        }
+      }, {
+        "type" : "TextualBody",
+        "value" : "Phem",
+        "created" : "2023-01-02T14:52:03Z",
+        "creator" : {
+          "type" : "Software",
+          "name" : "mapKurator:post-ocr-correction"
+        }
+      }, {
+        "type" : "TextualBody",
+        "value" : "Phem",
+        "created" : "2023-01-02T14:52:03Z",
+        "creator" : {
+          "type" : "Software",
+          "name" : "mapKurator:ocr:cyrillic"
         }
       }
     ],

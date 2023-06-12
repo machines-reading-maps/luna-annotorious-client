@@ -1,12 +1,15 @@
-<script>
+<script type="ts">
   import { slide } from 'svelte/transition';
-  import Icon from 'svelte-icons-pack/Icon.svelte';
-  import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
   import * as timeago from 'timeago.js';
+  import type { LunaPluginOpts } from '../../LunaPluginOpts';
+  import type { Transcription } from '../utils';
+  import MKLabel from './MKLabel.svelte';
 
-  export let transcriptions;
+  export let transcriptions: Transcription[];
 
-  export let open;
+  export let open: boolean;
+
+  export let opts: LunaPluginOpts;
 </script>
 
 {#if open}
@@ -14,7 +17,7 @@
     {#each transcriptions as body}
       <li>
         {body.value} <span class="transcribed-by">{timeago.format(body.created)} by {#if body.creator?.type === 'Software'}
-          <Icon src={FaSolidRobot} /> mapKurator {:else} {body.creator.name} {/if}</span>
+          <MKLabel opts={opts} transcription={body} /> {:else} {body.creator.name} {/if}</span>
       </li>
     {/each}
   </ul>

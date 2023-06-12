@@ -130,7 +130,9 @@
       <p class="transcription-details transcribed-by">
         Transcribed by {#if isOCR(bestTranscription)} <Icon src={FaSolidRobot} /> mapKurator {:else if (bestTranscription.creator?.name)} 
         {bestTranscription.creator?.name} {/if}{#if !opts.readOnly} · [ 
-          <button class="action add-transcription" on:click={makeEditable}>Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
+          <button 
+            class="action add-transcription" 
+            on:click={makeEditable}>Edit</button>{#if !verified}&nbsp;|&nbsp;<button class="action confirm" on:click={confirm}>Confirm</button> {/if}
         ]{/if}
       </p>
     {:else if transcriptions.length > 1}
@@ -145,7 +147,10 @@
         ]{/if}
       </p>
 
-      <TranscriptionList open={showAllTranscriptions} transcriptions={transcriptions} />
+      <TranscriptionList 
+        open={showAllTranscriptions} 
+        transcriptions={transcriptions} 
+        opts={opts} />
     {/if}
   </div>
 
@@ -222,6 +227,11 @@
 
   p.transcription-details button.show-all {
     color: var(--lightgrey-font);
+  }
+
+  :global(.transcribed-by > svg) {
+    position: relative;
+    top: 1px;
   }
 
   :global(p.transcription-details button.show-all svg) {

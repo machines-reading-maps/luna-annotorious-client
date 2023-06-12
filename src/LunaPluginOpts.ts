@@ -8,4 +8,16 @@ export interface LunaPluginOpts {
 
   deletePromptText?: string
 
+  models?: ModelInfo[];
+
+}
+
+export interface ModelInfo {
+
+  creatorName: string;
+
+  displayLabel: string;
+
+  displayTooltip: string
+
 }
