@@ -11,7 +11,7 @@
   }, {
     creatorName: 'mapKurator:post-ocr-correction',
     displayLabel: 'mapKurator+',
-    displayTooltipo: 'mapKurator AI text recognition model with Post-OCR correction'
+    displayTooltip: 'mapKurator AI text recognition model with Post-OCR correction'
   }];
 
   export let opts: LunaPluginOpts;
@@ -24,18 +24,14 @@
   ] : DEFAULT_MODEL_TABLE;
 
   $: model = models.find(i => i.creatorName === transcription.creator.name);
-
-  $: console.log(transcription, 'got', model);
-
-  const onClick = () => {
-
-  }
 </script>
 
-<Icon src={FaSolidRobot} /> <a class="model-info" href={'#'} on:click={onClick}>{model?.displayLabel || transcription.creator.name}</a>
+<Icon src={FaSolidRobot} /> <span
+  class="model-info" 
+  data-tooltip={model?.displayTooltip}>{model?.displayLabel || transcription.creator.name}</span>
 
 <style>
-  a.model-info {
+  .model-info {
     color: var(--darkgrey-font);
     text-decoration: none;
     border-bottom: 1px dashed var(--darkgrey-font);;
