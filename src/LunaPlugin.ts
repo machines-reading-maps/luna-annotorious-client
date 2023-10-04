@@ -33,7 +33,7 @@ export class LunaPlugin {
 
         this.hidePopup();
 
-        // this.anno.deselectAll();
+        this.anno.setSelected();
       }
     });
   }
@@ -84,13 +84,13 @@ export class LunaPlugin {
 
       this.hidePopup();
 
-      // this.anno.deselectAll();
+      this.anno.setSelected();
     });
 
     this.popup.$on('edit', () => {
       this.isEditing = true;
 
-      // this.anno.selectAnnotation(annotation);
+      this.anno.setSelected(annotation.id);
     });
 
     this.popup.$on('delete', () => {

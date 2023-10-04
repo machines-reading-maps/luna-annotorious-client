@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <title>Annotorious 3 | OpenSeadragon Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
     <style>
       html,
       body,
@@ -15,6 +14,7 @@
       }
     </style>
     <script type="module">
+      import OpenSeadragon from 'openseadragon';
       import { createOSDAnnotator, W3CImageFormat } from '@annotorious/openseadragon';
       import LunaPlugin from '../src/index.ts';
 
