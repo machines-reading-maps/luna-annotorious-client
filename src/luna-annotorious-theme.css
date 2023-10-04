@@ -1,0 +1,23 @@
+.a9s-annotationlayer .a9s-annotation polygon {
+  fill: rgba(26, 115, 232, 0.25);
+  stroke: rgb(26, 115, 232);
+  stroke-width: 2px;
+}
+
+.a9s-annotationlayer .a9s-annotation .a9s-outer {
+  display: none;
+}
+  
+.a9s-annotationlayer .a9s-annotation .a9s-shape-handle.a9s-inner {
+  fill: rgb(26, 115, 232);
+  fill-opacity: 0.25;
+  stroke: rgb(26, 115, 232);
+  stroke-width: 2px;
+}
+
+.a9s-annotationlayer .a9s-annotation .a9s-corner-handle {
+  fill: #fff;
+  stroke: rgb(26, 115, 232);
+  stroke-width: 1px;
+  rx: 0;
+}
