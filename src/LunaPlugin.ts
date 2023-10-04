@@ -67,14 +67,14 @@ export class LunaPlugin {
 
       // Merge modified annotation bodies from the popup with
       // latest target from the annotation layer
-      /*const latestState = this.anno.getAnnotationById(annotation.id);
+      const latestState = this.anno.getAnnotationById(annotation.id);
 
       const updated = {
         ...evt.detail,
         target: {
           ...latestState.target
         }
-      }*/
+      }
 
       // this.anno.updateAnnotation(evt.detail.id, updated);
     });
