@@ -12,6 +12,8 @@ export class LunaPlugin {
   
   isEditing: boolean;
 
+  beforeEdit: W3CAnnotation;
+
   constructor(anno: OpenSeadragonAnnotator<W3CAnnotation>, opts: LunaPluginOpts = {}) {
     this.anno = anno;
 
@@ -19,10 +21,11 @@ export class LunaPlugin {
 
     anno.on('clickAnnotation', (annotation, evt) => {
       if (!this.isEditing) {  
-        if (annotation)
+        if (annotation) {
           this.showPopup(annotation, evt);
-        else
+        } else {
           this.hidePopup();
+        }
       }
     });
 
@@ -39,6 +42,8 @@ export class LunaPlugin {
   }
 
   showPopup = (annotation: W3CAnnotation, originalEvent: PointerEvent) => {
+    this.beforeEdit = annotation;
+
     if (this.popup)
       this.hidePopup();
   
@@ -83,8 +88,10 @@ export class LunaPlugin {
     this.popup.$on('cancel', () => {
       this.isEditing = false;
 
-      this.hidePopup();
+      // Revert changes
+      this.anno.updateAnnotation(this.beforeEdit);
 
+      this.hidePopup();
       this.anno.setSelected();
     });
 
@@ -104,6 +111,8 @@ export class LunaPlugin {
   }
 
   hidePopup = () => {
+    this.beforeEdit = undefined;
+
     if (this.popup) {
       this.popup.$destroy();
       this.popup = null;
