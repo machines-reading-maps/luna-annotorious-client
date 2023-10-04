@@ -5,8 +5,7 @@
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
   import FaTrashAlt from 'svelte-icons-pack/fa/FaTrashAlt';
   import FiChevronDown from 'svelte-icons-pack/fi/FiChevronDown';
-  import type { Env } from '@annotorious/annotorious';
-  import type { WebAnnotation } from '@annotorious/formats';
+  import type { OpenSeadragonAnnotator, W3CAnnotation, W3CAnnotationBody } from '@annotorious/openseadragon';
   import EditableTranscription from './components/EditableTranscription.svelte';
   import TranscriptionList from './components/TranscriptionList.svelte';
   import DeleteConfirmation from './components/DeleteConfirmation.svelte';
@@ -16,11 +15,11 @@
 
   const dispatch = createEventDispatcher();
 
-  export let annotation: WebAnnotation;
+  export let annotation: W3CAnnotation;
 
   export let originalEvent: PointerEvent;
 
-  export let env: typeof Env;
+  export let anno: OpenSeadragonAnnotator<W3CAnnotation>;
 
   export let opts: LunaPluginOpts;
 
@@ -43,15 +42,18 @@
   const onTranscriptionChanged = evt => {
     const bodies = Array.isArray(originalAnnotation.body) ? originalAnnotation.body : [ originalAnnotation.body ];
 
-    const changedTranscription = {
+    const currentUser = anno.getUser();
+
+    const changedTranscription: W3CAnnotationBody = {
       type: 'TextualBody',
       purpose: 'transcribing',
       value: evt.detail,
       creator: {
+        id: currentUser.id,
         type: 'Person',
-        name: 'displayName' in env.currentUser ? env.currentUser.displayName : env.currentUser.id 
+        name: currentUser.name
       },
-      created: env.getCurrentTimeAdjusted()
+      created: new Date()
     };
 
     annotation = {
@@ -87,15 +89,18 @@
   const confirm = () => {
     const bodies = Array.isArray(originalAnnotation.body) ? originalAnnotation.body : [ originalAnnotation.body ];
 
-    const confirmation = {
+    const currentUser = anno.getUser();
+
+    const confirmation: W3CAnnotationBody = {
       type: 'TextualBody',
       purpose: 'verifying',
       value: bestTranscription?.value,
       creator: {
+        id: currentUser.id,
         type: 'Person',
-        name: 'displayName' in env.currentUser ? env.currentUser.displayName : env.currentUser.id
+        name: currentUser.name
       },
-      created: env.getCurrentTimeAdjusted()
+      created: new Date()
     };
 
     const confirmedAnnotation = {

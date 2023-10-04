@@ -1,11 +1,10 @@
-import type Annotorious from '@annotorious/openseadragon';
-import type { WebAnnotation } from '@annotorious/formats';
+import type { OpenSeadragonAnnotator, W3CAnnotation } from '@annotorious/openseadragon';
 import { LunaPopup } from './popup';
 import type { LunaPluginOpts } from './LunaPluginOpts';
 
 export class LunaPlugin {
 
-  anno: Annotorious;
+  anno: OpenSeadragonAnnotator<W3CAnnotation>;
 
   opts: LunaPluginOpts;
 
@@ -13,12 +12,12 @@ export class LunaPlugin {
   
   isEditing: boolean;
 
-  constructor(anno: Annotorious, opts: LunaPluginOpts = {}) {
+  constructor(anno: OpenSeadragonAnnotator<W3CAnnotation>, opts: LunaPluginOpts = {}) {
     this.anno = anno;
 
     this.opts = opts;
 
-    anno.on('pointerdown', (annotation, evt) => {
+    anno.on('clickAnnotation', (annotation, evt) => {
       if (!this.isEditing) {  
         if (annotation)
           this.showPopup(annotation, evt);
@@ -34,12 +33,12 @@ export class LunaPlugin {
 
         this.hidePopup();
 
-        this.anno.deselectAll();
+        // this.anno.deselectAll();
       }
     });
   }
 
-  showPopup = (annotation: WebAnnotation, originalEvent: PointerEvent) => {
+  showPopup = (annotation: W3CAnnotation, originalEvent: PointerEvent) => {
     if (this.popup)
       this.hidePopup();
   
@@ -48,36 +47,36 @@ export class LunaPlugin {
       props: { 
         annotation,
         originalEvent,
-        env: this.anno.env,
+        anno: this.anno,
         opts: this.opts
       }
     });
 
-    this.popup.$on('confirm', (evt: CustomEvent<WebAnnotation>) => {
+    this.popup.$on('confirm', (evt: CustomEvent<W3CAnnotation>) => {
       this.isEditing = false;
 
       this.hidePopup();
 
-      this.anno.updateAnnotation(evt.detail.id, evt.detail);
+      // this.anno.updateAnnotation(evt.detail.id, evt.detail);
     });
 
-    this.popup.$on('save', (evt: CustomEvent<WebAnnotation>) => {
+    this.popup.$on('save', (evt: CustomEvent<W3CAnnotation>) => {
       this.isEditing = false;
 
       this.hidePopup();
 
       // Merge modified annotation bodies from the popup with
       // latest target from the annotation layer
-      const latestState = this.anno.getAnnotationById(annotation.id);
+      /*const latestState = this.anno.getAnnotationById(annotation.id);
 
       const updated = {
         ...evt.detail,
         target: {
           ...latestState.target
         }
-      }
+      }*/
 
-      this.anno.updateAnnotation(evt.detail.id, updated);
+      // this.anno.updateAnnotation(evt.detail.id, updated);
     });
 
     this.popup.$on('cancel', () => {
@@ -85,13 +84,13 @@ export class LunaPlugin {
 
       this.hidePopup();
 
-      this.anno.deselectAll();
+      // this.anno.deselectAll();
     });
 
     this.popup.$on('edit', () => {
       this.isEditing = true;
 
-      this.anno.selectAnnotation(annotation);
+      // this.anno.selectAnnotation(annotation);
     });
 
     this.popup.$on('delete', () => {
