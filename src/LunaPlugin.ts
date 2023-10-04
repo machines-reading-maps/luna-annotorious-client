@@ -57,7 +57,7 @@ export class LunaPlugin {
 
       this.hidePopup();
 
-      // this.anno.updateAnnotation(evt.detail.id, evt.detail);
+      this.anno.updateAnnotation(evt.detail);
     });
 
     this.popup.$on('save', (evt: CustomEvent<W3CAnnotation>) => {
@@ -74,9 +74,10 @@ export class LunaPlugin {
         target: {
           ...latestState.target
         }
-      }
-
-      // this.anno.updateAnnotation(evt.detail.id, updated);
+      };
+      
+      this.anno.updateAnnotation(updated);
+      this.anno.setSelected();
     });
 
     this.popup.$on('cancel', () => {
