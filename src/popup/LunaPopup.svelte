@@ -71,7 +71,7 @@
   }
 
   const onCancelEdit = () => {
-    dispatch('cancel', annotation);
+    dispatch('cancel', originalAnnotation);
     
     annotation = originalAnnotation;
     
