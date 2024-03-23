@@ -8,11 +8,11 @@ export class LunaPlugin {
 
   opts: LunaPluginOpts;
 
-  popup: LunaPopup;
+  popup: LunaPopup | undefined;
   
-  isEditing: boolean;
+  isEditing: boolean | undefined;
 
-  beforeEdit: W3CAnnotation;
+  beforeEdit: W3CAnnotation | undefined;
 
   constructor(anno: OpenSeadragonAnnotator<W3CAnnotation>, opts: LunaPluginOpts = {}) {
     this.anno = anno;
@@ -21,7 +21,7 @@ export class LunaPlugin {
 
     let lastEvent: PointerEvent;
 
-    document.body.addEventListener('mousemove', event => lastEvent = event);
+    document.body.addEventListener('pointermove', event => lastEvent = event);
 
     anno.on('clickAnnotation', (annotation, evt) => {
       console.log('click', annotation, evt);
@@ -124,7 +124,7 @@ export class LunaPlugin {
 
     if (this.popup) {
       this.popup.$destroy();
-      this.popup = null;
+      this.popup = undefined;
     } 
   }
 
