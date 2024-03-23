@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import Icon from 'svelte-icons-pack/Icon.svelte';
   import FaSolidRobot from 'svelte-icons-pack/fa/FaSolidRobot';
   import type { Transcription } from '../utils';

@@ -8,7 +8,7 @@ export const getTranscriptions = (annotation: W3CAnnotation): W3CAnnotationBody[
   const transcriptions = bodies.filter(body =>  (!body.purpose || body.purpose === 'transcribing'));
 
   // Return sorted by time of creation
-  return transcriptions.slice().sort((a, b) => a.created > b.created ? -1 : 1);
+  return transcriptions.slice().sort((a, b) => a.created! > b?.created! ? -1 : 1);
 }
 
 /** 
@@ -19,10 +19,10 @@ export const getTranscriptions = (annotation: W3CAnnotation): W3CAnnotationBody[
  * to the first in the list.
  */
 export const getBestTranscription = (bodies: W3CAnnotationBody[]) => {
-  let best: W3CAnnotationBody;
+  let best: W3CAnnotationBody | undefined;
 
   // Sort by timestamp
-  const sorted = bodies.slice().sort((a, b) => a.created < b.created ? 1 : -1);
+  const sorted = bodies.slice().sort((a, b) => a.created! < b.created! ? 1 : -1);
 
   const byPerson = sorted.filter(body => body.creator?.type === 'Person'); 
   if (byPerson.length > 0) {
@@ -32,7 +32,7 @@ export const getBestTranscription = (bodies: W3CAnnotationBody[]) => {
     if (byMK) {
       best = byMK;
     } else {
-      best = sorted.length > 0 ? sorted[0] : null;
+      best = sorted.length > 0 ? sorted[0] : undefined;
     }
   }
 
@@ -41,7 +41,7 @@ export const getBestTranscription = (bodies: W3CAnnotationBody[]) => {
 
 /** Tests if this body represents an OCR transcription **/
 export const isOCR = (transcription: W3CAnnotationBody): boolean =>
-  transcription.creator?.type === 'Software' && transcription.creator?.name == 'mapKurator:ocr';
+  transcription?.creator?.type === 'Software' && transcription?.creator?.name == 'mapKurator:ocr';
 
 export const isVerified = (annotation: W3CAnnotation): boolean => {
   const bodies = annotation.body ?

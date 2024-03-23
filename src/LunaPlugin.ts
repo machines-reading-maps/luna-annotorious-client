@@ -19,7 +19,12 @@ export class LunaPlugin {
 
     this.opts = opts;
 
+    let lastEvent: PointerEvent;
+
+    document.body.addEventListener('mousemove', event => lastEvent = event);
+
     anno.on('clickAnnotation', (annotation, evt) => {
+      console.log('click', annotation, evt);
       if (!this.isEditing) {  
         if (annotation) {
           this.showPopup(annotation, evt);
@@ -27,6 +32,10 @@ export class LunaPlugin {
           this.hidePopup();
         }
       }
+    });
+
+    anno.on('createAnnotation', (annotation) => {
+      this.showPopup(annotation, lastEvent);
     });
 
     document.addEventListener('keydown', (evt: KeyboardEvent) => {

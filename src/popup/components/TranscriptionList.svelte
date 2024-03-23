@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import { slide } from 'svelte/transition';
   import * as timeago from 'timeago.js';
   import type { LunaPluginOpts } from '../../LunaPluginOpts';

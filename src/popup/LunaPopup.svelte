@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { draggable } from '@neodrag/svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
